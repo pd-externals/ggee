@@ -7,7 +7,9 @@
 #define abs fabs
 #endif
 
-#include "ggee.h"
+#define PD_VERSION_MINOR 32
+#define BACKGROUND "-fill grey"
+#define BACKGROUNDCOLOR "grey"
 #define BORDER 2
 
 #if 0 /* backwards compatiblity */
@@ -126,12 +128,12 @@ static void envgen_create_doodles(t_envgen *x, t_glist *glist)
      xpos = x->x_obj.te_xpix;
      ypos = (int) (x->x_obj.te_ypix + x->w.height);
      for (i=0;i<=x->last_state;i++) {
-	  sprintf(guistr,".x%x.c create oval %d %d %d %d -tags %xD%d",glist_getcanvas(glist),
+	  sprintf(guistr,".x%x.c create oval %d %d %d %d -tags %xD%d",(unsigned int)glist_getcanvas(glist),
 		   (int) (xpos+(x->duration[i] * xscale) - 2),
 		   (int) (ypos - x->finalvalues[i]*yscale - 2),
 		   (int) (xpos+(x->duration[i] * xscale)+2),
 		   (int) (ypos - x->finalvalues[i]*yscale + 2),
-		   x,i);
+		   (unsigned int)x,i);
 
 	  if (i == x->w.grabbed) strcat(guistr," -fill red\n");
 	  else strcat(guistr,"\n");
@@ -175,7 +177,7 @@ static void envgen_create(t_envgen *x, t_glist *glist)
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
      
-     sprintf(buf,".x%x.c create line",glist_getcanvas(glist));
+     sprintf(buf,".x%x.c create line",(unsigned int)glist_getcanvas(glist));
      xpos = x->x_obj.te_xpix;
      ypos = (int) (x->x_obj.te_ypix + x->w.height);
      for (i=0;i<=x->last_state;i++) {
@@ -184,7 +186,7 @@ static void envgen_create(t_envgen *x, t_glist *glist)
 	  strcat(buf,num);
      }
      
-     sprintf(num,"-tags %xP\n",x);
+     sprintf(num,"-tags %xP\n",(unsigned int)x);
      strcat(buf,num);
 /*     post("sending %s",buf); */
      sys_vgui("%s",buf);
@@ -210,7 +212,7 @@ int i;
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
      
-     sprintf(buf,".x%x.c coords %xP",glist_getcanvas(glist),x);
+     sprintf(buf,".x%x.c coords %xP",(unsigned int)glist_getcanvas(glist),x);
      xpos = x->x_obj.te_xpix;
      ypos = (int) (x->x_obj.te_ypix + x->w.height);
      for (i=0;i<=x->last_state;i++) {
@@ -434,7 +436,7 @@ static int envgen_newclick(t_gobj *z, struct _glist *glist,
 
 t_widgetbehavior envgen_widgetbehavior;
 
-void envgen_setwidget()
+void envgen_setwidget(void)
 {
     envgen_widgetbehavior.w_getrectfn =     envgen_getrect;
     envgen_widgetbehavior.w_displacefn =    envgen_displace;

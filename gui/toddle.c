@@ -3,12 +3,15 @@
 
 #include <m_pd.h>
 #include "g_canvas.h"
-#include <ggee.h>
 
 #ifdef NT
 #pragma warning( disable : 4244 )
 #pragma warning( disable : 4305 )
 #endif
+
+#define PD_VERSION_MINOR 32
+#define BACKGROUND "-fill grey"
+#define BACKGROUNDCOLOR "grey"
 
 
 #define te_xpos te_xpix
@@ -313,7 +316,7 @@ void toddle_color(t_toddle* x,t_symbol* col)
 */
 }
 
-static void toddle_setwidget()
+static void toddle_setwidget(void)
 {
     toddle_widgetbehavior.w_getrectfn =     toddle_getrect;
     toddle_widgetbehavior.w_displacefn =    toddle_displace;
