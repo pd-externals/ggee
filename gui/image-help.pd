@@ -1,0 +1,4 @@
+#N canvas 0 0 450 300 10;
+#X obj 90 167 image logo100.gif;
+#X text 20 36 Incorporate images. This is instantiated with;
+#X text 20 52 [image logo100.gif];

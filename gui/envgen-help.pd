@@ -1,0 +1,6 @@
+#N canvas 0 0 450 300 10;
+#X obj 27 87 envgen 203 123 1 0  ;
+#X text 21 16 envgen:;
+#X text 22 37 Envelope generator. This external delivers value for
+line~ if it is banged. When numbers are sent to its input it delivers
+the corresponding value of the envelope;
