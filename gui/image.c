@@ -32,8 +32,6 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 	  sys_vgui("image create photo img%x -file %s\n",x,fname);
 	  sys_vgui(".x%x.c create image %d %d -image img%x -tags %xS\n", 
 		   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x,x);
-	  post("image create photo img%x -file %s\n",x,fname);
-	  post(".x%x.c create image %d %d -image img%x -tags %xS\n", 
 		   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x,x);
 
 	  /* TODO callback from gui
