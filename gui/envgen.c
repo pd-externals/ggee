@@ -277,7 +277,7 @@ void envgen_setup(void)
 
     class_addbang(envgen_class,envgen_bang);
     class_addlist(envgen_class,envgen_list);
-    class_addmethod(envgen_class,(t_method)envgen_sustain,gensym("sustain"),A_FLOAT);
+    class_addmethod(envgen_class,(t_method)envgen_sustain,gensym("sustain"),A_FLOAT,A_NULL);
 
     class_addmethod(envgen_class, (t_method)envgen_click, gensym("click"),
     	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);

@@ -19,12 +19,12 @@
 
 static void draw_inlets(t_envgen *x, t_glist *glist, int firsttime, int nin, int nout)
 {
-     int n = nin;
+     int n = nout;
      int nplus, i;
      nplus = (n == 1 ? 1 : n-1);
      for (i = 0; i < n; i++)
      {
-	  int onset = x->x_obj.te_xpix + (x->w.width - IOWIDTH) * i / nplus - BORDER;
+	  int onset = x->x_obj.te_xpix + (x->w.width-2*BORDER) * i / nplus;
 	  if (firsttime)
 	       sys_vgui(".x%x.c create rectangle %d %d %d %d -tags %xo%d\n",
 			glist_getcanvas(glist),
@@ -37,7 +37,7 @@ static void draw_inlets(t_envgen *x, t_glist *glist, int firsttime, int nin, int
 			onset, x->x_obj.te_ypix + x->w.height - 1 + 2*BORDER,
 			onset + IOWIDTH, x->x_obj.te_ypix + x->w.height + 2*BORDER);
      }
-     n = nout; 
+     n = nin; 
      nplus = (n == 1 ? 1 : n-1);
      for (i = 0; i < n; i++)
      {
@@ -227,7 +227,7 @@ int i;
      //     post("sending %s",buf); 
      sys_vgui("%s",buf);
      envgen_update_doodles(x,glist);
-     draw_inlets(x, glist, 0,1,1);
+     draw_inlets(x, glist, 0,1,2);
 }
 
 
@@ -238,7 +238,7 @@ void envgen_drawme(t_envgen *x, t_glist *glist, int firsttime)
      if (firsttime) envgen_create(x,glist);
      else envgen_update(x,glist);
 
-     draw_inlets(x, glist, firsttime, 1,1);
+     draw_inlets(x, glist, firsttime, 1,2);
 }
 
 
@@ -287,7 +287,6 @@ static void envgen_displace(t_gobj *z, t_glist *glist,
     int dx, int dy)
 {
     t_envgen *x = (t_envgen *)z;
-    post("displace");
     x->x_obj.te_xpix += dx;
     x->x_obj.te_ypix += dy;
 
