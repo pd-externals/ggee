@@ -40,9 +40,11 @@ t_widgetbehavior   sliderh_widgetbehavior = {
   w_activatefn: fatom_activate,
   w_deletefn:   fatom_delete,
   w_visfn:      fatom_vis,
+#if PD_MINOR_VERSION < 37
   w_savefn:    sliderh_save,
-  w_clickfn:    NULL,
   w_propertiesfn: NULL,
+#endif
+  w_clickfn:    NULL,
 }; 
 
 
@@ -52,4 +54,7 @@ void sliderh_setup() {
 
     fatom_setup_common(sliderh_class);
     class_setwidget(sliderh_class,&sliderh_widgetbehavior);
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(sliderh_class,&sliderh_save);
+#endif
 }

@@ -10,11 +10,13 @@
 #pragma warning( disable : 4305 )
 #endif
 
-#if PD_VERSION_MINOR < 37
+#if PD_MINOR_VERSION < 37
 #define t_rtext t_text
 #endif
 
+#ifndef IOWIDTH 
 #define IOWIDTH 4
+#endif
 
 typedef struct _button
 {
@@ -264,9 +266,13 @@ t_widgetbehavior   button_widgetbehavior = {
   w_activatefn: button_activate,
   w_deletefn:   button_delete,
   w_visfn:      button_vis,
+#if PD_MINOR_VERSION < 37
   w_savefn:     button_save,
+#endif
   w_clickfn:    NULL,
+#if PD_MINOR_VERSION < 37
   w_propertiesfn: NULL,
+#endif
 }; 
 
 
@@ -311,7 +317,6 @@ static void button_save(t_gobj *z, t_binbuf *b)
 static t_class *button_class;
 
 
-
 static void *button_new(t_symbol* text)
 {
     t_button *x = (t_button *)pd_new(button_class);
@@ -342,7 +347,6 @@ static void *button_new(t_symbol* text)
 }
 
 void button_setup(void) {
-  post("button setup");
     button_class = class_new(gensym("button"), (t_newmethod)button_new, 0,
 				sizeof(t_button),0,A_DEFSYM,0);
 
@@ -350,7 +354,9 @@ void button_setup(void) {
     class_addmethod(button_class, (t_method)button_b,gensym("b"),0);
 
     class_setwidget(button_class,&button_widgetbehavior);
-
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(button_class,&button_save);
+#endif
 }
 
 

@@ -296,6 +296,20 @@ void envgen_click(t_envgen *x,
     t_floatarg alt);
 void envgen_key(t_envgen *x, t_floatarg f);
 
+t_widgetbehavior envgen_widgetbehavior = {
+  w_getrectfn:    envgen_getrect,
+  w_displacefn:    envgen_displace,
+  w_selectfn:   envgen_select,
+  w_activatefn:   envgen_activate,
+  w_deletefn:   envgen_delete,
+  w_visfn:   envgen_vis,
+  w_clickfn: envgen_newclick,
+#if PD_MINOR_VERSION < 37
+  w_propertiesfn: NULL,
+  w_savefn:   envgen_save
+#endif
+};
+
 
 void envgen_setup(void)
 {
@@ -320,7 +334,9 @@ void envgen_setup(void)
     class_addmethod(envgen_class,(t_method)envgen_freeze,gensym("freeze"),A_FLOAT,NULL);
     class_addmethod(envgen_class,(t_method)envgen_setresize,gensym("resize"),A_FLOAT,A_NULL);
 
-    envgen_setwidget();
     class_setwidget(envgen_class,&envgen_widgetbehavior);
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(envgen_class,&envgen_save);
+#endif
     class_addmethod(envgen_class,(t_method)envgen_dump,gensym("dump"),A_NULL);
 }

@@ -45,9 +45,11 @@ t_widgetbehavior   ticker_widgetbehavior = {
   w_activatefn: fatom_activate,
   w_deletefn:   fatom_delete,
   w_visfn:      fatom_vis,
+#if PD_MINOR_VERSION < 37
   w_savefn:     ticker_save,
-  w_clickfn:    NULL,
   w_propertiesfn: NULL,
+#endif
+  w_clickfn:    NULL,
 }; 
 
 void ticker_setup() {
@@ -58,4 +60,8 @@ void ticker_setup() {
   fatom_setup_common(ticker_class);
     class_addbang(ticker_class, (t_method)ticker_bang);
     class_setwidget(ticker_class,&ticker_widgetbehavior);
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(ticker_class,&ticker_save);
+#endif
 }
+

@@ -1,15 +1,13 @@
-/* (C) Guenter Geiger <geiger@epy.co.at> */
+/* (C) Guenter Geiger <geiger@xdv.org> */
 
 
 #include <m_pd.h>
 #include "g_canvas.h"
 
 /* ------------------------ gcanvas ----------------------------- */
-/* an area with gcanvas information */
 
 
 #define BACKGROUNDCOLOR "grey"
-#define DEFAULTCOLOR "grey"
 
 #define DEFAULTSIZE 80
 
@@ -19,10 +17,9 @@ typedef struct _gcanvas
 {
      t_object x_obj;
      t_glist * x_glist;
-  t_outlet* out2;
+     t_outlet* out2;
      int x_width;
      int x_height;
-     t_symbol* x_color;
      int x;
      int y;
 } t_gcanvas;
@@ -37,7 +34,7 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 		   glist_getcanvas(glist),
 		   x->x_obj.te_xpix, x->x_obj.te_ypix,
 		   x->x_obj.te_xpix + x->x_width, x->x_obj.te_ypix + x->x_height,
-		   x,x->x_color);
+		   x,BACKGROUNDCOLOR);
      }     
      else {
 	  sys_vgui(".x%x.c coords %xS \
@@ -47,9 +44,9 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 		   x->x_obj.te_xpix + x->x_width, x->x_obj.te_ypix + x->x_height);
      }
 
-
      {
-	  int n = 1;
+       /* outlets */
+	  int n = 2;
 	  int nplus, i;
 	  nplus = (n == 1 ? 1 : n-1);
 	  for (i = 0; i < n; i++)
@@ -67,7 +64,8 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 			     onset, x->x_obj.te_ypix + x->x_height - 1,
 			     onset + IOWIDTH, x->x_obj.te_ypix + x->x_height);
 	  }
-	  n = 1; 
+	  /* inlets */
+	  n = 0; 
 	  nplus = (n == 1 ? 1 : n-1);
 	  for (i = 0; i < n; i++)
 	  {
@@ -97,9 +95,8 @@ void gcanvas_erase(t_gcanvas* x,t_glist* glist)
      int n;
      sys_vgui(".x%x.c delete %xS\n",
 	      glist_getcanvas(glist), x);
-     n = 1;
+     n = 2;
      while (n--) {
-	  sys_vgui(".x%x.c delete %xi%d\n",glist_getcanvas(glist),x,n);
 	  sys_vgui(".x%x.c delete %xo%d\n",glist_getcanvas(glist),x,n);
      }
 }
@@ -170,9 +167,9 @@ static void gcanvas_vis(t_gobj *z, t_glist *glist, int vis)
 static void gcanvas_save(t_gobj *z, t_binbuf *b)
 {
     t_gcanvas *x = (t_gcanvas *)z;
-    binbuf_addv(b, "ssiissii", gensym("#X"),gensym("obj"),
+    binbuf_addv(b, "ssiisii", gensym("#X"),gensym("obj"),
 		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
-		gensym("gcanvas"),x->x_color,x->x_width,x->x_height);
+		gensym("gcanvas"),x->x_width,x->x_height);
     binbuf_addv(b, ";");
 }
 
@@ -183,8 +180,8 @@ static void gcanvas_motion(t_gcanvas *x, t_floatarg dx, t_floatarg dy)
 {
   x->x += dx;
   x->y += dy;
-  outlet_float(x->x_obj.ob_outlet,x->x);
   outlet_float(x->out2,x->y);
+  outlet_float(x->x_obj.ob_outlet,x->x);
 }
 
 void gcanvas_key(t_gcanvas *x, t_floatarg f)
@@ -197,13 +194,13 @@ static void gcanvas_click(t_gcanvas *x,
     t_floatarg xpos, t_floatarg ypos, t_floatarg shift, t_floatarg ctrl,
     t_floatarg alt)
 {
-  glist_grab(x->x_glist, &x->x_obj.te_g, (t_glistmotionfn) gcanvas_motion,
+    glist_grab(x->x_glist, &x->x_obj.te_g, (t_glistmotionfn) gcanvas_motion,
 		(t_glistkeyfn) NULL, xpos, ypos);
 
     x->x = xpos - x->x_obj.te_xpix;
     x->y = ypos - x->x_obj.te_ypix;
-    outlet_float(x->x_obj.ob_outlet,x->x);
     outlet_float(x->out2,x->y);
+    outlet_float(x->x_obj.ob_outlet,x->x);
 }
 
 static int gcanvas_newclick(t_gobj *z, struct _glist *glist,
@@ -221,14 +218,6 @@ void gcanvas_size(t_gcanvas* x,t_floatarg w,t_floatarg h) {
      gcanvas_drawme(x, x->x_glist, 0);
 }
 
-void gcanvas_color(t_gcanvas* x,t_symbol* col)
-{
-     x->x_color = col;
-/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang .. 
-       so color black does the same as bang, but doesn't forward the bang 
-*/
-}
-
 static void gcanvas_setwidget(void)
 {
     gcanvas_widgetbehavior.w_getrectfn =     gcanvas_getrect;
@@ -238,12 +227,14 @@ static void gcanvas_setwidget(void)
     gcanvas_widgetbehavior.w_deletefn =   gcanvas_delete;
     gcanvas_widgetbehavior.w_visfn =   gcanvas_vis;
     gcanvas_widgetbehavior.w_clickfn = gcanvas_newclick;
+#if PD_MINOR_VERSION < 37
     gcanvas_widgetbehavior.w_propertiesfn = NULL; 
     gcanvas_widgetbehavior.w_savefn =   gcanvas_save;
+#endif
 }
 
 
-static void *gcanvas_new(t_symbol* col,t_floatarg h,t_floatarg o)
+static void *gcanvas_new(t_floatarg h,t_floatarg o)
 {
     t_gcanvas *x = (t_gcanvas *)pd_new(gcanvas_class);
 
@@ -256,11 +247,6 @@ static void *gcanvas_new(t_symbol* col,t_floatarg h,t_floatarg o)
     else
 	 x->x_height = DEFAULTSIZE;
 
-    if (col != &s_)
-	 x->x_color = col;
-    else
-	 x->x_color = gensym(DEFAULTCOLOR);
-
     outlet_new(&x->x_obj, &s_float);
     x->out2 = outlet_new(&x->x_obj, &s_float);
     return (x);
@@ -269,7 +255,7 @@ static void *gcanvas_new(t_symbol* col,t_floatarg h,t_floatarg o)
 void gcanvas_setup(void)
 {
     gcanvas_class = class_new(gensym("gcanvas"), (t_newmethod)gcanvas_new, 0,
-				sizeof(t_gcanvas),0, A_DEFSYM,A_DEFFLOAT,A_DEFFLOAT,0);
+				sizeof(t_gcanvas),0, A_DEFFLOAT,A_DEFFLOAT,0);
 
     class_addcreator((t_newmethod)gcanvas_new,gensym("bng"),A_DEFSYM,A_DEFFLOAT,A_DEFFLOAT,A_GIMME,0);
 
@@ -278,11 +264,11 @@ void gcanvas_setup(void)
     class_addmethod(gcanvas_class, (t_method)gcanvas_size, gensym("size"),
     	A_FLOAT, A_FLOAT, 0);
 
-    class_addmethod(gcanvas_class, (t_method)gcanvas_color, gensym("color"),
-    	A_SYMBOL, 0);
-
     gcanvas_setwidget();
     class_setwidget(gcanvas_class,&gcanvas_widgetbehavior);
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(gcanvas_class,&gcanvas_save);
+#endif
 }
 
 

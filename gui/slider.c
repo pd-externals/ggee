@@ -40,11 +40,12 @@ t_widgetbehavior   slider_widgetbehavior = {
   w_activatefn: fatom_activate,
   w_deletefn:   fatom_delete,
   w_visfn:      fatom_vis,
+#if PD_MINOR_VERSION < 37
   w_savefn:     slider_save,
-  w_clickfn:    NULL,
   w_propertiesfn: NULL,
+#endif
+  w_clickfn:    NULL,
 }; 
-
 
 void slider_setup() {
     slider_class = class_new(gensym("slider"), (t_newmethod)slider_new, 0,
@@ -52,4 +53,8 @@ void slider_setup() {
 
   fatom_setup_common(slider_class);
     class_setwidget(slider_class,&slider_widgetbehavior);
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(slider_class,&slider_save);
+#endif
+    class_setpropertiesfn(slider_class,&fatom_properties);
 }

@@ -3,6 +3,8 @@
 #define x_val a_pos.a_w.w_float
 #define DEBUG(x)
 
+#include <string.h>
+#include <stdio.h>
 
 typedef struct _fatom
 {
@@ -317,9 +319,11 @@ t_widgetbehavior   fatom_widgetbehavior = {
   w_activatefn: fatom_activate,
   w_deletefn:   fatom_delete,
   w_visfn:      fatom_vis,
+#if PD_MINOR_VERSION < 37
   w_savefn:     fatom_save,
-  w_clickfn:    NULL,
   w_propertiesfn: NULL,
+#endif
+  w_clickfn:    NULL,
 }; 
 
 
@@ -362,6 +366,11 @@ static void fatom_f(t_fatom* x,t_floatarg f)
      outlet_float(x->x_obj.ob_outlet,f);
 }
 
+
+static void fatom_properties(t_gobj *z, t_glist *owner)
+{
+  post("N/I");
+}
 
 
 static void fatom_save(t_gobj *z, t_binbuf *b)
@@ -428,5 +437,7 @@ void fatom_setup_common(t_class* class)
     	A_SYMBOL, 0);
 */
     class_setwidget(class,&fatom_widgetbehavior);
-
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(class,&fatom_save);
+#endif
 }

@@ -478,23 +478,3 @@ static int envgen_newclick(t_gobj *z, struct _glist *glist,
 }
 #endif
 
-
-
-t_widgetbehavior envgen_widgetbehavior;
-
-void envgen_setwidget(void)
-{
-    envgen_widgetbehavior.w_getrectfn =     envgen_getrect;
-    envgen_widgetbehavior.w_displacefn =    envgen_displace;
-    envgen_widgetbehavior.w_selectfn =   envgen_select;
-    envgen_widgetbehavior.w_activatefn =   envgen_activate;
-    envgen_widgetbehavior.w_deletefn =   envgen_delete;
-    envgen_widgetbehavior.w_visfn =   envgen_vis;
-#if (PD_VERSION_MINOR > 31) 
-    envgen_widgetbehavior.w_clickfn = envgen_newclick;
-    envgen_widgetbehavior.w_propertiesfn = NULL; 
-#endif
-    envgen_widgetbehavior.w_savefn =   envgen_save;
-    
-}
-
