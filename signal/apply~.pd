@@ -1,14 +1,17 @@
 #N canvas 284 112 450 300 10;
-#X obj 33 88 sig~;
-#X obj 33 160 snapshot~;
-#X floatatom 33 183 10 0 0;
-#X msg 70 89 bang;
-#X floatatom 33 42 5 0 0;
-#X obj 148 112 apply~;
-#X msg 148 48 what;
-#X obj 33 118 apply~ rint;
-#X obj 295 41 loadbang;
-#X msg 295 63 \; pd dsp 1;
+#X obj 40 122 sig~;
+#X obj 40 194 snapshot~;
+#X floatatom 40 217 10 0 0;
+#X msg 77 123 bang;
+#X floatatom 40 76 5 0 0;
+#X obj 137 152 apply~;
+#X msg 137 88 what;
+#X obj 40 152 apply~ rint;
+#X obj 356 213 loadbang;
+#X msg 356 235 \; pd dsp 1;
+#X text 176 87 Click to show available functions;
+#X text 19 30 Apply~ applies a one argument function to the input buffer
+;
 #X connect 0 0 7 0;
 #X connect 1 0 2 0;
 #X connect 3 0 1 0;

@@ -34,6 +34,7 @@ static void draw_inlets(t_fatom *x, t_glist *glist, int firsttime, int nin, int 
      int n = nin;
      int nplus, i;
      nplus = (n == 1 ? 1 : n-1);
+     post("draw inlet");
      for (i = 0; i < n; i++)
      {
 	  int onset = text_xpix(&x->x_obj, glist) + (x->x_width - IOWIDTH) * i / nplus;
@@ -67,11 +68,14 @@ static void draw_inlets(t_fatom *x, t_glist *glist, int firsttime, int nin, int 
 			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + 1);
 	  
      }
+     post("draw inlet end");
 }
 
 
 void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 {
+  t_canvas *canvas=glist_getcanvas(glist);
+  post("drawme %d",firsttime);
      if (firsttime) {
 
 	  if (!strcmp(x->x_type->s_name,"vslider")) {
@@ -83,9 +87,9 @@ void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
                     -showvalue 0 \
                     -length 131 \
                     -from 127 -to 0 \
-                    -command fatom_cb%x\n",glist_getcanvas(glist),x,x);
+                    -command fatom_cb%x\n",canvas,x,x);
 	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,glist_getcanvas(glist),x,x);
+			canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
 	  } else  if (!strcmp(x->x_type->s_name,"hslider")) {
 	       x->x_width = 150;
 	       x->x_height = 28;
@@ -95,23 +99,24 @@ void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
                     -length 131 \
                     -orient horizontal \
                     -from 127 -to 0 \
-                    -command fatom_cb%x\n",glist_getcanvas(glist),x,x);
+                    -command fatom_cb%x\n",canvas,x,x);
 	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,glist_getcanvas(glist),x,x);
+			canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
+
 	  } else if (!strcmp(x->x_type->s_name,"checkbutton")) {
 	       x->x_width = 40;
 	       x->x_height = 25;
 	       sys_vgui("checkbutton .x%x.c.s%x \
-                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x\n",glist_getcanvas(glist),x,x,x,x);
+                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x\n",canvas,x,x,x,x);
 	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			x->x_glist,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,glist_getcanvas(glist),x,x);
+			x->x_glist,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
 	  } else if (!strcmp(x->x_type->s_name,"hradio")) {
 	       int i;
 	       x->x_width = 8*20;
 	       x->x_height = 25;
 	       for (i=0;i<8;i++) {
 		    sys_vgui("radiobutton .x%x.c.s%x%d \
-                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -value %d\n",glist_getcanvas(glist),x,i,x,x,x,i);
+                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -value %d\n",canvas,x,i,x,x,x,i);
 		    sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x%d -tags %x%xS\n", 
 			     x->x_glist,text_xpix(&x->x_obj, glist)+i*20, text_ypix(&x->x_obj, glist)+2,x->x_glist,x,i,x,i);
 	       }
@@ -121,7 +126,7 @@ void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 	       x->x_height = 20*8+5;
 	       for (i=0;i<8;i++) {
 		    sys_vgui("radiobutton .x%x.c.s%x%d \
-                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -value %d\n",glist_getcanvas(glist),x,i,x,x,x,i);
+                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -value %d\n",canvas,x,i,x,x,x,i);
 		    sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x%d -tags %x%xS\n", 
 			     x->x_glist,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2+i*20,x->x_glist,x,i,x,i);
 	       }
@@ -133,9 +138,9 @@ void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
                     -showvalue 0 \
                     -length 131 \
                     -from 127 -to 0 \
-                    -command fatom_cb%x\n",glist_getcanvas(glist),x,x);
+                    -command fatom_cb%x\n",canvas,x,x);
 	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,glist_getcanvas(glist),x,x);
+			canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
 	  }
 	       
 
@@ -147,7 +152,7 @@ void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 	       for (i=0;i<8;i++) {
 		    sys_vgui(".x%x.c coords %x%xS \
 %d %d\n",
-			     glist_getcanvas(glist), x,i,
+			     canvas, x,i,
 			     text_xpix(&x->x_obj, glist) + 20*i, text_ypix(&x->x_obj, glist)+2);
 	       }
 	  }
@@ -156,19 +161,19 @@ void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 	       for (i=0;i<8;i++) {
 		    sys_vgui(".x%x.c coords %x%xS \
 %d %d\n",
-			     glist_getcanvas(glist), x,i,
+			     canvas, x,i,
 			     text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2+20*i);
 	       }
 	       
 	  } else {
 	       sys_vgui(".x%x.c coords %xS \
 %d %d\n",
-			glist_getcanvas(glist), x,
+			canvas, x,
 			text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2);
 	  }
      }
-
      draw_inlets(x, glist, firsttime, 1,1);
+
 }
 
 
@@ -176,6 +181,7 @@ void fatom_erase(t_fatom* x,t_glist* glist)
 {
      int n;
 
+     post("erase");
 //     sys_vgui(".x%x.c.s%x delete\n",glist_getcanvas(glist),x);
 
      sys_vgui(".x%x.c delete %xS\n",glist_getcanvas(glist), x);
@@ -197,28 +203,32 @@ static void fatom_getrect(t_gobj *z, t_glist *owner,
     int width, height;
     t_fatom* s = (t_fatom*)z;
 
-
     width = s->x_width;
     height = s->x_height;
-    *xp1 = s->x_obj.te_xpix;
-    *yp1 = s->x_obj.te_ypix;
-    *xp2 = s->x_obj.te_xpix + width;
-    *yp2 = s->x_obj.te_ypix + height;
+    *xp1 = text_xpix(&s->x_obj, owner);
+    *yp1 = text_ypix(&s->x_obj, owner);
+    *xp2 = text_xpix(&s->x_obj, owner) + width;
+    *yp2 = text_ypix(&s->x_obj, owner) + height;
 }
 
 static void fatom_displace(t_gobj *z, t_glist *glist,
     int dx, int dy)
 {
     t_fatom *x = (t_fatom *)z;
+    post("displace");
     x->x_obj.te_xpix += dx;
     x->x_obj.te_ypix += dy;
-    sys_vgui(".x%x.c coords %xSEL %d %d %d %d\n",
-		   glist_getcanvas(glist), x,
-		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
-       	           text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
-
-    fatom_drawme(x, glist, 0);
-    canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+    if (glist_isvisible(glist))
+    {
+      sys_vgui(".x%x.c coords %xSEL %d %d %d %d\n",
+	       glist_getcanvas(glist), x,
+	       text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
+	       text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
+      
+      fatom_drawme(x, glist, 0);
+      canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+    }
+    post("displace end");
 }
 
 static void fatom_select(t_gobj *z, t_glist *glist, int state)
@@ -301,11 +311,9 @@ static void fatom_setwidget()
     fatom_widgetbehavior.w_activatefn =   fatom_activate;
     fatom_widgetbehavior.w_deletefn =   fatom_delete;
     fatom_widgetbehavior.w_visfn =   fatom_vis;
-#if (PD_VERSION_MINOR > 31) 
+    fatom_widgetbehavior.w_savefn =   fatom_save;
     fatom_widgetbehavior.w_clickfn = NULL;
     fatom_widgetbehavior.w_propertiesfn = NULL; 
-#endif
-    fatom_widgetbehavior.w_savefn =   fatom_save;
 }
 
 
@@ -339,6 +347,8 @@ static void *fatom_new(t_symbol* type)
     if (o) x->x_height = o;
     else
 */
+
+    post("x%x",x);
 
     /* bind to a symbol for fatom callback (later make this based on the
        filepath ??) */
