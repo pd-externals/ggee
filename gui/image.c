@@ -31,10 +31,10 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 
 	  sys_vgui("image create photo img%x -file %s\n",x,fname);
 	  sys_vgui(".x%x.c create image %d %d -image img%x -tags %xS\n", 
-		   glist_getcanvas(glist),x->x_obj.te_xpos, x->x_obj.te_ypos,x,x);
+		   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x,x);
 	  post("image create photo img%x -file %s\n",x,fname);
 	  post(".x%x.c create image %d %d -image img%x -tags %xS\n", 
-		   glist_getcanvas(glist),x->x_obj.te_xpos, x->x_obj.te_ypos,x,x);
+		   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x,x);
 
 	  /* TODO callback from gui
 	    sys_vgui("image_size logo");
@@ -44,7 +44,7 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 	  sys_vgui(".x%x.c coords %xS \
 %d %d\n",
 		   glist_getcanvas(glist), x,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos);
+		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
 
 }
@@ -63,31 +63,31 @@ void image_erase(t_image* x,t_glist* glist)
 /* ------------------------ image widgetbehaviour----------------------------- */
 
 
-static void image_getrect(t_gobj *z, t_glist *owner,
+static void image_getrect(t_gobj *z, t_glist *glist,
     int *xp1, int *yp1, int *xp2, int *yp2)
 {
     int width, height;
-    t_image* s = (t_image*)z;
+    t_image* x = (t_image*)z;
 
 
-    width = s->x_width;
-    height = s->x_height;
-    *xp1 = s->x_obj.te_xpos;
-    *yp1 = s->x_obj.te_ypos;
-    *xp2 = s->x_obj.te_xpos + width;
-    *yp2 = s->x_obj.te_ypos + height;
+    width = x->x_width;
+    height = x->x_height;
+    *xp1 = text_xpix(&x->x_obj, glist);
+    *yp1 = text_ypix(&x->x_obj, glist);
+    *xp2 = text_xpix(&x->x_obj, glist) + width;
+    *yp2 = text_ypix(&x->x_obj, glist) + height;
 }
 
 static void image_displace(t_gobj *z, t_glist *glist,
     int dx, int dy)
 {
     t_image *x = (t_image *)z;
-    x->x_obj.te_xpos += dx;
-    x->x_obj.te_ypos += dy;
+    x->x_obj.te_xpix += dx;
+    x->x_obj.te_ypix += dy;
     sys_vgui(".x%x.c coords %xSEL %d %d %d %d\n",
 		   glist_getcanvas(glist), x,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height);
+		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
+		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
 
     image_drawme(x, glist, 0);
     canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
@@ -100,8 +100,8 @@ static void image_select(t_gobj *z, t_glist *glist, int state)
 	  sys_vgui(".x%x.c create rectangle \
 %d %d %d %d -tags %xSEL -outline blue\n",
 		   glist_getcanvas(glist),
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
+		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
+		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height,
 		   x);
      }
      else {
@@ -143,7 +143,7 @@ static void image_save(t_gobj *z, t_binbuf *b)
 {
     t_image *x = (t_image *)z;
     binbuf_addv(b, "ssiiss", gensym("#X"),gensym("obj"),
-		(t_int)x->x_obj.te_xpos, (t_int)x->x_obj.te_ypos,  
+		x->x_obj.te_xpix, x->x_obj.te_ypix,   
 		gensym("image"),x->x_fname);
     binbuf_addv(b, ";");
 }
