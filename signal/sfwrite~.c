@@ -2,7 +2,6 @@
 
 
 #include <m_pd.h>
-#include "g_canvas.h"
 #ifdef NT
 #pragma warning( disable : 4244 )
 #pragma warning( disable : 4305 )
