@@ -29,7 +29,7 @@ static void *slider_new(t_floatarg max, t_floatarg min, t_floatarg h)
 {
     t_fatom *x = (t_fatom *)pd_new(slider_class);
     x->x_type = gensym("vslider");
-    return fatom_new(x,max,min,h);
+    return fatom_new(x,max,min,h,&s_);
 }
 
 

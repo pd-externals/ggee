@@ -33,11 +33,11 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 {
      if (firsttime) {
 	  sys_vgui(".x%x.c create rectangle \
-%d %d %d %d -tags %xS -fill "BACKGROUNDCOLOR"\n",
+%d %d %d %d -tags %xS -fill %s\n",
 		   glist_getcanvas(glist),
 		   x->x_obj.te_xpix, x->x_obj.te_ypix,
 		   x->x_obj.te_xpix + x->x_width, x->x_obj.te_ypix + x->x_height,
-		   x);
+		   x,x->x_color);
      }     
      else {
 	  sys_vgui(".x%x.c coords %xS \
