@@ -389,9 +389,7 @@ static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h)
 
 /* pipe startup code to slitk */
 
-    sys_vgui("proc fatom_cb%x {val} {\n
-       pd [concat fatom%x f $val \\;]\n
-       }\n",x,x);
+    sys_vgui("proc fatom_cb%x {val} {\n pd [concat fatom%x f $val \\;]\n }\n",x,x);
 
     outlet_new(&x->x_obj, &s_float);
     return (x);

@@ -4,7 +4,6 @@
 #include <string.h>
 
 
-t_rtext *rtext_new_without_senditup(t_glist *glist, t_text *who, t_rtext *next);
 
 #ifdef NT
 #pragma warning( disable : 4244 )
@@ -106,11 +105,7 @@ static void create_widget(t_button *x, t_glist *glist)
       text[i] = ' ';
   }
   
-  sys_vgui("button .x%x.c.s%x \
-                    -height %d \
-                    -font 
-                    -text \"%s\" \
-                    -command button_cb%x\n",canvas,x,
+  sys_vgui("button .x%x.c.s%x -height %d -text \"%s\" -command button_cb%x\n",canvas,x,
 	   x->x_height,text,
 	   x);
 }
@@ -140,7 +135,7 @@ static void button_drawme(t_button *x, t_glist *glist, int firsttime)
 		text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
      draw_inlets(x, glist, firsttime, 1,1);
-     draw_handle(x, glist, firsttime);
+     //     draw_handle(x, glist, firsttime);
 
 }
 
@@ -241,7 +236,7 @@ static void button_vis(t_gobj *z, t_glist *glist, int vis)
     t_rtext *y;
     DEBUG(post("vis: %d",vis);)
     if (vis) {
-      	y = (t_rtext *) rtext_new_without_senditup(glist, (t_text *)z, glist->gl_editor->e_rtext);
+      	y = (t_rtext *) rtext_new(glist, (t_text *)z);
 	 button_drawme(s, glist, 1);
     }
     else {
@@ -315,7 +310,7 @@ static void *button_new(t_symbol* text)
 
     x->x_glist = (t_glist*)NULL;
 
-    x->x_width = 20;
+    x->x_width = 30;
     x->x_height = 1;
     if (text == &s_)
       x->x_text = gensym("OK");
@@ -323,7 +318,7 @@ static void *button_new(t_symbol* text)
       x->x_text = text;
 
     /* TODO .. ask the button for its width */
-    x->x_width += strlen(x->x_text->s_name)*5.7;
+    x->x_width += strlen(x->x_text->s_name)*5.2;
 
     sprintf(buf,"button%p",x);
     x->x_sym = gensym(buf);
@@ -331,9 +326,7 @@ static void *button_new(t_symbol* text)
 
 /* pipe startup code to tk */
 
-    sys_vgui("proc button_cb%x {} {\n
-       pd [concat button%p b \\;]\n
-       }\n",x,x);
+    sys_vgui("proc button_cb%x {} {\n pd [concat button%p b \\;]\n }\n",x,x);
 
     outlet_new(&x->x_obj, &s_float);
     return (x);

@@ -43,8 +43,7 @@ void toddle_drawbang(t_toddle *x,t_glist *glist,int on)
 {
      if (glist_isvisible(glist)) {
 	  if (on)
-	       sys_vgui(".x%x.c create oval \
-%d %d %d %d -fill %s -tags %xB\n",glist_getcanvas(glist),
+	       sys_vgui(".x%x.c create oval %d %d %d %d -fill %s -tags %xB\n",glist_getcanvas(glist),
 			x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
 			x->x_obj.te_xpos + x->x_width -1,
 			x->x_obj.te_ypos + x->x_height -1,x->x_color->s_name,x);

@@ -54,9 +54,7 @@ static void *ticker_new()
 
 /* pipe startup code to slitk */
 
-    sys_vgui("proc fatom_cb%x {val} {\n
-       pd [concat ticker%x f $val \\;]\n
-       }\n",x,x);
+    sys_vgui("proc fatom_cb%x {val} {\n pd [concat ticker%x f $val \\;]\n }\n",x,x);
 
     outlet_new(&x->x_obj, &s_float);
     return (x);
