@@ -6,6 +6,7 @@
 #pragma warning( disable : 4305 )
 #endif
 
+#include <stdio.h>
 #include "fatom.h"
 
 /* can we use the normal text save function ?? */

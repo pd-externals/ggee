@@ -253,12 +253,10 @@ void envgen_erase(t_envgen* x,t_glist* glist)
      sys_vgui(".x%x.c delete %pP\n",
 	      glist_getcanvas(glist), x);
 
-     n = 1;
-
-     while (n--) {
-	  sys_vgui(".x%x.c delete %xi%d\n",glist_getcanvas(glist),x,n);
-	  sys_vgui(".x%x.c delete %xo%d\n",glist_getcanvas(glist),x,n);
-     }
+     sys_vgui(".x%x.c delete %xi0\n",glist_getcanvas(glist),x,n);
+     sys_vgui(".x%x.c delete %xo0\n",glist_getcanvas(glist),x,n);
+     sys_vgui(".x%x.c delete %xo1\n",glist_getcanvas(glist),x,n);
+	  
      
      envgen_delete_doodles(x,glist);
 }

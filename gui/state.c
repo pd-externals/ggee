@@ -214,12 +214,12 @@ void state_load(t_state *x)
 	      !strcmp(class_getname(a->te_pd),"hsl" ) */
 	      ) {
 	       if (TATOM(a)->a_type == A_SYMBOL) {
-		    fscanf(fp,"%s",name);
+		    if (fscanf(fp,"%s",name)<=0) continue;
 		    if (strcmp(name,EMPTYSYMBOL))
 			vmess((t_pd*)a,gensym("set"),"s",gensym(name));
 	       }
 	       else {
-		    fscanf(fp,"%f",&in);
+		    if (fscanf(fp,"%f",&in)<=0) continue;
 		    vmess((t_pd*)a,&s_float,"f",in);
 	       }
 	  }
@@ -234,7 +234,7 @@ void state_load(t_state *x)
 	       fscanf(fp,"%f",&in);
 	       end = in;
 
-	       fscanf(fp,"%f",&val);
+	       if (fscanf(fp,"%f",&val)<=0) continue;
 	       SETFLOAT(ilist,val);
 	       for (i=1 ;i <= end;i++) {
 		    fscanf(fp,"%f",&dur);
@@ -243,7 +243,7 @@ void state_load(t_state *x)
 		    SETFLOAT(ilist+2*i,val);
 	       }
 	       pd_typedmess((t_pd*)a,&s_list,2*end+1,ilist);
-	       post("ok %d",end);
+	       //	       post("ok %d",end);
 	  }
 
 

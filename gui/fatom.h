@@ -155,6 +155,16 @@ static void create_widget(t_fatom *x, t_glist *glist)
                     -from 127 -to 0 \
                     -command fatom_cb%x\n",canvas,x,x);
      }     
+
+  /* set the start value */
+     if (!strcmp(x->x_type->s_name,"checkbutton")) {
+       if (x->x_val)
+	 sys_vgui(".x%x.c.s%x select\n",x->x_glist,x,x->x_val);
+       else
+	 sys_vgui(".x%x.c.s%x deselect\n",x->x_glist,x,x->x_val);
+     } else
+       sys_vgui(".x%x.c.s%x set %f\n",x->x_glist,x,x->x_val);
+
 }
 
 
@@ -163,14 +173,12 @@ static void create_widget(t_fatom *x, t_glist *glist)
 
 static void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 {
-  t_canvas *canvas=glist_getcanvas(glist);
+  t_canvas *canvas=x->x_glist;//glist_getcanvas(glist);
   DEBUG(post("drawme %d",firsttime);)
      if (firsttime) {
-       DEBUG(post("glist %x canvas %x",x->x_glist,canvas);)
-       if (x->x_glist != canvas) {
-	 create_widget(x,glist);	       
-	 x->x_glist = canvas;
-       }
+       DEBUG(post("glist %x canvas %x",x->x_glist,canvas));
+       create_widget(x,glist);	       
+       
        sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
 		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,x->x_glist,x,x);
               
@@ -324,6 +332,7 @@ static void fatom_float(t_fatom* x,t_floatarg f)
 {
  
     x->x_val = f;
+    if (glist_isvisible(x->x_glist)) {
      if (!strcmp(x->x_type->s_name,"checkbutton")) {
        if (x->x_val)
 	 sys_vgui(".x%x.c.s%x select\n",x->x_glist,x,f);
@@ -331,6 +340,7 @@ static void fatom_float(t_fatom* x,t_floatarg f)
 	 sys_vgui(".x%x.c.s%x deselect\n",x->x_glist,x,f);
      } else
        sys_vgui(".x%x.c.s%x set %f\n",x->x_glist,x,f);
+    }
      outlet_float(x->x_obj.ob_outlet,f);
 }
 
@@ -362,7 +372,7 @@ static void fatom_save(t_gobj *z, t_binbuf *b)
 static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h)
 {
     char buf[256];
-    x->x_glist = (t_glist*)NULL;
+    x->x_glist = canvas_getcurrent();
 
 
     x->a_pos.a_type = A_FLOAT;
@@ -374,11 +384,6 @@ static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h)
     if (h) x->x_width = h;
     else x->x_width = 15;
    
-
-/*
-    if (o) x->x_height = o;
-    else
-*/
 
     /* bind to a symbol for slider callback (later make this based on the
        filepath ??) */
