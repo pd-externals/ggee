@@ -2,6 +2,7 @@
 
 
 #include <m_pd.h>
+#include <string.h>
 
 #define DEBUG(x) 
 /*#define DEBUG(x) x*/
