@@ -445,6 +445,7 @@ EXTERN void canvas_setusedastemplate(t_canvas *x);
 EXTERN t_canvas *canvas_getcurrent(void);
 EXTERN void canvas_setcurrent(t_canvas *x);
 EXTERN void canvas_unsetcurrent(t_canvas *x);
+EXTERN t_symbol *canvas_realizedollar(t_canvas *x, t_symbol *s);
 EXTERN t_canvas *canvas_getrootfor(t_canvas *x);
 EXTERN void canvas_dirty(t_canvas *x, t_int n);
 EXTERN int canvas_getfont(t_canvas *x);
@@ -459,12 +460,15 @@ EXTERN void canvas_free(t_canvas *x);
 EXTERN void canvas_updatewindowlist( void);
 EXTERN void canvas_editmode(t_canvas *x, t_floatarg yesplease);
 EXTERN int canvas_isabstraction(t_canvas *x);
+EXTERN int canvas_istable(t_canvas *x);
+EXTERN int canvas_showtext(t_canvas *x);
 EXTERN void canvas_vis(t_canvas *x, t_floatarg f);
 EXTERN t_canvasenvironment *canvas_getenv(t_canvas *x);
 EXTERN void canvas_rename(t_canvas *x, t_symbol *s, t_symbol *dir);
 EXTERN void canvas_loadbang(t_canvas *x);
 EXTERN int canvas_hitbox(t_canvas *x, t_gobj *y, int xpos, int ypos,
     int *x1p, int *y1p, int *x2p, int *y2p);
+EXTERN int canvas_setdeleting(t_canvas *x, int flag);
 
 /* ---- functions on canvasses as objects  --------------------- */
 

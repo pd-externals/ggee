@@ -171,7 +171,9 @@ static void serialctl_setlocal(t_serialctl *x,t_symbol* s,t_int ac, t_atom* at)
 
        if (at[i].a_type == A_SYMBOL) {
 	 DEBUG(post("symbol %s",atom_getsymbolarg(i,ac,at)->s_name);)
+#ifdef ISIG
 	 SETBIT(atom_getsymbolarg(i,ac,at),x->x_termios.c_lflag, ISIG);
+#endif
 	 SETBIT(atom_getsymbolarg(i,ac,at),x->x_termios.c_lflag, ICANON);
 	 SETBIT(atom_getsymbolarg(i,ac,at),x->x_termios.c_lflag, ECHO);
 	 SETBIT(atom_getsymbolarg(i,ac,at),x->x_termios.c_lflag, ECHOE);
