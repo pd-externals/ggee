@@ -334,6 +334,11 @@ static void fatom_float(t_fatom* x,t_floatarg f)
      outlet_float(x->x_obj.ob_outlet,f);
 }
 
+static void fatom_bang(t_fatom* x,t_floatarg f) 
+{
+     outlet_float(x->x_obj.ob_outlet,x->x_val);
+}
+
 static void fatom_f(t_fatom* x,t_floatarg f) 
 {
      x->x_val = f;
@@ -396,6 +401,7 @@ void fatom_setup_common(t_class* class)
 {
 
     class_addfloat(class, (t_method)fatom_float);
+    class_addbang(class, (t_method)fatom_bang);
     class_addmethod(class, (t_method)fatom_f, gensym("f"),
     	A_FLOAT, 0);
 

@@ -61,14 +61,14 @@ static void draw_inlets(t_button *x, t_glist *glist, int firsttime, int nin, int
 	  if (firsttime)
 	       sys_vgui(".x%x.c create rectangle %d %d %d %d -tags %xi%d\n",
 			glist_getcanvas(glist),
-			onset, text_ypix(&x->x_obj, glist)-2,
-			     onset + IOWIDTH, text_ypix(&x->x_obj, glist)-1,
+			onset, text_ypix(&x->x_obj, glist),
+			     onset + IOWIDTH, text_ypix(&x->x_obj, glist)+5,
 			x, i);
 	  else
 	       sys_vgui(".x%x.c coords %xi%d %d %d %d %d\n",
 			glist_getcanvas(glist), x, i,
-			onset, text_ypix(&x->x_obj, glist)-2,
-			onset + IOWIDTH, text_ypix(&x->x_obj, glist)-1);
+			onset, text_ypix(&x->x_obj, glist),
+			onset + IOWIDTH, text_ypix(&x->x_obj, glist)+5);
 	  
      }
      DEBUG(post("draw inlet end");)
@@ -108,6 +108,7 @@ static void create_widget(t_button *x, t_glist *glist)
   
   sys_vgui("button .x%x.c.s%x \
                     -height %d \
+                    -font 
                     -text \"%s\" \
                     -command button_cb%x\n",canvas,x,
 	   x->x_height,text,
