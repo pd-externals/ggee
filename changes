@@ -98,3 +98,7 @@
 
 0.24
   - moved moog~ to filters, improved stability.
+
+0.25 
+  - big GUI revival with face lifting
+
