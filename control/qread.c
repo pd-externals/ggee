@@ -2,7 +2,7 @@
 
 
 #include <m_pd.h>
-#include "g_canvas.h"
+
 /* ------------------------ qread ----------------------------- */
 
 #include <stdio.h>
@@ -34,7 +34,7 @@ static void qread_open(t_qread *x,t_symbol *filename)
 	  return;
      }
 
-     canvas_makefilename(glist_getcanvas(x->x_glist), filename->s_name,
+     canvas_makefilename((void*)glist_getcanvas(x->x_glist), filename->s_name,
 			 fname, MAXPDSTRING);
 
 

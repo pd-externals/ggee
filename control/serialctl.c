@@ -26,9 +26,9 @@
 
 #define SETBIT(yy,ww,xx) \
 if (!strcmp(yy->s_name,#xx)) \
-     valid=1,ww |= ##xx;\
+     valid=1,ww |= xx;\
 if (!strcmp(yy->s_name,"~"#xx))\
-     valid=1,ww &= ~##xx;\
+     valid=1,ww &= ~xx;\
 if (!strcmp(yy->s_name,"list"))\
     valid=1,post(#xx);
      
@@ -359,7 +359,7 @@ static void serialctl_send(t_serialctl* x,t_symbol* s)
 void serialctl_start(t_serialctl* x)
 {
     if (x->x_fd >= 0 && !x->started) {
-       sys_addpollfn(x->x_fd, (t_fdpollfn)serialctl_read, x);
+       sys_addpollfn(x->x_fd, serialctl_read, x);
        post("serialctl: start");
        x->started = 1;
     }
