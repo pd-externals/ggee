@@ -29,23 +29,57 @@ typedef struct _shell
      int sr_intail;
      void* x_binbuf;
      int fdpipe[2];
+     int fdinpipe[2];
      int pid;
+     int x_del;
+     t_outlet* x_done;
+     t_clock* x_clock;
 } t_shell;
 
 static int shell_pid;
 
-void child_handler(int n)
+
+void shell_cleanup(t_shell* x)
+{
+     sys_rmpollfn(x->fdpipe[0]);
+
+     if (x->fdpipe[0]>0) close(x->fdpipe[0]);
+     if (x->fdpipe[1]>0) close(x->fdpipe[1]);
+     if (x->fdinpipe[0]>0) close(x->fdinpipe[0]);
+     if (x->fdinpipe[1]>0) close(x->fdinpipe[1]);
+
+     x->fdpipe[0] = -1;
+     x->fdpipe[1] = -1;
+     x->fdinpipe[0] = -1;
+     x->fdinpipe[1] = -1;
+     clock_unset(x->x_clock);
+}
+
+void shell_check(t_shell* x)
 {
 	int ret;
-	waitpid(-1,&ret,WNOHANG);
+	int status;
+	ret = waitpid(x->pid,&status,WNOHANG);
+	if (ret == x->pid) {
+	     shell_cleanup(x);
+	     if (WIFEXITED(status)) {
+		  outlet_float(x->x_done,WEXITSTATUS(status));
+	     }
+	     else outlet_float(x->x_done,0);
+	}
+	else {
+	     if (x->x_del < 100) x->x_del+=2; /* increment poll times */
+	     clock_delay(x->x_clock,x->x_del);
+	}
 }
+
 
 void shell_bang(t_shell *x)
 {
      post("bang");
 }
 
-#if 1
+/* snippet from pd's code */
 static void shell_doit(void *z, t_binbuf *b)
 {
     t_shell *x = (t_shell *)z;
@@ -126,43 +160,78 @@ void shell_read(t_shell *x, int fd)
      binbuf_free(bbuf);
 }
 
-#endif
+
+static void shell_send(t_shell *x, t_symbol *s,int ac, t_atom *at)
+{
+     int i;
+     char tmp[MAXPDSTRING];
+     int size = 0;
+
+     if (x->fdinpipe[0] == -1) return; /* nothing to send to */
+
+     for (i=0;i<ac;i++) {
+	  atom_string(at,tmp+size,MAXPDSTRING - size);
+	  at++;
+	  size=strlen(tmp);
+	  tmp[size++] = ' ';	  
+     }
+     tmp[size-1] = '\0';
+     post("sending %s",tmp); 
+     fprintf(x->fdinpipe[0],tmp);
+}
 
 static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 {
      int i;
      char* argv[20];
+     t_symbol* sym;
+
+     if (!strcmp(s->s_name,"send")) {
+	  post("send");
+	  shell_send(x,s,ac,at);
+	  return;
+     }
 
      argv[0] = s->s_name;
 
-     if (x->fdpipe[0] != -1) {
-	  close(x->fdpipe[0]);
-	  close(x->fdpipe[1]);
-	  sys_rmpollfn(x->fdpipe[0]);
-	  x->fdpipe[0] = -1;
-	  x->fdpipe[1] = -1;
+     if (x->fdpipe[0] != -1) { 
+	  post("shell: old process still running");
 	  kill(x->pid,SIGKILL);
+	  shell_cleanup(x);
      }
 
 
-	  
-     for (i=1;i<=ac;i++) {
-	  argv[i] = atom_getsymbolarg(i-1,ac,at)->s_name;
-	  /*	  post("argument %s",argv[i]); */
-     }
-     argv[i] = 0;
-
-     if (pipe(x->fdpipe) < 0)
+     if (pipe(x->fdpipe) < 0) {
 	  error("unable to create pipe");
+	  return;
+     }
+
+     if (pipe(x->fdinpipe) < 0) {
+	  error("unable to create input pipe");
+	  return;
+     }
+
 
      sys_addpollfn(x->fdpipe[0],shell_read,x);
 
      if (!(x->pid = fork())) {
+	  int status;
+	  for (i=1;i<=ac;i++) {
+	       argv[i] = getbytes(255);
+	       atom_string(at,argv[i],255);
+/*	       post("argument %s",argv[i]); */
+	       at++;
+	  }
+	  argv[i] = 0;
+
 	  /* reassign stdout */
 	  dup2(x->fdpipe[1],1);
+	  dup2(x->fdinpipe[1],0);
 	  execvp(s->s_name,argv);
-	  exit(0);
+	  exit(-1);
      }
+     x->x_del = 1;
+     clock_delay(x->x_clock,x->x_del);
 
      if (x->x_echo)
 	  outlet_anything(x->x_obj.ob_outlet, s, ac, at); 
@@ -182,6 +251,8 @@ static void *shell_new()
     x->x_echo = 0;
     x->fdpipe[0] = -1;
     x->fdpipe[1] = -1;
+    x->fdinpipe[0] = -1;
+    x->fdinpipe[1] = -1;
 
     x->sr_inhead = x->sr_intail = 0;
     if (!(x->sr_inbuf = (char*) malloc(INBUFSIZE))) bug("t_shell");;
@@ -189,6 +260,8 @@ static void *shell_new()
     x->x_binbuf = binbuf_new();
 
     outlet_new(&x->x_obj, &s_list);
+    x->x_done = outlet_new(&x->x_obj, &s_bang);
+    x->x_clock = clock_new(x, (t_method) shell_check);
     return (x);
 }
 
@@ -198,7 +271,6 @@ void shell_setup(void)
 			    (t_method)shell_free,sizeof(t_shell), 0,0);
     class_addbang(shell_class,shell_bang);
     class_addanything(shell_class, shell_anything);
-    signal(SIGCHLD, child_handler);
 }
 
 
