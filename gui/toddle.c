@@ -323,11 +323,16 @@ static void toddle_setwidget(void)
     toddle_widgetbehavior.w_activatefn =   toddle_activate;
     toddle_widgetbehavior.w_deletefn =   toddle_delete;
     toddle_widgetbehavior.w_visfn =   toddle_vis;
-#if (PD_VERSION_MINOR > 31) 
     toddle_widgetbehavior.w_clickfn = toddle_newclick;
+#if (PD_MINOR_VERSION < 37) 
     toddle_widgetbehavior.w_propertiesfn = NULL; 
-#endif
     toddle_widgetbehavior.w_savefn =   toddle_save;
+#endif
+
+#if PD_MINOR_VERSION >= 37
+    class_setsavefn(toddle_class,&toddle_save);
+#endif
+
 }
 
 

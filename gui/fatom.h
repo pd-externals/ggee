@@ -21,6 +21,8 @@ typedef struct _fatom
      int x_max; /* maximum value of a_pos (x_val) */
      int x_min; /* minimum value of a_pos (x_val) */
      int x_width; /* width of widget (e.g x_rect_height + 15 for hslider, x_rect_width + 15 for slider) */
+     t_symbol* x_color;
+     t_symbol* x_bgcolor;
 } t_fatom;
 
 /* widget helper functions */
@@ -103,11 +105,17 @@ static void create_widget(t_fatom *x, t_glist *glist)
                     -repeatinterval 20 \
                     -from %d -to %d \
                     -width %d \
+                    -bg %s \
+                    -activebackground %s \
+                    -troughcolor %s \
                     -command fatom_cb%x\n",canvas,x,
 	     x->x_max-x->x_min+14,
 	     x->x_max,
 	     x->x_min,
 	     x->x_width,
+             x->x_color->s_name,
+             x->x_color->s_name,
+             x->x_bgcolor->s_name,
 	     x);
   } else  if (!strcmp(x->x_type->s_name,"hslider")) {
     x->x_rect_width =  x->x_max-x->x_min + 24;
@@ -121,17 +129,29 @@ static void create_widget(t_fatom *x, t_glist *glist)
                     -repeatinterval 20 \
                     -from %d -to %d \
                     -width %d \
+                    -bg %s \
+                    -activebackground %s \
+                    -troughcolor %s \
                     -command fatom_cb%x\n",canvas,x,
 	     x->x_max-x->x_min+14,
 	     x->x_min,
 	     x->x_max,
 	     x->x_width,
+             x->x_color->s_name,
+             x->x_color->s_name,
+             x->x_bgcolor->s_name,
 	     x);
   } else if (!strcmp(x->x_type->s_name,"checkbutton")) {
        x->x_rect_width = 32;
        x->x_rect_height = 28;
        sys_vgui("checkbutton .x%x.c.s%x \
-                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -text \"%s\"\n",canvas,x,x,x,x,x->x_text->s_name);
+                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -text \"%s\" \
+		     -bg %s \
+		     -activebackground %s \
+		     \n",canvas,x,x,x,x,
+		x->x_text->s_name,
+		x->x_color->s_name,
+		x->x_bgcolor->s_name);
   } else if (!strcmp(x->x_type->s_name,"hradio")) {
     int i;
     x->x_rect_width = 8*20;
@@ -178,12 +198,12 @@ static void create_widget(t_fatom *x, t_glist *glist)
 
 static void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 {
-  t_canvas *canvas=x->x_glist;//glist_getcanvas(glist);
+  t_canvas *canvas=glist_getcanvas(glist);// x->x_glist;//glist_getcanvas(glist);
   DEBUG(post("drawme %d",firsttime);)
      if (firsttime) {
        DEBUG(post("glist %x canvas %x",x->x_glist,canvas));
        create_widget(x,glist);	       
-       
+       x->x_glist = canvas;
        sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
 		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,x->x_glist,x,x);
               
@@ -390,7 +410,10 @@ static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h,t
     x->x_min = min;    
     if (h) x->x_width = h;
     else x->x_width = 15;
-   
+
+
+    x->x_color = gensym("grey");
+    x->x_bgcolor = gensym("grey");
 
     /* bind to a symbol for slider callback (later make this based on the
        filepath ??) */

@@ -20,7 +20,7 @@ static void ticker_save(t_gobj *z, t_binbuf *b)
 
     binbuf_addv(b, "ssiiss", gensym("#X"),gensym("obj"),
 		x->x_obj.te_xpix, x->x_obj.te_ypix ,  
-		gensym("ticker"),x->x_text);
+		gensym("ticker"),x->x_text,x->x_max,x->x_width);
     binbuf_addv(b, ";");
 }
 

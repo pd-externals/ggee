@@ -127,10 +127,10 @@ static void button_drawme(t_button *x, t_glist *glist, int firsttime)
   DEBUG(post("drawme %d",firsttime);)
      if (firsttime) {
        DEBUG(post("glist %x canvas %x",x->x_glist,canvas);)
-       if (x->x_glist != canvas) {
+	 //       if (x->x_glist != canvas) {
 	 create_widget(x,glist);	       
 	 x->x_glist = canvas;
-       }
+	 //       }
        sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
 		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x->x_glist,x,x);
               

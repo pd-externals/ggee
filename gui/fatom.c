@@ -1,19 +1,8 @@
 #include <m_pd.h>
 #include "g_canvas.h"
-#include <ggee.h>
-
-#ifdef NT
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4305 )
-#endif
-
 #include "fatom.h"
 
-
 static t_class *fatom_class;
-
-
-
 
 void fatom_setup() {
   post("fatom setup");
