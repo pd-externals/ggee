@@ -2,12 +2,6 @@
 
 
 #include <m_pd.h>
-/*#include <m_pd.h>*/
-#include "g_canvas.h"
-#ifdef NT
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4305 )
-#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -47,7 +41,7 @@ typedef struct _sfread
      t_float x_skip;
      t_float x_speed;
 
-     t_glist * x_glist;
+     t_canvas * x_canvas;
      t_outlet *x_bangout;
 } t_sfread;
 
@@ -62,7 +56,7 @@ void sfread_open(t_sfread *x,t_symbol *filename)
 	  return;
      }
 
-     canvas_makefilename(glist_getcanvas(x->x_glist), filename->s_name,
+     canvas_makefilename(x->x_canvas, filename->s_name,
 			 fname, MAXPDSTRING);
 
 
@@ -267,7 +261,7 @@ static void *sfread_new(t_floatarg chan,t_floatarg skip)
     t_sfread *x = (t_sfread *)pd_new(sfread_class);
     t_int c = chan;
 
-    x->x_glist = (t_glist*) canvas_getcurrent();
+    x->x_canvas =  canvas_getcurrent();
 
     if (c<1 || c > MAX_CHANS) c = 1;
     floatinlet_new(&x->x_obj, &x->x_offset);
