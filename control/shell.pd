@@ -1,4 +1,4 @@
-#N canvas 309 28 450 300 10;
+#N canvas 420 4 512 424 10;
 #X obj 137 98 shell;
 #X msg 36 39 ls;
 #X obj 121 165 print;
@@ -12,9 +12,10 @@
 #X obj 60 17 metro 10;
 #X floatatom 271 89 4 0 0;
 #X obj 53 245 shell;
-#X obj 53 273 print;
-#X msg 53 219 cvs update;
+#X obj 97 306 print;
 #X msg 133 215 cvs commit -m fixed_bug_in_shell;
+#X msg 19 191 cvs -q update;
+#X obj 53 268 route ?;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 3 0 0 0;
@@ -23,6 +24,7 @@
 #X connect 8 0 10 0;
 #X connect 9 0 0 0;
 #X connect 10 0 3 0;
-#X connect 12 0 13 0;
+#X connect 12 0 16 0;
 #X connect 14 0 12 0;
 #X connect 15 0 12 0;
+#X connect 16 1 13 0;

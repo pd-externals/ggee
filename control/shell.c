@@ -148,7 +148,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	  
      for (i=1;i<=ac;i++) {
 	  argv[i] = atom_getsymbolarg(i-1,ac,at)->s_name;
-	  post("argument %s",argv[i]);
+	  /*	  post("argument %s",argv[i]); */
      }
      argv[i] = 0;
 
