@@ -9,18 +9,18 @@
 typedef struct _fatom
 {
      t_object x_obj;
-     t_atom a_pos;
+     t_atom a_pos;  /* the value of the fatom */
 
-     t_glist * x_glist;
-     int x_rect_width;
-     int x_rect_height;
-     t_symbol*  x_sym;
-     t_symbol*  x_type;
+     t_glist * x_glist; /* value of the current canvas, intialized in _new */
+     int x_rect_width; /* width of the widget */
+     int x_rect_height; /* height of the widget */
+     t_symbol*  x_sym; /* symbol for receiving callbacks from GUI */
+     t_symbol*  x_type; /* type of fatom (vslider, hslider, checkbutton) */
 
-     t_symbol*  x_text;
-     int x_max;
-     int x_min;
-     int x_width;
+     t_symbol*  x_text; /* associated widget text */
+     int x_max; /* maximum value of a_pos (x_val) */
+     int x_min; /* minimum value of a_pos (x_val) */
+     int x_width; /* width of widget (e.g x_rect_height + 15 for hslider, x_rect_width + 15 for slider) */
 } t_fatom;
 
 /* widget helper functions */
