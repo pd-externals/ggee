@@ -230,10 +230,11 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	  /* reassign stdout */
 	  dup2(x->fdpipe[1],1);
 	  dup2(x->fdinpipe[1],0);
+	  post("executing");
 	  execvp(s->s_name,argv);
 	  exit(-1);
      }
-     x->x_del = 1;
+     x->x_del = 4;
      clock_delay(x->x_clock,x->x_del);
 
      if (x->x_echo)
