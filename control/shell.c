@@ -8,18 +8,32 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <sched.h>
 
 void sys_rmpollfn(int fd);
+void sys_addpollfn(int fd, void* fn, void *ptr);
 
 /* ------------------------ shell ----------------------------- */
 
 #define INBUFSIZE 1024
 
 static t_class *shell_class;
+
+
+static void drop_priority(void) 
+{
+#ifdef _POSIX_PRIORITY_SCHEDULING
+    struct sched_param par;
+    int p1 ,p2, p3;
+    par.sched_priority = 0;
+    sched_setscheduler(0,SCHED_OTHER,&par);
+#endif
+}
 
 
 typedef struct _shell
@@ -242,6 +256,11 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	  /* reassign stdout */
 	  dup2(x->fdpipe[1],1);
 	  dup2(x->fdinpipe[1],0);
+
+          /* drop privileges */
+          drop_priority();
+          seteuid(getuid());          /* lose setuid priveliges */
+
 	  post("executing %s",cmd);
 	  system(cmd);
 //	  execvp(s->s_name,argv);
