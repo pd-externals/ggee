@@ -198,7 +198,7 @@ static void streamin_connectpoll(t_streamin *x)
 
     if (x->x_socket > 0) {
 	 post("streamin~: new connection");
-	 close(x->x_socket);
+	 sys_closesocket(x->x_socket);
 	 sys_rmpollfn(x->x_socket);
     }
 
