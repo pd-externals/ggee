@@ -4,14 +4,6 @@
 #X obj 118 128 button Hit_me_with_your_rhythm_stick;
 #X msg 118 181 yes I will;
 #X obj 118 83 button OK;
-#X obj 325 328 del 400;
-#X obj 248 256 del 400;
-#X obj 324 195 del 400;
-#X obj 375 254 del 400;
-#X obj 368 246 button Don't_click;
-#X obj 321 321 button Don't_click;
-#X obj 316 188 button Don't_click;
-#X obj 236 247 button Don't_click;
 #X text 17 21 Button \, a bang with a label (no pics yet);
 #X text 26 374 (C) dosmildos Guenter Geiger;
 #X text 17 41 button <text> \, _ are made into spaces;
@@ -19,11 +11,3 @@
 #X connect 2 0 3 0;
 #X connect 3 0 1 0;
 #X connect 4 0 2 0;
-#X connect 5 0 12 0;
-#X connect 6 0 11 0;
-#X connect 7 0 9 0;
-#X connect 8 0 10 0;
-#X connect 9 0 8 0;
-#X connect 10 0 5 0;
-#X connect 11 0 7 0;
-#X connect 12 0 6 0;

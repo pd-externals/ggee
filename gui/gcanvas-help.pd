@@ -1,14 +1,14 @@
 #N canvas 132 175 459 478 10;
-#X obj 115 415 nbx 5 25 -1e+37 1e+37 0 0 empty empty X: -20 14 1 16
--241655 -1 -1 195 256;
-#X obj 132 192 gcanvas 200 97;
+#X obj 116 413 nbx 5 25 -1e+37 1e+37 0 0 empty empty X: -20 14 1 16
+-241655 -1 -1 126 256;
+#X obj 132 192 gcanvas 49 49;
 #X obj 342 412 nbx 5 25 -1e+37 1e+37 0 0 empty empty Y: -20 14 1 16
--241655 -1 -1 77 256;
-#X msg 132 172 size 200 97;
-#X obj 37 194 vsl 20 200 200 5 0 0 empty empty Y 0 -8 1 11 -241655
--1 -1 10500 0;
+-241655 -1 -1 27 256;
+#X msg 132 172 size 49 49;
+#X obj 37 193 vsl 20 200 200 5 0 8.38861e+06 empty empty Y 0 -8 1 11
+-241655 -1 -1 15308 0;
 #X obj 135 72 hsl 200 20 5 200 0 0 empty empty X -2 -6 1 11 -241655
--1 -1 19900 0;
+-1 -1 4592 0;
 #X obj 20 62 loadbang;
 #X msg 37 85 50;
 #X text 18 3 [gcanvas];
