@@ -27,18 +27,20 @@ void prepend_anything(t_prepend *x,t_symbol* s,t_int argc,t_atom* argv)
      int    c_out = 0;
      t_atom* a = a_out;
 
-#if 1
-     SETSYMBOL(a,s);
-     a++;
-     c_out++;
-#endif
+     if (argv->a_type == A_SYMBOL) {
+       SETSYMBOL(a,s);
+       a++;
+       c_out++;
+     }
+
      while (i--) {
 	  switch( argv->a_type) {
 	  case A_FLOAT:
-	       post("%f",atom_getfloat(argv));
+	       SETFLOAT(a,atom_getfloat(argv));
+	       a++;
+	       c_out++;
 	       break;
 	  case A_SYMBOL:
-	       post("%s",atom_getsymbol(argv)->s_name);
 	       SETSYMBOL(a,atom_getsymbol(argv));
 	       a++;
 	       c_out++;
@@ -48,9 +50,7 @@ void prepend_anything(t_prepend *x,t_symbol* s,t_int argc,t_atom* argv)
 	  }
 	  argv++;
      }
-
-     outlet_list(x->x_obj.ob_outlet,x->x_s,c_out,(t_atom*)&a_out);
-     post("done");
+     outlet_anything(x->x_obj.ob_outlet,x->x_s,c_out,(t_atom*)&a_out);
 }
 
 static void *prepend_new(t_symbol* s)
@@ -59,8 +59,10 @@ static void *prepend_new(t_symbol* s)
     outlet_new(&x->x_obj, &s_float);
     if (s != &s_)
 	 x->x_s = s;
-    else
+    else {
 	 x->x_s = gensym("prepend");
+	 error("prepend needs symbol argument");
+    }
     return (x);
 }
 
