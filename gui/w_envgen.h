@@ -64,7 +64,7 @@ static int envgen_next_doodle(t_envgen *x, int xpos,int ypos)
      int ret = -1;
      float xscale,yscale;
      int dxpos,dypos;
-     float minval = 1000000.0;
+     float minval = 100000.0;
      float tval;
      int i;
      int insertpos = -1;
@@ -82,22 +82,25 @@ static int envgen_next_doodle(t_envgen *x, int xpos,int ypos)
 
 	  dx2*=dx2;
 	  dy2*=dy2;
-	  tval = dx2+dy2;
-/*	  post("%i: dist = %f dx=%f dy=%f",i,tval,dx2,dy2);*/
-	  if ((dxpos + (x->duration[i] * xscale)) < xpos) 
+	  tval = sqrt(dx2+dy2);
+
+	  //	  post("%i: dist = %f dx=%f dy=%f",i,tval,dx2,dy2);
+	  if (tval <= minval) {
+	    minval = tval;	    
 	    insertpos = i;
-	  if (abs(tval) < minval) {
-	       minval = abs(tval);
 	  }
      }
 
      /* decide if we want to make a new one */
-/*          post("insertpos %d",insertpos); */
-     if (minval > /*5*/ 16 && insertpos >= 0 && !x->x_freeze) {
+     //     post("insertpos %d minval %f",insertpos,minval); 
+     if (minval > /*5*/ 8 && insertpos >= 0 && !x->x_freeze) {
 
-	  if (((dxpos + (x->duration[insertpos] * xscale)) - xpos) < 0)
+       //       post("insertpos %d",insertpos);
+	  while (((dxpos + (x->duration[insertpos] * xscale)) - xpos) < 0)
 	       insertpos++;
-/*	  post("minval = %f, insertpos = %d",minval,insertpos);*/
+	  while (((dxpos + (x->duration[insertpos-1] * xscale)) - xpos) > 0)
+	       insertpos--;
+	  //	  post("minval = %f, insertpos = %d",minval,insertpos);
 
 	  if (x->last_state+1 >= x->args)
 	       envgen_resize(x,x->args+1);
@@ -186,9 +189,9 @@ static void envgen_create(t_envgen *x, t_glist *glist)
 	  strcat(buf,num);
      }
      
-     sprintf(num,"-tags %xP\n",(unsigned int)x);
+     sprintf(num,"-tags %pP\n",x);
      strcat(buf,num);
-/*     post("sending %s",buf); */
+     //     post("sending %s",buf); 
      sys_vgui("%s",buf);
      envgen_create_doodles(x,glist);
 }
@@ -221,9 +224,10 @@ int i;
 	  strcat(buf,num);
      }
      strcat(buf,"\n");
-/*     post("sending %s",buf); */
+     //     post("sending %s",buf); 
      sys_vgui("%s",buf);
      envgen_update_doodles(x,glist);
+     draw_inlets(x, glist, 0,1,1);
 }
 
 
@@ -246,7 +250,7 @@ void envgen_erase(t_envgen* x,t_glist* glist)
      sys_vgui(".x%x.c delete %xS\n",
 	      glist_getcanvas(glist), x);
 
-     sys_vgui(".x%x.c delete %xP\n",
+     sys_vgui(".x%x.c delete %pP\n",
 	      glist_getcanvas(glist), x);
 
      n = 1;
@@ -283,6 +287,7 @@ static void envgen_displace(t_gobj *z, t_glist *glist,
     int dx, int dy)
 {
     t_envgen *x = (t_envgen *)z;
+    post("displace");
     x->x_obj.te_xpix += dx;
     x->x_obj.te_ypix += dy;
 
@@ -344,9 +349,9 @@ static void envgen_followpointer(t_envgen* x)
 	  
 	  dur = (x->w.pointerx - x->x_obj.te_xpix)*xscale;
 	  if (dur < x->duration[x->w.grabbed-1])
-	       dur = x->duration[x->w.grabbed-1] + 1.0;
+	       dur = x->duration[x->w.grabbed-1];
 	  if (dur > x->duration[x->w.grabbed+1])	  
-	       dur = x->duration[x->w.grabbed+1] - 0.2;
+	       dur = x->duration[x->w.grabbed+1];
 
 	  x->duration[x->w.grabbed] = dur;
      }
