@@ -72,11 +72,9 @@ typedef struct _streamout
 static void streamout_tempbuf(t_streamout *x,int size) {
 
      if (x->cbuf && x->tbufsize) freebytes(x->cbuf,x->tbufsize);
-     x->tbufsize=size;
+     x->tbufsize=size*sizeof(float)*x->x_tag.channels;
      if (!x->cbuf) 
-	  x->cbuf = getbytes(size*sizeof(short));
-     else
-	  x->cbuf = resizebytes(x->cbuf,x->nsamples*sizeof(short),size*sizeof(short));
+	  x->cbuf = getbytes(x->tbufsize);
      x->nsamples = size;
 }
 
@@ -156,11 +154,19 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
 static t_int *streamout_perform(t_int *w)
 {
     t_streamout* x = (t_streamout*) (w[1]);
-    t_float *in = (t_float *)(w[2]);
+    t_float *in[4];
     char* bp;
-    int n = (int)(w[3]);
-    int length = n*SF_SIZEOF(x->x_tag.format);
+    int n; 
+    int length;
     int sent = 0;
+    int i;
+    int chans = x->x_tag.channels;
+
+    
+    for (i=0;i<chans;i++)
+      in[i] =  (t_float *)(w[2+i]);
+    n = (int)(w[2+i]);
+    length = n*SF_SIZEOF(x->x_tag.format)*chans;
 
     if (n != x->nsamples)
       streamout_tempbuf(x,n);
@@ -168,20 +174,30 @@ static t_int *streamout_perform(t_int *w)
     x->x_tag.framesize=length;
     x->x_tag.count++;
     /* format the buffer */
-    bp = (char*)in;
+
     switch (x->x_tag.format) {
+    case SF_FLOAT: {
+	 float* cibuf =(float*) x->cbuf;
+	 bp = (char*) x->cbuf;
+	 for (i=0;i<chans;i++)
+	   while (n--) 
+	     *cibuf++ = *(in[i]++);
+	 break;
+    }
     case SF_16BIT: {
 	 short* cibuf =(short*) x->cbuf;
 	 bp = (char*) x->cbuf;
-	 while (n--) 
-	      *cibuf++ = (short) 32767.0 * *in++;
+	 for (i=0;i<chans;i++)
+	   while (n--) 
+	     *cibuf++ = (short) 32767.0 * *in[i]++;
 	 break;
     }
     case SF_8BIT: {
 	 unsigned char*  cbuf = (char*)  x->cbuf;
 	 bp = (char*) x->cbuf;
-	 while (n--) 
-	      *cbuf++ = (unsigned char)(128. * (1.0 + *in++));
+	 for (i=0;i<chans;i++)
+	   while (n--) 
+	     *cbuf++ = (unsigned char)(127. * (1.0 + *in[i]++));
 	 break;
     }
     default:
@@ -224,14 +240,30 @@ static t_int *streamout_perform(t_int *w)
 	      }
 	 }
     }
-    return (w+4);
+    return (w+3+chans);
 }
 
 
 
 static void streamout_dsp(t_streamout *x, t_signal **sp)
 {
-    dsp_add(streamout_perform, 3, x, sp[0]->s_vec, sp[0]->s_n);
+  switch (x->x_tag.channels) {
+  case 1:
+    dsp_add(streamout_perform, 3, x,sp[0]->s_vec, sp[0]->s_n);
+    post("one channel mode");
+    break;
+  case 2:
+    dsp_add(streamout_perform, 4, x,sp[0]->s_vec, sp[1]->s_vec,sp[0]->s_n);
+    post("two channel mode");
+    break;
+  case 4:
+    dsp_add(streamout_perform, 6, x,sp[0]->s_vec, sp[1]->s_vec,
+	    sp[2]->s_vec,sp[3]->s_vec,sp[0]->s_n);
+    post("four channel mode");
+    break;
+  default:
+    post("streamout: %d channels not supported",x->x_tag.channels);
+  }
 }
 
 
@@ -276,10 +308,12 @@ static void streamout_float(t_streamout* x,t_float arg)
 
 
 
-static void *streamout_new(t_symbol* prot)
+static void *streamout_new(t_symbol* prot,float channels)
 {
     t_streamout *x = (t_streamout *)pd_new(streamout_class);
     outlet_new(&x->x_obj, &s_float);
+
+    if (channels == 0) channels = 1;
 
     x->hostname = gensym("localhost");
     x->portno = 3000;
@@ -291,7 +325,7 @@ static void *streamout_new(t_symbol* prot)
 	      x->x_protocol = SOCK_DGRAM;
 
     x->x_tag.format = SF_FLOAT;
-    x->x_tag.channels = 1;
+    x->x_tag.channels = channels;
     x->x_tag.version = 1;
     x->cbuf = NULL;
     streamout_tempbuf(x,64);
@@ -310,7 +344,7 @@ static void streamout_free(t_streamout* x)
 void streamout_tilde_setup(void)
 {
     streamout_class = class_new(gensym("streamout~"), (t_newmethod) streamout_new, (t_method) streamout_free,
-    	sizeof(t_streamout), 0, A_DEFSYM, 0);
+    	sizeof(t_streamout), 0, A_DEFSYM,A_DEFFLOAT, 0);
     class_addmethod(streamout_class, (t_method) streamout_connect,
     	gensym("connect"), A_SYMBOL, A_DEFFLOAT, 0);
     class_addmethod(streamout_class, (t_method) streamout_disconnect,

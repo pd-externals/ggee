@@ -1,5 +1,5 @@
 
-/* Written by Guenter Geiger <geiger@debian.org> (C) 1999 */
+/* Written by Guenter Geiger <geiger@xdv.org> (C) 1999 */
 
 #include <m_pd.h>
 #include "stream.h"
@@ -30,7 +30,7 @@
 #ifdef unix
 #define NONBLOCKED
 #endif
-#define INBUFSIZE 8192
+
 #define MAXFRAMES 128
 #define MAXFRAMESIZE 256
 #define AVERAGENUM 10
@@ -349,7 +349,7 @@ static void streamin_print(t_streamin* x)
      for (i=0;i<AVERAGENUM;i++)
 	  avg += x->average[i];
      post("last size = %d, avg size = %d, %d underflows",
-	  QUEUESIZE,avg,x->underflow);
+	  QUEUESIZE,avg/AVERAGENUM,x->underflow);
 }
 
 
