@@ -119,6 +119,9 @@ void state_dosave(t_state *x)
 	  if (!strcmp(class_getname(a->te_pd),"sliderh")) {
 		fprintf(fp,"%f\n",atom_getfloat(TATOM(a)));
 	  }
+	  if (!strcmp(class_getname(a->te_pd),"ticker")) {
+		fprintf(fp,"%f\n",atom_getfloat(TATOM(a)));
+	  }
 #if 0
 	  if (!strcmp(class_getname(a->te_pd),"vsl")) {
 	    /*	    float val = atom_getfloat(TATOM(a));*/
@@ -205,7 +208,8 @@ void state_load(t_state *x)
      do {
 	  if (a->te_type == T_ATOM || 
 	      !strcmp(class_getname(a->te_pd),"slider")
-	/* ||
+	      ||
+	     !strcmp(class_getname(a->te_pd),"ticker")/* ||
 	     !strcmp(class_getname(a->te_pd),"vsl") ||
 	      !strcmp(class_getname(a->te_pd),"hsl" ) */
 	      ) {
