@@ -9,8 +9,10 @@ typedef struct _wenvgen {
      int    height;
      int    numdoodles;
      int    grabbed; /* for moving points */
-     int    pointerx;
-     int    pointery;
+     int    shift; /* move 100th */
+     float    pointerx;
+     float    pointery;
+     t_clock* numclock;
 } t_wenvgen;
 
 typedef struct _envgen
@@ -19,8 +21,6 @@ typedef struct _envgen
 
      t_float x_val;
      
-     t_float x_slevel;
-     t_float x_time;
      int x_state;
      int last_state;
      int sustain_state;
@@ -31,7 +31,10 @@ typedef struct _envgen
      t_float  totaldur;
      t_int    args; /* get rid of that */
      t_int resizing;
+     t_int resizeable;
 
+     t_float min;
+     t_float max;
 
      t_clock* x_clock;
      t_float x_freeze;

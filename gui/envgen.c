@@ -132,6 +132,11 @@ void envgen_list(t_envgen *x,t_symbol* s, int argc,t_atom* argv)
      }
 }
 
+void envgen_setresize(t_envgen *x, t_floatarg f)
+{
+     x->resizeable = f;
+}
+
 
 void envgen_float(t_envgen *x, t_floatarg f)
 {
@@ -152,8 +157,6 @@ void envgen_float(t_envgen *x, t_floatarg f)
 void envgen_bang(t_envgen *x)
 {
      t_atom   a[2];
-     x->x_time = 0.0;
-
 
      SETFLOAT(a,x->finalvalues[NONE]);
      SETFLOAT(a+1,0);
@@ -188,7 +191,7 @@ static void envgen_tick(t_envgen* x)
      if (x->x_state <= x->last_state) {
 	  float del = x->duration[x->x_state] - x->duration[x->x_state-1];
 	  clock_delay(x->x_clock,del);
-	  SETFLOAT(a,x->finalvalues[x->x_state]);
+	  SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
 	  SETFLOAT(a+1,del);
 	  
 	  outlet_list(x->x_obj.ob_outlet,&s_list,2,(t_atom*)&a);
@@ -204,59 +207,53 @@ static void envgen_freeze(t_envgen* x, t_floatarg f)
 
 static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
 {
-    t_envgen *x = (t_envgen *)pd_new(envgen_class);
-
-    x->args = STATES;
-    x->finalvalues = getbytes( x->args*sizeof(t_float));
-    x->duration = getbytes( x->args*sizeof(t_float));
+     t_envgen *x = (t_envgen *)pd_new(envgen_class);
+     
+     x->args = STATES;
+     x->finalvalues = getbytes( x->args*sizeof(t_float));
+     x->duration = getbytes( x->args*sizeof(t_float));
 #ifdef DEBUG
-    post("finalvalues %x",x->finalvalues);
+     post("finalvalues %x",x->finalvalues);
 #endif
-    /* widget */
-
-    x->w.glist = (t_glist*) canvas_getcurrent();
-    if (argc) {
-      x->w.width = atom_getfloat(argv++);
-      argc--;
-    }
-    else
-      x->w.width = 140;
-
-    if (argc) {
-      x->w.height = atom_getfloat(argv++);
-      argc--;
-    }
-    else
-      x->w.height = 200;
-
-
-
-    x->w.grabbed = 0;
-    x->resizing = 0;
-    /* end widget */
-
-    if (argc)
-	 envgen_init(x,argc,argv);
-    else {
-	 t_atom a[5];
-	 SETFLOAT(a,0);
-	 SETFLOAT(a+1,50);
-	 SETFLOAT(a+2,1);
-	 SETFLOAT(a+3,50);
-	 SETFLOAT(a+4,0);
-	 envgen_init(x,5,a);
-    }	 
-
-    x->x_val = 0.0;
-    x->x_state = NONE;
-    x->sustain_state = SUSTAIN;
-    x->x_freeze = 0;
-
-    outlet_new(&x->x_obj, &s_float);
-    x->out2 = outlet_new(&x->x_obj, &s_float);
-
-    x->x_clock = clock_new(x, (t_method) envgen_tick);
-    return (x);
+     /* widget */
+     
+     x->w.grabbed = 0;
+     x->resizing = 0;
+     x->resizeable = 0;
+     
+     x->w.glist = (t_glist*) canvas_getcurrent();
+     
+     x->w.width = 200;
+     if (argc) x->w.width = atom_getfloat(argv++),argc--;
+     x->w.height = 140;
+     if (argc) x->w.height = atom_getfloat(argv++),argc--;
+     x->max = 1.0;
+     if (argc) x->max = atom_getfloat(argv++),argc--;
+     x->min = 0.0;
+     if (argc) x->min = atom_getfloat(argv++),argc--;
+     
+     if (argc)
+	  envgen_init(x,argc,argv);
+     else {
+	  t_atom a[5];
+	  SETFLOAT(a,0);
+	  SETFLOAT(a+1,50);
+	  SETFLOAT(a+2,1);
+	  SETFLOAT(a+3,50);
+	  SETFLOAT(a+4,0);
+	  envgen_init(x,5,a);
+     }	 
+     
+     x->x_val = 0.0;
+     x->x_state = NONE;
+     x->sustain_state = SUSTAIN;
+     x->x_freeze = 0;
+     
+     outlet_new(&x->x_obj, &s_float);
+     x->out2 = outlet_new(&x->x_obj, &s_float);
+     
+     x->x_clock = clock_new(x, (t_method) envgen_tick);
+     return (x);
 }
 
 
@@ -288,7 +285,7 @@ void envgen_setup(void)
 
     class_addmethod(envgen_class,(t_method)envgen_totaldur,gensym("duration"),A_FLOAT,NULL);
     class_addmethod(envgen_class,(t_method)envgen_freeze,gensym("freeze"),A_FLOAT,NULL);
-
+    class_addmethod(envgen_class,(t_method)envgen_setresize,gensym("resize"),A_FLOAT,A_NULL);
 
     envgen_setwidget();
     class_setwidget(envgen_class,&envgen_widgetbehavior);
