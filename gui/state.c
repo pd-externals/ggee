@@ -251,7 +251,6 @@ void state_load(t_state *x)
 
      x->x_loading = 0;
      fclose(fp);
-
 }
 
 void state_float(t_state *x,t_floatarg f)
@@ -266,6 +265,7 @@ void state_float(t_state *x,t_floatarg f)
      }
 	  
      state_load(x);
+     outlet_float(x->x_obj.ob_outlet,x->x_slot);
 }
 
 
@@ -279,7 +279,23 @@ void state_anything(t_state *x,t_symbol* s,t_int argc,t_atom* argv)
      }
 
      state_load(x);
+     outlet_symbol(x->x_obj.ob_outlet,x->x_symslot);
 }
+
+
+void state_symbol(t_state *x,t_symbol* s)
+{
+     x->x_symslot = s;
+     if (x->x_save) {
+	  x->x_save = 0;
+	  state_dosave(x);
+	  return;
+     }
+
+     state_load(x);
+     outlet_symbol(x->x_obj.ob_outlet,x->x_symslot);
+}
+
 
 
 
@@ -319,6 +335,7 @@ void state_setup(void)
     class_addmethod(state_class,(t_method) state_save, gensym("save"), 0);
     class_addanything(state_class,(t_method) state_anything);
     class_addbang(state_class,state_bang);
+    class_addsymbol(state_class,state_symbol);
 /*    class_addmethod(state_class, (t_method)state_load, gensym("load"), 0);*/
 }
 
