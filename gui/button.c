@@ -331,7 +331,7 @@ static void *button_new(t_symbol* text)
 /* pipe startup code to tk */
 
     sys_vgui("proc button_cb%x {} {\n
-       pd [concat button%x b \\;]\n
+       pd [concat button%p b \\;]\n
        }\n",x,x);
 
     outlet_new(&x->x_obj, &s_float);
