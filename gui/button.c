@@ -318,7 +318,7 @@ static void *button_new(t_symbol* text)
       x->x_text = text;
 
     /* TODO .. ask the button for its width */
-    x->x_width += strlen(x->x_text->s_name)*5.6;
+    x->x_width += strlen(x->x_text->s_name)*5.7;
 
     sprintf(buf,"button%x",x);
     x->x_sym = gensym(buf);

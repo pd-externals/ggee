@@ -182,7 +182,7 @@ static void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
 		text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2);
      }
      draw_inlets(x, glist, firsttime, 1,1);
-     draw_handle(x, glist, firsttime);
+     //     draw_handle(x, glist, firsttime);
 
 }
 
