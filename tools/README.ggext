@@ -1,0 +1,22 @@
+This is a part of the vbap implementation from 
+Ville Pulkki <Ville.Pulkki@hut.fi>
+
+Other parts of the code are folded into the "vbap" external.
+
+An example how to create a vbap file used by the "vabp" external:
+
+first type make to generate the "define_loudspeaker" program.
+
+write down the description of your loudspeaker positions, similar to
+the file
+
+loudspeaker_directions_3D
+
+then call 
+
+./define_loudspeaker loudspeaker_directrions_3D > ls_setup 
+
+lsi_setup can be used with the "vbap" object to spatialize the data.
+
+Guenter Geiger
+

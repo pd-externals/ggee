@@ -1,0 +1,9 @@
+3 	# dimensionality
+-30 0	# directions (azimuth elevation) of  loudspeakers
+30 0	
+-90 0	
+90 0	
+180 0	
+180 40	
+-30 40	
+30 40	

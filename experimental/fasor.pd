@@ -1,0 +1,10 @@
+#N canvas 166 117 500 171 10;
+#X obj 30 43 fasor~;
+#X obj 21 90 dac~;
+#X floatatom 30 14;
+#X text 110 8 fasor is similar to phasor~ \, but changes it's frequency;
+#X text 110 23 only at phase 0;
+#X text 28 142 (C) 1999 - 2000 Guenter Geiger;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 2 0 0 0;

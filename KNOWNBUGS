@@ -1,0 +1,12 @@
+
+
+
+envgen has different methods of data output (indexed, line~pairs, dump) which
+all go to the same outlet
+
+sfread doesn't work on Windows (and will never do, use readsf~^H^H^H^H^H 
+sfplay instead)
+
+the objects for serial control only work under Linux
+
+

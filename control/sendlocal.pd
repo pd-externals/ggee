@@ -1,0 +1,18 @@
+#N canvas 245 35 596 413 10;
+#N canvas 296 238 600 380 /SUBPATCH/ 0;
+#X obj 104 220 print subpatch;
+#X obj 105 160 rl test;
+#X connect 1 0 0 0;
+#X restore 254 192 pd;
+#X obj 39 285 print local;
+#X floatatom 38 142;
+#X msg 72 138 nope dope;
+#X text 38 327 (C) 1999 Guenter Geiger;
+#X obj 41 198 sl test1;
+#X obj 39 259 rl test1;
+#X text 31 38 receive locally sent messages with receivelocal;
+#X text 31 20 send messages locally (per canvas) with sendlocal;
+#X text 30 56 aliases are "sl" and "rl";
+#X connect 2 0 5 0;
+#X connect 3 0 5 0;
+#X connect 6 0 1 0;

@@ -1,0 +1,68 @@
+
+EXT = @EXT@
+DEFS = @DEFS@ -DPD_VERSION_MINOR=@pd_minor_version@
+CC = @CC@
+CXX = @CXX@
+LD = @LD@
+AFLAGS = @AFLAGS@
+LFLAGS = @LFLAGS@
+WFLAGS =
+IFLAGS = -I./include
+INSTALL_PREFIX=@prefix@
+
+VERSION = \"$(shell cat VERSION)\"
+DISTVERSION = $(shell cat VERSION)
+
+.SUFFIXES: .$(EXT)
+
+PDCFLAGS = @CFLAGS@ $(DEFS) $(IFLAGS) $(WFLAGS) $(LFLAGS) $(AFLAGS) -DVERSION=$(VERSION) 
+CFLAGS = @CFLAGS@ $(DEFS) $(IFLAGS) $(WFLAGS) -DVERSION=$(VERSION)
+CXXFLAGS = $(CFLAGS)
+
+STKPD= @STKPD@
+STK= @STK@
+BUILD_STK = @BUILDSTK@
+#LIBS = -lc -lm 
+LIBS = @LIBS@
+SOURCES = @MYSOURCES@
+TARGETS = $(SOURCES:.c=.$(EXT)) $(STKPD)
+
+all:  $(STK) $(TARGETS) 
+
+ggext: $(STK) $(TARGETS)
+	cc -c $(CFLAGS) -DPD ggee.c
+	$(LD) -export_dynamic  -shared -o ggext.pd_linux ggee.o */*.o $(LIBS)
+	strip --strip-unneeded ggext.pd_linux
+
+clean::
+	-rm  */*.$(EXT) *.$(EXT) so_locations rm */*~ *~ *.o */*.o
+
+distclean: clean
+	-rm config.cache config.log config.status makefile
+
+
+distcleancvs:
+	-rm -r CVS reference/CVS
+
+
+.c.o:
+	$(CC) -c -o $@ $(CFLAGS) -DPD $*.c
+
+# cp $@ $*_stat.o
+
+.o.pd_linux:
+	$(CC) -o $@ $(PDCFLAGS) -DPD $*.o
+
+
+include makefile.stk
+
+
+install::
+	install -d $(INSTALL_PREFIX)/lib/pd/externs
+	install -m 644 */*.pd_linux $(INSTALL_PREFIX)/lib/pd/externs
+	-install -m 644 ggext.pd_linux $(INSTALL_PREFIX)/lib/pd/externs
+	install -m 644 */*.pd $(INSTALL_PREFIX)/lib/pd/doc/5.reference
+
+
+dist: distclean
+	(cd ..;tar czvf ggee-$(DISTVERSION).tgz ggee)

@@ -1,0 +1,66 @@
+#include <m_pd.h>
+#include <math.h>
+#include <string.h>
+#ifdef NT
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4305 )
+#endif
+
+/* ------------------------ osctl ----------------------------- */
+#ifndef M_PI
+#define M_PI 3.141593f
+#endif
+
+void InitOSCReceive() {
+    struct OSCReceiveMemoryTuner rt;
+    Boolean result;
+
+    rt.InitTimeMemoryAllocator = MyInitTimeMalloc;
+    rt.RealTimeMemoryAllocator = MyRealTimeMalloc;
+    rt.receiveBufferSize = 1000;
+    rt.numReceiveBuffers = 100;
+    rt.numQueuedObjects = 200;
+    rt.numCallbackListNodes = 100;
+
+    result = OSCInitReceive(&rt);
+
+    if (result == FALSE) {
+	fatal_error("OSCInitReceive returned FALSE!\n");
+    }
+}
+
+
+
+static t_class *osctl_class;
+
+
+typedef struct _osctl
+{
+     t_object x_obj;
+} t_osctl;
+
+
+void osctl_bang(t_osctl *x)
+{
+     outlet_float(x->x_obj.ob_outlet, x->x_osctl);
+}
+
+static void *osctl_new(t_symbol* s)
+{
+    t_osctl *x = (t_osctl *)pd_new(osctl_class);
+    
+    InitOSCReceive();
+
+
+    outlet_new(&x->x_obj, &s_float);
+    return (x);
+}
+
+void osctl_setup(void)
+{
+    osctl_class = class_new(gensym("osctl"), (t_newmethod)osctl_new, 0,
+				sizeof(t_osctl), 0,0);
+    class_addbang(osctl_class,osctl_bang);
+}
+
+

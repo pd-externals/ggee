@@ -1,0 +1,107 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(ggee.c)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_CXX
+
+AC_SUBST(STK)
+AC_SUBST(STKPD)
+AC_SUBST(BUILDSTK)
+AC_SUBST(AFLAGS)
+AC_SUBST(MYSOURCES)
+AC_SUBST(LFLAGS)
+AC_SUBST(EXT)
+AC_SUBST(LD)
+AC_SUBST(pd_minor_version)
+
+
+LD=ld
+
+
+AC_PREFIX_DEFAULT(/usr)
+
+dnl Replace `main' with a function in -lm:
+
+AC_CHECK_LIB(m, main)
+
+dnl Replace `main' with a function in -lpthread:
+
+AC_CHECK_LIB(pthread, main)
+
+dnl AC_CHECK_LIB(sndfile, sf_close)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h sys/time.h unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_TIME
+
+dnl Checks for library functions.
+AC_FUNC_MMAP
+AC_CHECK_FUNCS(select socket strerror)
+
+
+
+
+
+
+dnl Replace `main' with a function in -lstk:
+dnl stk is broken atm
+dnl 
+dnl LIBS="$LFLAGS -L../stk/STK"
+dnl CFLAGS="$CFLAGS -I../stk/STK"
+dnl AC_CHECK_LIB(stk, main, STK=stk)
+
+
+
+dnl
+dnl  OK, checks for machines are here now
+dnl
+
+MYSOURCES="`echo */*.c`"
+
+if test `uname -m` = alpha; 
+then 
+ AFLAGS="-mieee  -mcpu=ev56"; 
+fi
+
+if test `uname -s` = Linux; 
+then
+  LFLAGS="-export_dynamic  -shared"
+  EXT=pd_linux	
+fi
+
+if test `uname -s` = IRIX64; 
+then
+LFLAGS="-n32 -DUNIX -DIRIX -DN32 -woff 1080,1064,1185 \
+	-OPT:roundoff=3 -OPT:IEEE_arithmetic=3 -OPT:cray_ivdep=true \
+        -shared -rdata_shared"
+EXT=pd_irix6
+fi
+
+if test `uname -s` = IRIX32; 
+then
+LFLAGS="-o32 -DUNIX -DIRIX -O2 
+         -shared -rdata_shared"
+EXT=pd_irix5
+fi
+
+AC_ARG_WITH(stk,[
+  --with-stk=PATH       path to stk],
+   BUILDSTK="$withval";
+   STK=libstk;
+   STKPD=experimental/stk.$EXT;
+   LD="c++"
+,)
+
+AC_ARG_WITH(minor-version,[
+  --with-minor-version=version   pd-version(without 0.)],pd_minor_version="$withval",pd_minor_version="32")
+
+
+
+
+AC_OUTPUT(makefile)
+dnl AC_OUTPUT(makefile signal/makefile control/makefile gui/makefile filters/makefile experimental/makefile other/makefile)
