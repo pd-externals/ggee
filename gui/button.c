@@ -10,6 +10,10 @@
 #pragma warning( disable : 4305 )
 #endif
 
+#if PD_VERSION_MINOR < 37
+#define t_rtext t_text
+#endif
+
 #define IOWIDTH 4
 
 typedef struct _button
@@ -237,7 +241,11 @@ static void button_vis(t_gobj *z, t_glist *glist, int vis)
     t_rtext *y;
     DEBUG(post("vis: %d",vis);)
     if (vis) {
+#ifdef PD_MINOR_VERSION
       	y = (t_rtext *) rtext_new(glist, (t_text *)z);
+#else
+        y = (t_rtext *) rtext_new(glist, (t_text *)z,0,0);
+#endif
 	 button_drawme(s, glist, 1);
     }
     else {

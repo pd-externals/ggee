@@ -1,7 +1,8 @@
 /* ------------------------ fatom ----------------------------- */
 
 #define x_val a_pos.a_w.w_float
-#define DEBUG(x) x
+#define DEBUG(x)
+
 
 typedef struct _fatom
 {
@@ -293,7 +294,11 @@ static void fatom_vis(t_gobj *z, t_glist *glist, int vis)
     t_rtext *y;
     DEBUG(post("vis: %d",vis);)
     if (vis) {
+#ifdef PD_MINOR_VERSION
       	y = (t_rtext *) rtext_new(glist, (t_text *)z);
+#else
+        y = (t_rtext *) rtext_new(glist, (t_text *)z,0,0);
+#endif
 	 fatom_drawme(s, glist, 1);
     }
     else {
