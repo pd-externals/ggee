@@ -141,7 +141,14 @@ static void streamin_datapoll(t_streamin *x)
      n = x->nbytes;
      if (x->nbytes == 0) {      /* get the new tag */
 	  ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),MSG_PEEK);
-	  if (ret != sizeof(t_tag)) return;
+	  if (ret != sizeof(t_tag)) {
+#ifdef NT
+            sys_closesocket(x->x_socket);
+            sys_rmpollfn(x->x_socket);
+            x->x_socket = -1;
+#endif
+            return;
+          }
 	  ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),0);
 
 	  x->nbytes = n = x->frames[x->framein].tag.framesize;
