@@ -141,16 +141,22 @@ void envgen_setresize(t_envgen *x, t_floatarg f)
 void envgen_float(t_envgen *x, t_floatarg f)
 {
      int state = 0;
+     float val;
+
      while (x->duration[state] < f && state <  x->last_state) state++;
 
      if (state == 0 || f >= x->duration[x->last_state]) {
-	  outlet_float(x->x_obj.ob_outlet,x->finalvalues[state]);
+	  outlet_float(x->x_obj.ob_outlet,x->finalvalues[state]*(x->max-x->min));
 	  return;
      }
-     outlet_float(x->x_obj.ob_outlet,x->finalvalues[state-1] + 
+
+     val = x->finalvalues[state-1] + 
 		  (f - x->duration[state-1])*
 		  (x->finalvalues[state] - x->finalvalues[state-1])/ 
-		  (x->duration[state] - x->duration[state-1]));
+		  (x->duration[state] - x->duration[state-1]);
+
+     val *= val*(x->max - x->min);
+     outlet_float(x->x_obj.ob_outlet,val);
 }
 
 
@@ -169,7 +175,7 @@ void envgen_bang(t_envgen *x)
      x->x_state = ATTACK;
      x->x_val = x->finalvalues[NONE];
 
-     SETFLOAT(a,x->finalvalues[x->x_state]);
+     SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
      SETFLOAT(a+1,x->duration[x->x_state]);
 
      outlet_list(x->x_obj.ob_outlet,&s_list,2,(t_atom*)&a);
