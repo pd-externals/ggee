@@ -1,6 +1,5 @@
 /* (C) Guenter Geiger <geiger@epy.co.at> */
 
-
 #include <m_pd.h>
 #ifdef NT
 #pragma warning( disable : 4244 )
@@ -219,6 +218,11 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 
      if (!(x->pid = fork())) {
 	  int status;
+	  char* cmd = getbytes(1024);
+	  char* tcmd = getbytes(1024);
+	  strcpy(cmd,s->s_name);
+	  
+#if 0
 	  for (i=1;i<=ac;i++) {
 	       argv[i] = getbytes(255);
 	       atom_string(at,argv[i],255);
@@ -226,13 +230,22 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	       at++;
 	  }
 	  argv[i] = 0;
+#endif         
+          for (i=1;i<=ac;i++) {
+	       atom_string(at,tcmd,255);
+	       strcat(cmd," ");
+               strcat(cmd,tcmd);
+               at++;
+	  }
 
+	  
 	  /* reassign stdout */
 	  dup2(x->fdpipe[1],1);
 	  dup2(x->fdinpipe[1],0);
-	  post("executing");
-	  execvp(s->s_name,argv);
-	  exit(-1);
+	  post("executing %s",cmd);
+	  system(cmd);
+//	  execvp(s->s_name,argv);
+	  exit(0);
      }
      x->x_del = 4;
      clock_delay(x->x_clock,x->x_del);
