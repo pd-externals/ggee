@@ -1,0 +1,5 @@
+#N canvas 273 269 450 300 10;
+#X obj 66 203 image logo100.gif;
+#X text 12 14 Putting images into your patch;
+#X text 10 74 image <filename>;
+#X text 12 36 Working formats are gif and png \, I think;
