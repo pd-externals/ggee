@@ -1,0 +1,23 @@
+#N canvas 295 68 566 339 10;
+#X obj 77 199 print;
+#X floatatom 77 114 0 0 0 0 - - -;
+#X floatatom 168 114 0 0 0 0 - - -;
+#X msg 91 138 bang;
+#X text 139 93 bandwidth (0 - 100);
+#X text 75 226 These filters are all controlled by a bandwidth which
+is expressed in octaves. A bandwidth of 100 is equivalent to one octave.
+;
+#X text 76 12 Bandpass coefficients for biquad~;
+#X text 70 26 ===================================;
+#X text 6 320 (C) Guenter Geiger 2000;
+#X text 75 92 frequency;
+#X text 75 268 Attention \, only the left inlet triggers new coefficients
+for biquad~;
+#X obj 77 160 bandpass 4000 33;
+#X obj 33 114 r doit;
+#X connect 1 0 11 0;
+#X connect 2 0 11 1;
+#X connect 2 0 3 0;
+#X connect 3 0 11 0;
+#X connect 11 0 0 0;
+#X connect 12 0 3 0;

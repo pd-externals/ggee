@@ -1,0 +1,28 @@
+#N canvas 365 183 620 471 10;
+#X obj 38 182 print;
+#X floatatom 38 114 0 0 0 0 - - -;
+#X floatatom 71 115 0 0 0 0 - - -;
+#X text 37 12 Bandpass coefficients for biquad~;
+#X text 31 26 ===================================;
+#X text 7 313 (C) Guenter Geiger 2000;
+#X text 36 268 Attention \, only the left inlet triggers new coefficients
+for biquad~;
+#X obj 38 160 hlshelf;
+#X floatatom 106 114 0 0 0 0 - - -;
+#X text 36 99;
+#X floatatom 173 114 0 0 0 0 - - -;
+#X floatatom 212 115 0 0 0 0 - - -;
+#X text 31 90 gain0;
+#X text 70 89 gain1;
+#X text 111 89 gain2;
+#X text 171 89 f-low;
+#X text 214 90 f-high;
+#X text 33 218 The hlshelf object creates filter coefficients for the
+biquad~ filter. The three shelfs of the filter are controlled through
+the gains \, the boundaries of the areas through f-low and f-high;
+#X connect 1 0 7 0;
+#X connect 2 0 7 1;
+#X connect 7 0 0 0;
+#X connect 8 0 7 2;
+#X connect 10 0 7 3;
+#X connect 11 0 7 4;
