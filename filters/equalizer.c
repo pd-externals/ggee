@@ -30,10 +30,10 @@ void equ_bang(t_rbjfilter *x)
      t_float alpha = e_alpha(x->x_bw*0.01,omega);
      t_float b0 = 1 + alpha*e_A(x->x_gain);
      t_float b1 = -2.*cos(omega);
-     t_float b2 = 1;
-     t_float a0 = 1 + alpha;
+     t_float b2 = 1 - alpha*e_A(x->x_gain);
+     t_float a0 = 1 + alpha/e_A(x->x_gain);
      t_float a1 = -2.*cos(omega);
-     t_float a2 = 1 - alpha;
+     t_float a2 = 1 - alpha/e_A(x->x_gain);
 
 /*      post("bang %f %f %f",x->x_freq, x->x_gain, x->x_bw);*/
      
