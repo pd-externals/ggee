@@ -1,0 +1,6 @@
+#N canvas 0 0 450 300 10;
+#X obj 182 78 mousearea grey 80 80;
+#X floatatom 158 185 5 0 0 0 - - -;
+#X floatatom 243 194 5 0 0 0 - - -;
+#X connect 0 0 1 0;
+#X connect 0 1 2 0;
