@@ -155,7 +155,7 @@ void envgen_float(t_envgen *x, t_floatarg f)
 		  (x->finalvalues[state] - x->finalvalues[state-1])/ 
 		  (x->duration[state] - x->duration[state-1]);
 
-     val *= val*(x->max - x->min);
+     val *= (x->max - x->min);
      outlet_float(x->x_obj.ob_outlet,val);
 }
 

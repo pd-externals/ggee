@@ -10,6 +10,7 @@
 #pragma warning( disable : 4305 )
 #endif
 
+#define IOWIDTH 4
 
 typedef struct _button
 {

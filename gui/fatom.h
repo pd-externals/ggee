@@ -1,7 +1,7 @@
 /* ------------------------ fatom ----------------------------- */
 
 #define x_val a_pos.a_w.w_float
-#define DEBUG(x)
+#define DEBUG(x) x
 
 typedef struct _fatom
 {
@@ -14,6 +14,7 @@ typedef struct _fatom
      t_symbol*  x_sym;
      t_symbol*  x_type;
 
+     t_symbol*  x_text;
      int x_max;
      int x_min;
      int x_width;
@@ -86,6 +87,7 @@ static void draw_handle(t_fatom *x, t_glist *glist, int firsttime) {
 static void create_widget(t_fatom *x, t_glist *glist)
 {
   t_canvas *canvas=glist_getcanvas(glist);
+
   if (!strcmp(x->x_type->s_name,"vslider")) {
     x->x_rect_width = x->x_width+15;
     x->x_rect_height =  x->x_max-x->x_min+24;
@@ -123,10 +125,10 @@ static void create_widget(t_fatom *x, t_glist *glist)
 	     x->x_width,
 	     x);
   } else if (!strcmp(x->x_type->s_name,"checkbutton")) {
-       x->x_rect_width = 30;
-       x->x_rect_height = 25;
+       x->x_rect_width = 32;
+       x->x_rect_height = 28;
        sys_vgui("checkbutton .x%x.c.s%x \
-                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x\n",canvas,x,x,x,x);
+                    -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -text \"%s\"\n",canvas,x,x,x,x,x->x_text->s_name);
   } else if (!strcmp(x->x_type->s_name,"hradio")) {
     int i;
     x->x_rect_width = 8*20;
@@ -159,11 +161,11 @@ static void create_widget(t_fatom *x, t_glist *glist)
   /* set the start value */
      if (!strcmp(x->x_type->s_name,"checkbutton")) {
        if (x->x_val)
-	 sys_vgui(".x%x.c.s%x select\n",x->x_glist,x,x->x_val);
+	 sys_vgui(".x%x.c.s%x select\n",canvas,x,x->x_val);
        else
-	 sys_vgui(".x%x.c.s%x deselect\n",x->x_glist,x,x->x_val);
+	 sys_vgui(".x%x.c.s%x deselect\n",canvas,x,x->x_val);
      } else
-       sys_vgui(".x%x.c.s%x set %f\n",x->x_glist,x,x->x_val);
+       sys_vgui(".x%x.c.s%x set %f\n",canvas,x,x->x_val);
 
 }
 
@@ -369,12 +371,13 @@ static void fatom_save(t_gobj *z, t_binbuf *b)
 }
 
 
-static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h)
+static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h,t_symbol* text)
 {
     char buf[256];
     x->x_glist = canvas_getcurrent();
 
-
+    if (text != &s_) x->x_text = text;
+    else x->x_text = gensym("");
     x->a_pos.a_type = A_FLOAT;
 
     if (!max) x->x_max = 127; 

@@ -187,11 +187,11 @@ static void envgen_shownum(t_envgen *x)
      ypos = (int) (x->x_obj.te_ypix + x->w.height);
 
      envgen_delnum(x);
-     if (!x->w.grabbed) return;
+
      sys_vgui(".x%x.c create text %d %d -text %fx%f -tags %xT\n",
 	     (unsigned int)glist_getcanvas(x->w.glist),
 	     
-	     (int) (xpos+(x->duration[i] * xscale) - 2),
+	     (int) (xpos+(x->duration[i] * xscale) + 12),
 	     (int) (ypos - x->finalvalues[i]*yscale - 2),
 	     
 	     x->finalvalues[i]*(x->max-x->min),

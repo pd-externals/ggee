@@ -1,6 +1,6 @@
 #include <m_pd.h>
 #include "g_canvas.h"
-#include <ggee.h>
+
 
 #ifdef NT
 #pragma warning( disable : 4244 )
@@ -29,7 +29,7 @@ static void *sliderh_new(t_floatarg max, t_floatarg min,t_floatarg h)
 {
     t_fatom *x = (t_fatom *)pd_new(sliderh_class);
     x->x_type = gensym("hslider");
-    return fatom_new(x,max,min,h);
+    return fatom_new(x,max,min,h,&s_);
 }
 
 
