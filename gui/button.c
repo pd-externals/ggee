@@ -259,21 +259,8 @@ static void button_vis(t_gobj *z, t_glist *glist, int vis)
 
 static void button_save(t_gobj *z, t_binbuf *b);
 
-t_widgetbehavior   button_widgetbehavior = {
-  w_getrectfn:  button_getrect,
-  w_displacefn: button_displace,
-  w_selectfn:   button_select,
-  w_activatefn: button_activate,
-  w_deletefn:   button_delete,
-  w_visfn:      button_vis,
-#if PD_MINOR_VERSION < 37
-  w_savefn:     button_save,
-#endif
-  w_clickfn:    NULL,
-#if PD_MINOR_VERSION < 37
-  w_propertiesfn: NULL,
-#endif
-}; 
+t_widgetbehavior   button_widgetbehavior;
+
 
 
 void button_size(t_button* x,t_floatarg w,t_floatarg h) {
@@ -353,6 +340,19 @@ void button_setup(void) {
     class_addbang(button_class, (t_method)button_bang);
     class_addmethod(button_class, (t_method)button_b,gensym("b"),0);
 
+	button_widgetbehavior.w_getrectfn=  button_getrect,
+    button_widgetbehavior.w_displacefn= button_displace,
+    button_widgetbehavior.w_selectfn=  button_select,
+    button_widgetbehavior.w_activatefn= button_activate,
+    button_widgetbehavior.w_deletefn=   button_delete,
+    button_widgetbehavior.w_visfn=     button_vis,
+#if PD_MINOR_VERSION < 37
+    button_widgetbehavior.w_savefn=     button_save,
+#endif
+    button_widgetbehavior.w_clickfn=    NULL,
+#if PD_MINOR_VERSION < 37
+    button_widgetbehavior.w_propertiesfn= NULL,
+#endif
     class_setwidget(button_class,&button_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
     class_setsavefn(button_class,&button_save);

@@ -33,19 +33,9 @@ static void *sliderh_new(t_floatarg max, t_floatarg min,t_floatarg h)
 }
 
 
-t_widgetbehavior   sliderh_widgetbehavior = {
-  w_getrectfn:  fatom_getrect,
-  w_displacefn: fatom_displace,
-  w_selectfn:   fatom_select,
-  w_activatefn: fatom_activate,
-  w_deletefn:   fatom_delete,
-  w_visfn:      fatom_vis,
-#if PD_MINOR_VERSION < 37
-  w_savefn:    sliderh_save,
-  w_propertiesfn: NULL,
-#endif
-  w_clickfn:    NULL,
-}; 
+t_widgetbehavior   sliderh_widgetbehavior;
+
+
 
 
 void sliderh_setup() {
@@ -53,7 +43,20 @@ void sliderh_setup() {
 				sizeof(t_fatom),0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
 
     fatom_setup_common(sliderh_class);
-    class_setwidget(sliderh_class,&sliderh_widgetbehavior);
+
+    sliderh_widgetbehavior.w_getrectfn = fatom_getrect;
+    sliderh_widgetbehavior.w_displacefn= fatom_displace;
+    sliderh_widgetbehavior.w_selectfn=   fatom_select;
+    sliderh_widgetbehavior.w_activatefn=fatom_activate;
+    sliderh_widgetbehavior.w_deletefn=   fatom_delete;
+    sliderh_widgetbehavior.w_visfn=     fatom_vis;
+#if PD_MINOR_VERSION < 37
+    sliderh_widgetbehavior.w_savefn=    sliderh_save;
+    sliderh_widgetbehavior.w_propertiesfn= NULL;
+#endif
+    sliderh_widgetbehavior.w_clickfn=    NULL;
+
+	class_setwidget(sliderh_class,&sliderh_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
     class_setsavefn(sliderh_class,&sliderh_save);
 #endif

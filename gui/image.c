@@ -210,7 +210,7 @@ void image_setup(void)
     image_setwidget();
     class_setwidget(image_class,&image_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
-    class_setsavefn(image_class,&image_widgetbehavior);
+    class_setsavefn(image_class,&image_save);
 #endif
 }
 

@@ -308,7 +308,6 @@ static void envgen_getrect(t_gobj *z, t_glist *owner,
     int width, height;
     t_envgen* s = (t_envgen*)z;
 
-
     width = s->w.width + 2*BORDER;
     height = s->w.height + 2*BORDER;
     *xp1 = s->x_obj.te_xpix-BORDER;
@@ -402,7 +401,7 @@ static void envgen_followpointer(t_envgen* x)
 
 void envgen_motion(t_envgen *x, t_floatarg dx, t_floatarg dy)
 {
-     if (x->w.shift) {
+	if (x->w.shift) {
 	  x->w.pointerx+=dx/1000.f;
 	  x->w.pointery+=dy/1000.f;
      }

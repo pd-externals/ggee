@@ -38,28 +38,31 @@ static void *ticker_new(t_symbol* t)
 }
 
 
-t_widgetbehavior   ticker_widgetbehavior = {
-  w_getrectfn:  fatom_getrect,
-  w_displacefn: fatom_displace,
-  w_selectfn:   fatom_select,
-  w_activatefn: fatom_activate,
-  w_deletefn:   fatom_delete,
-  w_visfn:      fatom_vis,
-#if PD_MINOR_VERSION < 37
-  w_savefn:     ticker_save,
-  w_propertiesfn: NULL,
-#endif
-  w_clickfn:    NULL,
-}; 
+t_widgetbehavior   ticker_widgetbehavior;
+
 
 void ticker_setup() {
     ticker_class = class_new(gensym("ticker"), (t_newmethod)ticker_new, 0,
 				sizeof(t_fatom),0,A_DEFSYMBOL,0);
 
     class_addbang(ticker_class,ticker_bang);
-  fatom_setup_common(ticker_class);
+    fatom_setup_common(ticker_class);
     class_addbang(ticker_class, (t_method)ticker_bang);
-    class_setwidget(ticker_class,&ticker_widgetbehavior);
+
+    ticker_widgetbehavior.w_getrectfn=  fatom_getrect;
+    ticker_widgetbehavior.w_displacefn= fatom_displace;
+    ticker_widgetbehavior.w_selectfn=  fatom_select;
+    ticker_widgetbehavior.w_activatefn= fatom_activate;
+    ticker_widgetbehavior.w_deletefn=   fatom_delete;
+    ticker_widgetbehavior.w_visfn=     fatom_vis;
+#if PD_MINOR_VERSION < 37
+    ticker_widgetbehavior.w_savefn=    ticker_save;
+    ticker_widgetbehavior.w_propertiesfn= NULL;
+#endif
+    ticker_widgetbehavior.w_clickfn=   NULL;
+
+
+	class_setwidget(ticker_class,&ticker_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
     class_setsavefn(ticker_class,&ticker_save);
 #endif

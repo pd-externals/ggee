@@ -93,7 +93,7 @@ static void create_widget(t_fatom *x, t_glist *glist)
 
   if (!strcmp(x->x_type->s_name,"vslider")) {
     x->x_rect_width = x->x_width+15;
-    x->x_rect_height =  x->x_max-x->x_min+24;
+    x->x_rect_height =  x->x_max-x->x_min+26;
     
     sys_vgui("scale .x%x.c.s%x \
                     -sliderlength 10 \
@@ -312,19 +312,9 @@ static void fatom_vis(t_gobj *z, t_glist *glist, int vis)
 
 static void fatom_save(t_gobj *z, t_binbuf *b);
 
-t_widgetbehavior   fatom_widgetbehavior = {
-  w_getrectfn:  fatom_getrect,
-  w_displacefn: fatom_displace,
-  w_selectfn:   fatom_select,
-  w_activatefn: fatom_activate,
-  w_deletefn:   fatom_delete,
-  w_visfn:      fatom_vis,
-#if PD_MINOR_VERSION < 37
-  w_savefn:     fatom_save,
-  w_propertiesfn: NULL,
-#endif
-  w_clickfn:    NULL,
-}; 
+t_widgetbehavior   fatom_widgetbehavior;
+
+ 
 
 
 void fatom_size(t_fatom* x,t_floatarg w,t_floatarg h) {
@@ -419,6 +409,18 @@ static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h,t
 
 void fatom_setup_common(t_class* class)
 {
+
+  fatom_widgetbehavior.w_getrectfn =  fatom_getrect;
+  fatom_widgetbehavior.w_displacefn = fatom_displace;
+  fatom_widgetbehavior.w_selectfn =   fatom_select;
+  fatom_widgetbehavior.w_activatefn = fatom_activate;
+  fatom_widgetbehavior.w_deletefn =  fatom_delete;
+  fatom_widgetbehavior.w_visfn =     fatom_vis;
+#if PD_MINOR_VERSION < 37
+  fatom_widgetbehavior.w_savefn =    fatom_save;
+  fatom_widgetbehavior.w_propertiesfn = NULL,
+#endif
+  fatom_widgetbehavior.w_clickfn =   NULL,
 
     class_addfloat(class, (t_method)fatom_float);
     class_addbang(class, (t_method)fatom_bang);
