@@ -8,7 +8,6 @@
 #endif
 
 #define PD_VERSION_MINOR 32
-#define BACKGROUND "-fill grey"
 #define BACKGROUNDCOLOR "grey"
 #define BORDER 2
 
@@ -69,6 +68,7 @@ static int envgen_next_doodle(t_envgen *x, int xpos,int ypos)
      int i;
      int insertpos = -1;
 
+     if (xpos > x->x_obj.te_xpix + x->w.width) xpos = x->x_obj.te_xpix + x->w.width;
 
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
@@ -105,9 +105,7 @@ static int envgen_next_doodle(t_envgen *x, int xpos,int ypos)
 	       x->duration[i+1] = x->duration[i];
 	       x->finalvalues[i+1] = x->finalvalues[i];
 	  }
-
 	  x->duration[insertpos] = (float)(xpos-dxpos)/x->w.width*x->duration[x->last_state++];
-
 	  x->w.pointerx = xpos;
 	  x->w.pointery = ypos;
      }
@@ -212,7 +210,7 @@ static void envgen_create(t_envgen *x, t_glist *glist)
 
      x->w.numclock = clock_new(x, (t_method) envgen_delnum);     
      sys_vgui(".x%x.c create rectangle \
-%d %d %d %d -tags %xS "BACKGROUND"\n",
+%d %d %d %d -tags %xS -fill "BACKGROUNDCOLOR"\n",
 	      glist_getcanvas(glist),
 	      x->x_obj.te_xpix-BORDER, x->x_obj.te_ypix-BORDER,
 	      x->x_obj.te_xpix + x->w.width+2*BORDER, x->x_obj.te_ypix + x->w.height+2*BORDER,
@@ -315,8 +313,8 @@ static void envgen_getrect(t_gobj *z, t_glist *owner,
     height = s->w.height + 2*BORDER;
     *xp1 = s->x_obj.te_xpix-BORDER;
     *yp1 = s->x_obj.te_ypix-BORDER;
-    *xp2 = s->x_obj.te_xpix + width;
-    *yp2 = s->x_obj.te_ypix + height;
+    *xp2 = s->x_obj.te_xpix + width + 4;
+    *yp2 = s->x_obj.te_ypix + height + 4;
 }
 
 static void envgen_displace(t_gobj *z, t_glist *glist,
@@ -366,9 +364,9 @@ static void envgen_vis(t_gobj *z, t_glist *glist, int vis)
 static void envgen_save(t_gobj *z, t_binbuf *b)
 {
     t_envgen *x = (t_envgen *)z;
-    binbuf_addv(b, "ssiisiiff", gensym("#X"),gensym("obj"),
+    binbuf_addv(b, "ssiisiiffss", gensym("#X"),gensym("obj"),
 		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
-		gensym("envgen"),x->w.width,x->w.height,x->max,x->min);
+		gensym("envgen"),x->w.width,x->w.height,x->max,x->min,x->r_sym,x->s_sym);
     binbuf_addv(b, ";");
 }
 
@@ -413,19 +411,11 @@ void envgen_motion(t_envgen *x, t_floatarg dx, t_floatarg dy)
 	  x->w.pointerx+=dx;
 	  x->w.pointery+=dy;
      }
-
      if (!x->resizing)
 	  envgen_followpointer(x);
      else {
-	  if (x->w.shift) {
 	       x->w.width+=dx;
 	       x->w.height+=dy;
-	  }
-	  else
-	  {
-	       x->w.pointerx+=dx;
-	       x->w.pointery+=dy;
-	  }
      }
      envgen_shownum(x);
      envgen_update(x,x->w.glist);
@@ -456,7 +446,6 @@ void envgen_click(t_envgen *x,
     /* check if user wants to resize */
      float wxpos = x->x_obj.te_xpix;
      float wypos = (int) (x->x_obj.te_ypix + x->w.height);
-
      envgen_next_doodle(x,xpos,ypos);
 #if (PD_VERSION_MINOR > 31)
      glist_grab(x->w.glist, &x->x_obj.te_g, (t_glistmotionfn) envgen_motion,
@@ -465,8 +454,8 @@ void envgen_click(t_envgen *x,
      glist_grab(x->w.glist, &x->x_obj.te_g, xpos, ypos);
 #endif
      x->resizing = 0;     
-     if (x->resizeable && (xpos > wxpos + x->w.width - 3) && 
-	 (fabs(ypos -2 - wypos) < 3.)) {
+     if (x->resizeable && (xpos > wxpos + x->w.width) && 
+	 (ypos > wypos)) {
 	  x->resizing = 1;     
 	  return;
      }

@@ -1,12 +1,8 @@
 /* (C) Guenter Geiger <geiger@epy.co.at> */
 
-
 #include <m_pd.h>
-#ifdef NT
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4305 )
-#endif
 
+//#define DEBUG
 /* ------------------------ envgen~ ----------------------------- */
 
 #define NONE    0
@@ -18,6 +14,11 @@
 #include "w_envgen.h"
 
 static t_class *envgen_class;
+
+
+#define OUT_LIST(x,nr,a) \
+     outlet_list(x->x_obj.ob_outlet,&s_list,nr,(t_atom*)&a);\
+     if (x->s_sym != &s_ && x->s_sym->s_thing) pd_list(x->s_sym->s_thing, &s_list, nr, (t_atom*)&a);
 
 
 char dumpy[2000];
@@ -146,7 +147,9 @@ void envgen_float(t_envgen *x, t_floatarg f)
      while (x->duration[state] < f && state <  x->last_state) state++;
 
      if (state == 0 || f >= x->duration[x->last_state]) {
-	  outlet_float(x->x_obj.ob_outlet,x->finalvalues[state]*(x->max-x->min));
+          val = x->finalvalues[state]*(x->max-x->min);
+	  outlet_float(x->x_obj.ob_outlet,f);
+	  if (x->s_sym != &s_) pd_float(x->s_sym->s_thing, f);
 	  return;
      }
 
@@ -157,6 +160,7 @@ void envgen_float(t_envgen *x, t_floatarg f)
 
      val *= (x->max - x->min);
      outlet_float(x->x_obj.ob_outlet,val);
+     if (x->s_sym != &s_) pd_float(x->s_sym->s_thing, val);
 }
 
 
@@ -166,7 +170,8 @@ void envgen_bang(t_envgen *x)
 
      SETFLOAT(a,x->finalvalues[NONE]);
      SETFLOAT(a+1,0);
-     outlet_list(x->x_obj.ob_outlet,&s_list,2,(t_atom*)&a);
+
+     OUT_LIST(x,2,a);
 
 /*       we don't force the first value anymore, so the first value
        is actually with what we have left off at the end ...
@@ -178,7 +183,7 @@ void envgen_bang(t_envgen *x)
      SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
      SETFLOAT(a+1,x->duration[x->x_state]);
 
-     outlet_list(x->x_obj.ob_outlet,&s_list,2,(t_atom*)&a);
+     OUT_LIST(x,2,a);
      clock_delay(x->x_clock,x->duration[x->x_state]);
 }
 
@@ -199,8 +204,7 @@ static void envgen_tick(t_envgen* x)
 	  clock_delay(x->x_clock,del);
 	  SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
 	  SETFLOAT(a+1,del);
-	  
-	  outlet_list(x->x_obj.ob_outlet,&s_list,2,(t_atom*)&a);
+	  OUT_LIST(x,2,a);
      }
      else
 	  clock_unset(x->x_clock);
@@ -209,6 +213,14 @@ static void envgen_tick(t_envgen* x)
 static void envgen_freeze(t_envgen* x, t_floatarg f)
 {
      x->x_freeze = f;
+}
+
+
+static void bindsym(t_pd* x,t_symbol* o,t_symbol* s)
+{
+     if (o != &s_) pd_unbind(x,o);
+     o = s;
+     pd_bind(x,s);
 }
 
 static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
@@ -225,7 +237,7 @@ static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
      
      x->w.grabbed = 0;
      x->resizing = 0;
-     x->resizeable = 0;
+     x->resizeable = 1;
      
      x->w.glist = (t_glist*) canvas_getcurrent();
      
@@ -237,7 +249,22 @@ static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
      if (argc) x->max = atom_getfloat(argv++),argc--;
      x->min = 0.0;
      if (argc) x->min = atom_getfloat(argv++),argc--;
-     
+
+     x->r_sym = &s_;
+     if (argc) {
+       t_symbol* n;
+
+       n = atom_getsymbol(argv++);
+       bindsym(&x->x_obj.ob_pd,x->r_sym,n);
+       x->r_sym = n;
+       argc--;
+     }
+     //     post("recv %s",x->r_sym->s_name);
+
+     x->s_sym = &s_;
+     if (argc) x->s_sym = atom_getsymbol(argv++),argc--;
+     //     post("send %s",x->s_sym->s_name);
+
      if (argc)
 	  envgen_init(x,argc,argv);
      else {

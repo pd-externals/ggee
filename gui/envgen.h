@@ -33,6 +33,9 @@ typedef struct _envgen
      t_int resizing;
      t_int resizeable;
 
+     t_symbol* r_sym;
+     t_symbol* s_sym;
+
      t_float min;
      t_float max;
 
