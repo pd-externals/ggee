@@ -111,7 +111,7 @@ static void create_widget(t_button *x, t_glist *glist)
     if (text[i] == '_')
       text[i] = ' ';
   }
-  
+  sys_vgui("destroy .x%x.c.s%x\n",glist_getcanvas(glist),x);
   sys_vgui("button .x%x.c.s%x -height %d -text \"%s\" -command button_cb%x\n",canvas,x,
 	   x->x_height,text,
 	   x);

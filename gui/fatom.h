@@ -1,7 +1,7 @@
 /* ------------------------ fatom ----------------------------- */
 
 #define x_val a_pos.a_w.w_float
-#define DEBUG(x)
+#define DEBUG(x) 
 
 #include <string.h>
 #include <stdio.h>
@@ -92,7 +92,8 @@ static void draw_handle(t_fatom *x, t_glist *glist, int firsttime) {
 static void create_widget(t_fatom *x, t_glist *glist)
 {
   t_canvas *canvas=glist_getcanvas(glist);
-
+  post("slider create widget");
+       sys_vgui("destroy .x%x.c.s%x\n",glist_getcanvas(glist),x);
   if (!strcmp(x->x_type->s_name,"vslider")) {
     x->x_rect_width = x->x_width+15;
     x->x_rect_height =  x->x_max-x->x_min+26;
@@ -204,6 +205,7 @@ static void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
        DEBUG(post("glist %x canvas %x",x->x_glist,canvas));
        create_widget(x,glist);	       
        x->x_glist = canvas;
+       post("create window to hold widget");
        sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
 		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,x->x_glist,x,x);
               
@@ -410,7 +412,6 @@ static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h,t
     x->x_min = min;    
     if (h) x->x_width = h;
     else x->x_width = 15;
-
 
     x->x_color = gensym("grey");
     x->x_bgcolor = gensym("grey");
