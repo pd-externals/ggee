@@ -17,31 +17,22 @@ typedef struct _concat
      t_symbol* x_sym;
 } t_concat;
 
+static char tsym[2048];
 
 void concat_float(t_concat *x,t_float f)
 {
-  char* nsym;
-  int len = (12+strlen(x->x_sym));
-  nsym = getbytes(len);
+  sprintf(tsym,"%g",f);
+  strcat(tsym,x->x_sym->s_name);
 
-  sprintf(nsym,"%g",f);
-  strcat(nsym,x->x_sym->s_name);
-
-  outlet_symbol(x->x_obj.ob_outlet,gensym(nsym));
-  freebytes(nsym,len);
+  outlet_symbol(x->x_obj.ob_outlet,gensym(tsym));
 }
 
 void concat_symbol(t_concat *x,t_symbol* s)
 {
-  char* nsym;
-  int len = (strlen(s->s_name)+strlen(x->x_sym));
-  nsym = getbytes(len);
+  strcpy(tsym,s->s_name);
+  strcat(tsym,x->x_sym->s_name);
 
-  strcpy(nsym,s->s_name);
-  strcat(nsym,x->x_sym->s_name);
-
-  outlet_symbol(x->x_obj.ob_outlet,gensym(nsym));
-  freebytes(nsym,len);
+  outlet_symbol(x->x_obj.ob_outlet,gensym(tsym));
 }
 
 
@@ -51,6 +42,7 @@ static void *concat_new(t_symbol* s)
     outlet_new(&x->x_obj,&s_float);
     symbolinlet_new(&x->x_obj, &x->x_sym);
     x->x_sym = s;
+    *tsym = 0;
     return (x);
 }
 
