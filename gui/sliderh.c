@@ -18,18 +18,18 @@ static void sliderh_save(t_gobj *z, t_binbuf *b)
 
     t_fatom *x = (t_fatom *)z;
 
-    binbuf_addv(b, "ssiisiii", gensym("#X"),gensym("obj"),
+    binbuf_addv(b, "ssiisiiisss", gensym("#X"),gensym("obj"),
 		x->x_obj.te_xpix, x->x_obj.te_ypix ,  
-		gensym("sliderh"),x->x_max,x->x_min,x->x_width);
+		gensym("sliderh"),x->x_max,x->x_min,x->x_width,x->x_send,x->x_color,x->x_bgcolor);
     binbuf_addv(b, ";");
 }
 
 
-static void *sliderh_new(t_floatarg max, t_floatarg min,t_floatarg h)
+static void *sliderh_new(t_symbol* s, int argc, t_atom* argv)
 {
     t_fatom *x = (t_fatom *)pd_new(sliderh_class);
     x->x_type = gensym("hslider");
-    return fatom_new(x,max,min,h,&s_);
+    return fatom_new(x,argc,argv);
 }
 
 
@@ -38,7 +38,7 @@ t_widgetbehavior   sliderh_widgetbehavior;
 
 
 
-void sliderh_setup() {
+void sliderh_setup(void) {
     sliderh_class = class_new(gensym("sliderh"), (t_newmethod)sliderh_new, 0,
 				sizeof(t_fatom),0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
 
