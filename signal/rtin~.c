@@ -1,15 +1,20 @@
 /* (C) Guenter Geiger <geiger@epy.co.at> */
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/time.h>
+#include <unistd.h>
 
-       #include <sys/types.h>
-       #include <sys/stat.h>
-       #include <fcntl.h>
-       #include <sys/time.h>
-       #include <unistd.h>
-
-//      int gettimeofday(struct timeval *tv, struct timezone *tz);
- 
-
+#ifdef NT
+#include <sys/timeb.h>
+void gettimeofday(struct timeval* t,void* timezone)
+{       struct timeb timebuffer;
+        ftime( &timebuffer );
+        t->tv_sec=timebuffer.time;
+        t->tv_usec=1000*timebuffer.millitm;
+}
+#endif
 
 #include "math.h"
 #include <m_pd.h>
