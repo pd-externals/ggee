@@ -136,9 +136,13 @@ static t_int *sfread_perform(t_int *w)
 
 	  if (speed != 1) { /* different speed */
 	       float aoff = (((int)offset)>>1)<<1;
+	       float frac = offset - (int)offset;
 	       while (n--) {
 		    for (i=0;i<c;i++)  {
-			 *out[i]++ = *(buf+(int)aoff+i)*3.052689e-05;
+	                 t_sample as = *(buf+(int)aoff+i)*3.052689e-05;
+	                 t_sample bs = *(buf+(int)aoff+i+c)*3.052689e-05;
+
+			 *out[i]++ = as + frac*(bs-as);
 		    }
 		    offset+=speed*c;
 		    aoff = (((int)offset)>>1)<<1;
