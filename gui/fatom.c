@@ -23,9 +23,11 @@ typedef struct _fatom
      int x_height;
      t_symbol*  x_sym;
      t_symbol*  x_type;
+  int x_widget;
 } t_fatom;
 
 /* widget helper functions */
+
 
 
 
@@ -72,105 +74,83 @@ static void draw_inlets(t_fatom *x, t_glist *glist, int firsttime, int nin, int 
 }
 
 
-void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
+static void create_widget(t_fatom *x, t_glist *glist)
 {
   t_canvas *canvas=glist_getcanvas(glist);
-  post("drawme %d",firsttime);
-     if (firsttime) {
-
-	  if (!strcmp(x->x_type->s_name,"vslider")) {
-	       x->x_width = 32;
-	       x->x_height = 140;
-
-	       sys_vgui("scale .x%x.c.s%x \
+  if (!strcmp(x->x_type->s_name,"vslider")) {
+    x->x_width = 32;
+    x->x_height = 140;
+    
+    sys_vgui("scale .x%x.c.s%x \
                     -sliderlength 10 \
                     -showvalue 0 \
                     -length 131 \
                     -from 127 -to 0 \
                     -command fatom_cb%x\n",canvas,x,x);
-	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
-	  } else  if (!strcmp(x->x_type->s_name,"hslider")) {
-	       x->x_width = 150;
-	       x->x_height = 28;
-	       sys_vgui("scale .x%x.c.s%x \
+  } else  if (!strcmp(x->x_type->s_name,"hslider")) {
+    x->x_width = 150;
+       x->x_height = 28;
+       sys_vgui("scale .x%x.c.s%x \
                     -sliderlength 10 \
                     -showvalue 0 \
                     -length 131 \
                     -orient horizontal \
                     -from 127 -to 0 \
                     -command fatom_cb%x\n",canvas,x,x);
-	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
-
-	  } else if (!strcmp(x->x_type->s_name,"checkbutton")) {
-	       x->x_width = 40;
-	       x->x_height = 25;
-	       sys_vgui("checkbutton .x%x.c.s%x \
+  } else if (!strcmp(x->x_type->s_name,"checkbutton")) {
+    x->x_width = 40;
+       x->x_height = 25;
+       sys_vgui("checkbutton .x%x.c.s%x \
                     -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x\n",canvas,x,x,x,x);
-	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			x->x_glist,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
-	  } else if (!strcmp(x->x_type->s_name,"hradio")) {
-	       int i;
-	       x->x_width = 8*20;
-	       x->x_height = 25;
-	       for (i=0;i<8;i++) {
-		    sys_vgui("radiobutton .x%x.c.s%x%d \
+  } else if (!strcmp(x->x_type->s_name,"hradio")) {
+    int i;
+    x->x_width = 8*20;
+       x->x_height = 25;
+       for (i=0;i<8;i++) {
+	 sys_vgui("radiobutton .x%x.c.s%x%d \
                     -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -value %d\n",canvas,x,i,x,x,x,i);
-		    sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x%d -tags %x%xS\n", 
-			     x->x_glist,text_xpix(&x->x_obj, glist)+i*20, text_ypix(&x->x_obj, glist)+2,x->x_glist,x,i,x,i);
-	       }
-	  } else if (!strcmp(x->x_type->s_name,"vradio")) {
-	       int i;
-	       x->x_width = 30;
-	       x->x_height = 20*8+5;
-	       for (i=0;i<8;i++) {
-		    sys_vgui("radiobutton .x%x.c.s%x%d \
+       }
+       /* TODO pack them */
+     } else if (!strcmp(x->x_type->s_name,"vradio")) {
+       int i;
+       x->x_width = 30;
+       x->x_height = 20*8+5;
+       for (i=0;i<8;i++) {
+	 sys_vgui("radiobutton .x%x.c.s%x%d \
                     -command { fatom_cb%x $fatom_val%x} -variable fatom_val%x -value %d\n",canvas,x,i,x,x,x,i);
-		    sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x%d -tags %x%xS\n", 
-			     x->x_glist,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2+i*20,x->x_glist,x,i,x,i);
-	       }
-	  } else {
-	       x->x_width = 32;
-	       x->x_height = 140;
-	       sys_vgui("scale .x%x.c.s%x \
+       }
+       /* TODO pack them */
+     } else {
+       x->x_width = 32;
+       x->x_height = 140;
+       sys_vgui("scale .x%x.c.s%x \
                     -sliderlength 10 \
                     -showvalue 0 \
                     -length 131 \
                     -from 127 -to 0 \
                     -command fatom_cb%x\n",canvas,x,x);
-	       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-			canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,canvas,x,x);
-	  }
-	       
+     }     
+}
 
-
+void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
+{
+  t_canvas *canvas=glist_getcanvas(glist);
+  post("drawme %d",firsttime);
+     if (firsttime) {
+       post("glist %x canvas %x",x->x_glist,canvas);
+       if (x->x_glist != canvas) {
+	 create_widget(x,glist);	       
+	 x->x_glist = canvas;
+       }
+       sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
+		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,x->x_glist,x,x);
+              
      }     
      else {
-	  if (!strcmp(x->x_type->s_name,"hradio")) {
-	       int i;
-	       for (i=0;i<8;i++) {
-		    sys_vgui(".x%x.c coords %x%xS \
+       sys_vgui(".x%x.c coords %xS \
 %d %d\n",
-			     canvas, x,i,
-			     text_xpix(&x->x_obj, glist) + 20*i, text_ypix(&x->x_obj, glist)+2);
-	       }
-	  }
-	  else if (!strcmp(x->x_type->s_name,"vradio")) {
-	       int i;
-	       for (i=0;i<8;i++) {
-		    sys_vgui(".x%x.c coords %x%xS \
-%d %d\n",
-			     canvas, x,i,
-			     text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2+20*i);
-	       }
-	       
-	  } else {
-	       sys_vgui(".x%x.c coords %xS \
-%d %d\n",
-			canvas, x,
-			text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2);
-	  }
+		canvas, x,
+		text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2);
      }
      draw_inlets(x, glist, firsttime, 1,1);
 
@@ -188,8 +168,8 @@ void fatom_erase(t_fatom* x,t_glist* glist)
 
      /* inlets and outlets */
      
-     sys_vgui(".x%x.c delete %xi%d\n",x->x_glist,x,0);
-     sys_vgui(".x%x.c delete %xo%d\n",x->x_glist,x,0);
+     sys_vgui(".x%x.c delete %xi%d\n",glist_getcanvas(glist),x,0);
+     sys_vgui(".x%x.c delete %xo%d\n",glist_getcanvas(glist),x,0);
 }
 	
 
@@ -269,10 +249,17 @@ static void fatom_delete(t_gobj *z, t_glist *glist)
 static void fatom_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_fatom* s = (t_fatom*)z;
-    if (vis)
+    t_rtext *y;
+    post("vis: %d",vis);
+    if (vis) {
+      	y = (t_rtext *) rtext_new_without_senditup(glist, (t_text *)z, glist->gl_editor->e_rtext);
 	 fatom_drawme(s, glist, 1);
-    else
+    }
+    else {
+	y = glist_findrtext(glist, (t_text *)z);
 	 fatom_erase(s,glist);
+	rtext_free(y);
+    }
 }
 
 /* can we use the normal text save function ?? */
@@ -337,8 +324,8 @@ static void *fatom_new(t_symbol* type)
     char buf[256];
 
     x->x_type = type;
-
-    x->x_glist = (t_glist*) canvas_getcurrent();
+    x->x_widget = 0;
+    x->x_glist = (t_glist*)NULL;
 /*
     if (h) x->x_width = h;
     else
