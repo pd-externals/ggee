@@ -40,14 +40,14 @@ static void draw_inlets(t_button *x, t_glist *glist, int firsttime, int nin, int
 	  if (firsttime)
 	       sys_vgui(".x%x.c create rectangle %d %d %d %d -tags %xo%d\n",
 			glist_getcanvas(glist),
-			onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 1,
-			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height,
+			onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 2,
+			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height-1,
 			x, i);
 	  else
 	       sys_vgui(".x%x.c coords %xo%d %d %d %d %d\n",
 			glist_getcanvas(glist), x, i,
-			onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 1,
-			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height);
+			onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 2,
+			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height-1);
      }
      n = nout; 
      nplus = (n == 1 ? 1 : n-1);
@@ -57,14 +57,14 @@ static void draw_inlets(t_button *x, t_glist *glist, int firsttime, int nin, int
 	  if (firsttime)
 	       sys_vgui(".x%x.c create rectangle %d %d %d %d -tags %xi%d\n",
 			glist_getcanvas(glist),
-			onset, text_ypix(&x->x_obj, glist),
-			     onset + IOWIDTH, text_ypix(&x->x_obj, glist) + 1,
+			onset, text_ypix(&x->x_obj, glist)-2,
+			     onset + IOWIDTH, text_ypix(&x->x_obj, glist)-1,
 			x, i);
 	  else
 	       sys_vgui(".x%x.c coords %xi%d %d %d %d %d\n",
 			glist_getcanvas(glist), x, i,
-			onset, text_ypix(&x->x_obj, glist),
-			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + 1);
+			onset, text_ypix(&x->x_obj, glist)-2,
+			onset + IOWIDTH, text_ypix(&x->x_obj, glist)-1);
 	  
      }
      DEBUG(post("draw inlet end");)
@@ -125,14 +125,14 @@ static void button_drawme(t_button *x, t_glist *glist, int firsttime)
 	 x->x_glist = canvas;
        }
        sys_vgui(".x%x.c create window %d %d -anchor nw -window .x%x.c.s%x -tags %xS\n", 
-		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,x->x_glist,x,x);
+		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x->x_glist,x,x);
               
      }     
      else {
        sys_vgui(".x%x.c coords %xS \
 %d %d\n",
 		canvas, x,
-		text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2);
+		text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
      draw_inlets(x, glist, firsttime, 1,1);
      draw_handle(x, glist, firsttime);
@@ -170,7 +170,7 @@ static void button_getrect(t_gobj *z, t_glist *owner,
     width = s->x_rect_width;
     height = s->x_rect_height;
     *xp1 = text_xpix(&s->x_obj, owner);
-    *yp1 = text_ypix(&s->x_obj, owner);
+    *yp1 = text_ypix(&s->x_obj, owner) - 1;
     *xp2 = text_xpix(&s->x_obj, owner) + width;
     *yp2 = text_ypix(&s->x_obj, owner) + height;
 }
@@ -186,8 +186,8 @@ static void button_displace(t_gobj *z, t_glist *glist,
     {
       sys_vgui(".x%x.c coords %xSEL %d %d %d %d\n",
 	       glist_getcanvas(glist), x,
-	       text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
-	       text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height);
+	       text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)-1,
+	       text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height-2);
       
       button_drawme(x, glist, 0);
       canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
@@ -202,8 +202,8 @@ static void button_select(t_gobj *z, t_glist *glist, int state)
 	  sys_vgui(".x%x.c create rectangle \
 %d %d %d %d -tags %xSEL -outline blue\n",
 		   glist_getcanvas(glist),
-		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
-		   text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height,
+		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)-1,
+		   text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height-2,
 		   x);
      }
      else {
@@ -317,11 +317,14 @@ static void *button_new(t_symbol* text)
     else
       x->x_text = text;
 
+    /* TODO .. ask the button for its width */
+    x->x_width += strlen(x->x_text->s_name)*5.6;
+
     sprintf(buf,"button%x",x);
     x->x_sym = gensym(buf);
     pd_bind(&x->x_obj.ob_pd, x->x_sym);
 
-/* pipe startup code to slitk */
+/* pipe startup code to tk */
 
     sys_vgui("proc button_cb%x {} {\n
        pd [concat button%x b \\;]\n
