@@ -48,7 +48,6 @@ void shell_bang(t_shell *x)
 #if 1
 static void shell_doit(void *z, t_binbuf *b)
 {
-    t_atom messbuf[1024];
     t_shell *x = (t_shell *)z;
     int msg, natom = binbuf_getnatom(b);
     t_atom *at = binbuf_getvec(b);
@@ -93,7 +92,7 @@ void shell_read(t_shell *x, int fd)
 	  (x->sr_inhead >= x->sr_intail ? INBUFSIZE : x->sr_intail-1);
      int ret;
 
-     ret = read(fd, buf,INBUFSIZE);
+     ret = read(fd, buf,INBUFSIZE-1);
      buf[ret] = '\0';
 
      for (i=0;i<ret;i++)
@@ -123,7 +122,6 @@ void shell_read(t_shell *x, int fd)
 	 natom = binbuf_getnatom(bbuf);
 	 at = binbuf_getvec(bbuf);
 	 shell_doit(x,bbuf);
-	 
        }
      binbuf_free(bbuf);
 }
@@ -150,7 +148,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	  
      for (i=1;i<=ac;i++) {
 	  argv[i] = atom_getsymbolarg(i-1,ac,at)->s_name;
-	  /* post("argument %s",argv[i]);*/
+	  post("argument %s",argv[i]);
      }
      argv[i] = 0;
 

@@ -1,6 +1,6 @@
 #N canvas 357 136 578 414 10;
-#X obj 19 151 fatom ;
-#X floatatom 19 318 5 0 0;
+#X obj 16 155 fatom ;
+#X floatatom 16 319 5 0 0;
 #X floatatom 52 193 5 0 0;
 #X floatatom 221 221 5 0 0;
 #X obj 52 153 fatom hslider;
@@ -12,13 +12,15 @@
 #X text 320 131 Radio Button;
 #X floatatom 368 217 5 0 0;
 #X text 17 10 Widgets with Floatatom Behaviour;
-#X text 14 376 (C) 2002 Guenter Geiger;
+#X text 11 380 (C) 2002 Guenter Geiger;
 #X obj 368 186 fatom hradio;
 #X obj 321 161 fatom vradio;
 #X floatatom 321 332 5 0 0;
 #X floatatom 221 164 5 0 0;
 #X floatatom 368 162 5 0 0;
 #X text 14 69 The fatom object;
+#X obj 205 294 osc~;
+#X obj 208 332 dac~;
 #X connect 0 0 1 0;
 #X connect 4 0 2 0;
 #X connect 5 0 3 0;
@@ -26,3 +28,5 @@
 #X connect 15 0 16 0;
 #X connect 17 0 5 0;
 #X connect 18 0 14 0;
+#X connect 20 0 21 0;
+#X connect 20 0 21 1;
