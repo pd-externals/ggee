@@ -283,7 +283,7 @@ static void fatom_vis(t_gobj *z, t_glist *glist, int vis)
     t_rtext *y;
     DEBUG(post("vis: %d",vis);)
     if (vis) {
-      	y = (t_rtext *) rtext_new_without_senditup(glist, (t_text *)z, glist->gl_editor->e_rtext);
+      	y = (t_rtext *) rtext_new(glist, (t_text *)z);
 	 fatom_drawme(s, glist, 1);
     }
     else {
