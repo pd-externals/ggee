@@ -1,6 +1,10 @@
 #include <m_pd.h>
-#include "g_canvas.h"
+#include <g_canvas.h>
+#include <stdio.h>
+#include <string.h>
 
+
+t_rtext *rtext_new_without_senditup(t_glist *glist, t_text *who, t_rtext *next);
 
 #ifdef NT
 #pragma warning( disable : 4244 )
@@ -320,7 +324,7 @@ static void *button_new(t_symbol* text)
     /* TODO .. ask the button for its width */
     x->x_width += strlen(x->x_text->s_name)*5.7;
 
-    sprintf(buf,"button%x",x);
+    sprintf(buf,"button%p",x);
     x->x_sym = gensym(buf);
     pd_bind(&x->x_obj.ob_pd, x->x_sym);
 
@@ -334,7 +338,7 @@ static void *button_new(t_symbol* text)
     return (x);
 }
 
-void button_setup() {
+void button_setup(void) {
   post("button setup");
     button_class = class_new(gensym("button"), (t_newmethod)button_new, 0,
 				sizeof(t_button),0,A_DEFSYM,0);

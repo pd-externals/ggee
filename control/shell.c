@@ -8,10 +8,13 @@
 #endif
 
 #include <unistd.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
+
+void sys_rmpollfn(int fd);
 
 /* ------------------------ shell ----------------------------- */
 
@@ -177,7 +180,7 @@ static void shell_send(t_shell *x, t_symbol *s,int ac, t_atom *at)
      }
      tmp[size-1] = '\0';
      post("sending %s",tmp); 
-     fprintf(x->fdinpipe[0],tmp);
+     write(x->fdinpipe[0],tmp,strlen(tmp));
 }
 
 static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
@@ -244,7 +247,7 @@ void shell_free(t_shell* x)
     binbuf_free(x->x_binbuf);
 }
 
-static void *shell_new()
+static void *shell_new(void)
 {
     t_shell *x = (t_shell *)pd_new(shell_class);
 

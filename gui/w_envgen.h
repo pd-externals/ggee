@@ -212,7 +212,7 @@ int i;
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
      
-     sprintf(buf,".x%x.c coords %xP",(unsigned int)glist_getcanvas(glist),x);
+     sprintf(buf,".x%x.c coords %pP",(unsigned int)glist_getcanvas(glist),x);
      xpos = x->x_obj.te_xpix;
      ypos = (int) (x->x_obj.te_ypix + x->w.height);
      for (i=0;i<=x->last_state;i++) {
@@ -403,7 +403,8 @@ void envgen_click(t_envgen *x,
 
      x->w.grabbed = envgen_next_doodle(x,xpos,ypos);
 #if (PD_VERSION_MINOR > 31)
-     glist_grab(x->w.glist, &x->x_obj.te_g, envgen_motion, envgen_key, xpos, ypos);
+     glist_grab(x->w.glist, &x->x_obj.te_g, (t_glistmotionfn) envgen_motion,
+		(t_glistkeyfn) envgen_key, xpos, ypos);
 #else
      glist_grab(x->w.glist, &x->x_obj.te_g, xpos, ypos);
 #endif

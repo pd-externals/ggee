@@ -159,7 +159,7 @@ void image_color(t_image* x,t_symbol* col)
 */
 }
 
-static void image_setwidget()
+static void image_setwidget(void)
 {
     image_widgetbehavior.w_getrectfn =     image_getrect;
     image_widgetbehavior.w_displacefn =    image_displace;

@@ -66,10 +66,10 @@ t_int *moog_perform(t_int *w)
     float x2 = x->x_2;
     float x3 = x->x_3;
     float x4 = x->x_4;
-    float y1 = x->y_1;
-    float y2 = x->y_2;
-    float y3 = x->y_3;
-    float y4 = x->y_4;
+    float ys1 = x->y_1;
+    float ys2 = x->y_2;
+    float ys3 = x->y_3;
+    float ys4 = x->y_4;
 
 
    while (n--) {
@@ -77,23 +77,23 @@ t_int *moog_perform(t_int *w)
      *k = calc_k(*p,*k);
      pt =*p;
      pt1=(pt+1)*0.76923077;
-     in = *in1++ - *k*y4;
-     y1 = (pt1)*in + 0.3*x1 - pt*y1;
+     in = *in1++ - *k*ys4;
+     ys1 = (pt1)*in + 0.3*x1 - pt*ys1;
      x1 = in;
-     y2 = (pt1)*y1 + 0.3*x2 - pt*y2;
-     x2 = y1;
-     y3 = (pt1)*y2 + 0.3 *x3 - pt*y3;
-     x3 = y2;
-     y4 = (pt1)*y3 + 0.3*x4 - pt*y4;
-     x4 = y3;
-     *out++ = y4;
+     ys2 = (pt1)*ys1 + 0.3*x2 - pt*ys2;
+     x2 = ys1;
+     ys3 = (pt1)*ys2 + 0.3 *x3 - pt*ys3;
+     x3 = ys2;
+     ys4 = (pt1)*ys3 + 0.3*x4 - pt*ys4;
+     x4 = ys3;
+     *out++ = ys4;
    }
 
    
-    x->y_1 = y1;
-    x->y_2 = y2;
-    x->y_3 = y3;
-    x->y_4 = y4;
+    x->y_1 = ys1;
+    x->y_2 = ys2;
+    x->y_3 = ys3;
+    x->y_4 = ys4;
     x->x_1 = x1;
     x->x_2 = x2;
     x->x_3 = x3;
@@ -118,10 +118,10 @@ t_int *moog_perf8(t_int *w)
     t_float x2 = x->x_2;
     t_float x3 = x->x_3;
     t_float x4 = x->x_4;
-    t_float y1 = x->y_1;
-    t_float y2 = x->y_2;
-    t_float y3 = x->y_3;
-    t_float y4 = x->y_4;
+    t_float ys1 = x->y_1;
+    t_float ys2 = x->y_2;
+    t_float ys3 = x->y_3;
+    t_float ys4 = x->y_4;
     t_float temp,temp2;
     t_float pt,pt1;
     t_float in;
@@ -132,24 +132,24 @@ t_int *moog_perf8(t_int *w)
 
      pt =*p* 0.01*0.0140845 - 0.9999999f;
      pt1=(pt+1.0)*0.76923077;
-     in = *in1++ - *k*y4;
-     y1 = pt1*(in + 0.3*x1) - pt*y1;
+     in = *in1++ - *k*ys4;
+     ys1 = pt1*(in + 0.3*x1) - pt*ys1;
      x1 = in;
-     y2 = pt1*(y1 + 0.3*x2) - pt*y2;
-     x2 = y1;
-     y3 = pt1*(y2 + 0.3*x3) - pt*y3;
-     x3 = y2;
-     y4 = pt1*(y3 + 0.3*x4) - pt*y4;
-     x4 = y3;
-     *out++ = y4;
+     ys2 = pt1*(ys1 + 0.3*x2) - pt*ys2;
+     x2 = ys1;
+     ys3 = pt1*(ys2 + 0.3*x3) - pt*ys3;
+     x3 = ys2;
+     ys4 = pt1*(ys3 + 0.3*x4) - pt*ys4;
+     x4 = ys3;
+     *out++ = ys4;
 
       p++;k++;
     }
 
-    x->y_1 = y1;
-    x->y_2 = y2;
-    x->y_3 = y3;
-    x->y_4 = y4;
+    x->y_1 = ys1;
+    x->y_2 = ys2;
+    x->y_3 = ys3;
+    x->y_4 = ys4;
     x->x_1 = x1;
     x->x_2 = x2;
     x->x_3 = x3;
