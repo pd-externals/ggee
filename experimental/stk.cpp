@@ -32,52 +32,52 @@ void stk_print(t_stk* x) {
 }
 
 
-#define DECL_INST(name)   if ((stk_instruments[i++] = #name) && !strcmp(s->s_name, #name )) \
+#define DI(name)   if ((stk_instruments[i++] = #name) && !strcmp(s->s_name, #name )) \
 { x->instrument = new name;}
 
-#define DECL_INST2(name)   if ((stk_instruments[i++] = #name) && !strcmp(s->s_name, #name )) \
-{ x->instrument = new name(80.);}
+#define DI2(name,y)   if ((stk_instruments[i++] = #name) && !strcmp(s->s_name, #name )) \
+{ x->instrument = new name(y);}
 
 
 static void stk_set_instrument(t_stk* x,t_symbol* s) 
 {
   int i = 0;
-  if (!strcmp(s->s_name,"Simple"))  x->instrument = new Simple;
-  DECL_INST2(Plucked)
-  DECL_INST2(Plucked2)
-  DECL_INST2(Mandolin)
-  DECL_INST2(Bowed)
-  DECL_INST2(Brass)
-  DECL_INST2(Clarinet)
-  DECL_INST2(BlowHole)
-  DECL_INST2(Flute)
-  DECL_INST(BowedBar)
-  DECL_INST(Modal4)
-  DECL_INST(ModalBar)
-  DECL_INST(FM4Op)
-  DECL_INST(FM4Alg3)
-  DECL_INST(FM4Alg4)
-  DECL_INST(FM4Alg5)
-  DECL_INST(FM4Alg6)
-  DECL_INST(FM4Alg8)
-  DECL_INST(HeavyMtl)
-  DECL_INST(PercFlut)
-  DECL_INST(Rhodey)
-  DECL_INST(Wurley)
-  DECL_INST(TubeBell)
-  DECL_INST(FMVoices)
-  DECL_INST(BeeThree)
-  DECL_INST(Sampler)
-  DECL_INST(SamplFlt)
-  DECL_INST(Moog1)
-    //  DECL_INST(VoicForm)
-  DECL_INST(DrumSynt)
-  DECL_INST(Shakers)
-  DECL_INST2(Sitar1)
-  DECL_INST2(StrDrone)
-  else {
+
+  x->instrument = NULL;
+  DI2(Clarinet,10.0);
+  DI2(BlowHole,10.0);
+  DI2(Saxofony,10.0);
+  DI2(Flute,10.0);
+  DI2(Brass,10.0);
+  DI(BlowBotl);
+  DI2(Bowed,10.0);
+  DI2(Plucked,5.0);
+  DI2(StifKarp,5.0);
+  DI2(Sitar,5.0);
+  DI2(Mandolin,5.0);
+
+  DI(Rhodey);
+  DI(Wurley);
+  DI(TubeBell);
+  DI(HevyMetl);
+  DI(PercFlut);
+  DI(BeeThree);
+  DI(FMVoices);
+
+  DI(VoicForm);
+  DI(Moog);
+  DI(Simple);
+  DI(Drummer);
+  DI(BandedWG);
+  DI(Shakers);
+  DI(ModalBar);
+  //  DI2(Mesh2D,10, 10);
+  DI(Resonate);
+  DI(Whistle);
+
+  if (!x->instrument)
        error("No such instrument %s",s->s_name);
-  }
+
   stk_instruments[i] = "LastInst";
 }
 
@@ -123,7 +123,7 @@ static void stk_noteOff(t_stk *x)
 
 static void stk_control(t_stk *x,t_floatarg f1,t_floatarg f2) 
 {
-     x->instrument->controlChange(f1,f2);
+     x->instrument->controlChange((int)f1,f2);
 }
 
 static void stk_control1(t_stk *x,t_floatarg f1) 
@@ -153,7 +153,7 @@ static void stk_aftertouch(t_stk *x,t_floatarg f1)
 
 static void stk_pitchbend(t_stk *x,t_floatarg f1) 
 {
-     x->instrument->setFreq(f1);
+     x->instrument->setFrequency(f1);
 }
 
 static void stk_float(t_stk* x,t_floatarg f)

@@ -1,91 +1,92 @@
-#include <ADSR.h>
-#include <AifWvIn.h>
-#include <AifWvOut.h>
-#include <BeeThree.h>
-#include <BiQuad.h>
-#include <BlowHole.h>
-#include <BowTabl.h>
-#include <Bowed.h>
-#include <BowedBar.h>
-#include <Brass.h>
-#include <ByteSwap.h>
-#include <Clarinet.h>
-#include <Controller.h>
-#include <DCBlock.h>
-#include <DLineA.h>
-#include <DLineL.h>
-#include <DLineN.h>
-#include <DrumSynt.h>
-#include <Envelope.h>
-#include <FIR.h>
-#include <FM4Alg3.h>
-#include <FM4Alg4.h>
-#include <FM4Alg5.h>
-#include <FM4Alg6.h>
-#include <FM4Alg8.h>
-#include <FM4Op.h>
-#include <FMVoices.h>
-#include <Filter.h>
-#include <Flute.h>
-#include <FormSwep.h>
-#include <HeavyMtl.h>
-#include <Instrmnt.h>
-#include <JCRev.h>
-#include <JetTabl.h>
-//#include <LipFilt.h>
-#include <Mandolin.h>
-#include <MatWvIn.h>
-#include <MatWvOut.h>
-#include <Modal4.h>
-#include <ModalBar.h>
-#include <Modulatr.h>
-#include <Moog1.h>
-#include <NRev.h>
-#include <Noise.h>
-#include <Object.h>
-#include <OnePole.h>
-#include <OneZero.h>
-#include <PRCRev.h>
-#include <PercFlut.h>
-#include <Plucked.h>
-#include <Plucked2.h>
-#include <PoleZero.h>
-#include <RawWvIn.h>
-#include <RawWvOut.h>
-#include <ReedTabl.h>
-#include <Reverb.h>
-#include <Rhodey.h>
-#include <RtAudio.h>
-#include <RtDuplex.h>
-#include <RtMidi.h>
-#include <RtWvIn.h>
-#include <RtWvOut.h>
-#include <SKINI11.h>
-#include <SKINI11.msg>
-#include <SamplFlt.h>
-#include <Sampler.h>
-#include <Shakers.h>
-#include <Simple.h>
-#include <SingWave.h>
-#include <SndWvIn.h>
-#include <SndWvOut.h>
-#include <StkError.h>
-#include <StrmWvIn.h>
-#include <StrmWvOut.h>
-#include <SubNoise.h>
-#include <TablLook.h>
-#include <TubeBell.h>
-#include <TwoPole.h>
-#include <TwoZero.h>
-#include <VoicForm.h>
-#include <VoicMang.h>
-#include <WavWvIn.h>
-#include <WavWvOut.h>
-#include <Wurley.h>
-#include <WvIn.h>
-#include <WvOut.h>
-#include <mandplyr.h>
-#include <miditabl.h>
-#include <phontabl.h>
-#include <Sitar1.h>
-#include <StrDrone.h>
+#ifdef __linux__
+#define __OS_LINUX__
+#endif
+
+#include<Stk.h>
+#include<ADSR.h>
+#include<Asymp.h>
+#include<BandedWG.h>
+#include<BeeThree.h>
+#include<BiQuad.h>
+#include<BlowBotl.h>
+#include<BlowHole.h>
+#include<BowTable.h>
+#include<Bowed.h>
+#include<Brass.h>
+#include<Chorus.h>
+#include<Clarinet.h>
+#include<Delay.h>
+#include<DelayA.h>
+#include<DelayL.h>
+#include<Drummer.h>
+#include<Echo.h>
+#include<Effect.h>
+#include<Envelope.h>
+#include<FM.h>
+#include<FMVoices.h>
+#include<Filter.h>
+#include<Flute.h>
+#include<FormSwep.h>
+#include<Function.h>
+#include<Generator.h>
+#include<HevyMetl.h>
+#include<Instrmnt.h>
+#include<JCRev.h>
+#include<JetTable.h>
+#include<Mandolin.h>
+#include<Mesh2D.h>
+#include<Messager.h>
+#include<MidiFileIn.h>
+#include<Modal.h>
+#include<ModalBar.h>
+#include<Modulate.h>
+#include<Moog.h>
+#include<Mutex.h>
+#include<NRev.h>
+#include<Noise.h>
+#include<OnePole.h>
+#include<OneZero.h>
+#include<PRCRev.h>
+#include<PercFlut.h>
+#include<Phonemes.h>
+#include<PitShift.h>
+#include<PluckTwo.h>
+#include<Plucked.h>
+#include<PoleZero.h>
+#include<ReedTable.h>
+#include<Resonate.h>
+#include<Rhodey.h>
+#include<RtAudio.h>
+#include<RtDuplex.h>
+#include<RtError.h>
+#include<RtMidi.h>
+#include<RtWvIn.h>
+#include<RtWvOut.h>
+#include<SKINI.msg>
+#include<SKINI.tbl>
+#include<Sampler.h>
+#include<Saxofony.h>
+#include<Shakers.h>
+#include<Simple.h>
+#include<SingWave.h>
+#include<Sitar.h>
+#include<Skini.h>
+#include<Socket.h>
+#include<Sphere.h>
+#include<StifKarp.h>
+#include<SubNoise.h>
+#include<Table.h>
+#include<TcpWvIn.h>
+#include<TcpWvOut.h>
+#include<Thread.h>
+#include<TubeBell.h>
+#include<TwoPole.h>
+#include<TwoZero.h>
+#include<Vector3D.h>
+#include<VoicForm.h>
+#include<Voicer.h>
+#include<WaveLoop.h>
+#include<Whistle.h>
+#include<Wurley.h>
+#include<WvIn.h>
+#include<WvOut.h>
