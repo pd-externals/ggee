@@ -208,9 +208,9 @@ void state_load(t_state *x)
      do {
 	  if (a->te_type == T_ATOM || 
 	      !strcmp(class_getname(a->te_pd),"slider")
-	      ||
-	     !strcmp(class_getname(a->te_pd),"ticker")/* ||
-	     !strcmp(class_getname(a->te_pd),"vsl") ||
+	      || !strcmp(class_getname(a->te_pd),"ticker")
+	      || !strcmp(class_getname(a->te_pd),"sliderh")
+/*            || !strcmp(class_getname(a->te_pd),"vsl") ||
 	      !strcmp(class_getname(a->te_pd),"hsl" ) */
 	      ) {
 	       if (TATOM(a)->a_type == A_SYMBOL) {

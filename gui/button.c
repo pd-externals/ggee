@@ -145,7 +145,7 @@ static void button_erase(t_button* x,t_glist* glist)
      int n;
 
      DEBUG(post("erase");)
-//     sys_vgui(".x%x.c.s%x delete\n",glist_getcanvas(glist),x);
+     sys_vgui("destroy .x%x.c.s%x\n",glist_getcanvas(glist),x);
 
      sys_vgui(".x%x.c delete %xS\n",glist_getcanvas(glist), x);
 
