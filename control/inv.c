@@ -33,11 +33,13 @@ static void inv_dsp(t_inv *x, t_signal **sp)
     dsp_add(inv_perform, 3, sp[0]->s_vec, sp[1]->s_vec, sp[0]->s_n);
 }
 
-void inv_setup(void)
+void inv_tilde_setup(void)
 {
-    inv_class = class_new(gensym("1/x~"), (t_newmethod)inv_new, 0,
+    inv_class = class_new(gensym("inv~"), (t_newmethod)inv_new, 0,
     	sizeof(t_inv), 0, 0);
 
+    class_addcreator(inv_new,gensym("1/x~"),0);
+    
     class_addmethod(inv_class, nullfn, gensym("signal"), 0);
     class_addmethod(inv_class, (t_method)inv_dsp, gensym("dsp"), 0);
 }
@@ -65,10 +67,11 @@ static void scalarinv_float(t_scalarinv *x,t_float val)
      
 }
 
-void scalarinv_setup(void)
+void inv_setup(void)
 {
-    scalarinv_class = class_new(gensym("1/x"), (t_newmethod)scalarinv_new, 0,
+    scalarinv_class = class_new(gensym("inv"), (t_newmethod)scalarinv_new, 0,
     	sizeof(t_scalarinv), 0, 0);
+    class_addcreator(scalarinv_new,gensym("1/x"),0);
 
     class_addfloat(scalarinv_class, (t_method)scalarinv_float);
 }

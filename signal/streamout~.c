@@ -101,7 +101,8 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
     int sockfd;
     int portno = fportno;
     x->hostname = hostname;
-    x->portno = (int) fportno;
+    if (!fportno) x->portno = 4267;
+    else x->portno = (int) fportno;
     x->x_tag.count = 0;
     
 

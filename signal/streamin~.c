@@ -360,6 +360,8 @@ static void *streamin_new(t_floatarg fportno, t_floatarg prot)
     t_streamin *x;
     int i;
     
+    if (fportno == 0) fportno = 4267;
+
     post("port %f",fportno);
     x = (t_streamin *)pd_new(streamin_class);
     
