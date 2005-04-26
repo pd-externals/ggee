@@ -27,10 +27,11 @@ static void getdir_bang(t_getdir *x)
 {
     int i = x->x_level;
     t_canvas* last = x->x_canvas;
-    do {
+
+    while (i>0) {
         i--;
-        last = last->gl_owner;
-    } while (last && i); 
+        if (last->gl_owner) last = last->gl_owner;
+    }
 
     outlet_symbol(x->x_outlet,canvas_getdir(last));
 }
