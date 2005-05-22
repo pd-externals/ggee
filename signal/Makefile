@@ -1,51 +1,24 @@
-current: nt
+# Adapt the PDPATH if your pd is not installed in the standard place
 
+PDPATH="$(PROGRAMFILES)/pd"
 
-# TARGETS += stk
+EXTERNALS = $(shell ls *.c)
 
-VERSION = \"0.16\"
+all: $(EXTERNALS:.c=.dll)
 
-.SUFFIXES: .dll .obj
-# ----------------------- NT ----------------------------
+.SUFFIXES: .dll
 
-NTOBJECTS = *.obj
-NTDLLS = *.dll
+DEFINES = -DPD -DNT 
+CFLAGS = -Wall -W -Wshadow -Wstrict-prototypes \
+    -Wno-unused -Wno-parentheses -Wno-switch
 
-PDNTCFLAGS = /W3 /WX /DNT /DPD /nologo
+INCLUDE = -I.. -I. -I$(PDPATH)/src
+LIBS = -lwsock32
 
-PDNTINCLUDE = /I. /I..\..\pd\src /I..\include
-ProgramFiles = C:\Program Files
-PDNTLDIR = "$(ProgramFiles)\Microsoft Visual Studio\Vc98\lib"
-#PDNTLDIR = "C:\Programme\Msdev\Vc98\lib"
-
-PDNTLIB = $(PDNTLDIR)\libc.lib \
-	$(PDNTLDIR)\oldnames.lib \
-	$(PDNTLDIR)\wsock32.lib \
-	$(PDNTLDIR)\kernel32.lib \
-	$(PDNTLDIR)\uuid.lib \
-	..\..\pd\bin\pd.lib 
-
-nt: $(NTOBJECTS) 
-	-link /dll  $(PDNTLIB) sfplay~.obj /export:sfplay_tilde_setup
-	-link /dll  $(PDNTLIB) atan2~.obj /export:atan2_tilde_setup
-	-link /dll  $(PDNTLIB) exp~.obj /export:exp_tilde_setup
-	-link /dll  $(PDNTLIB) log~.obj /export:log_tilde_setup
-	-link /dll  $(PDNTLIB) mixer~.obj /export:mixer_tilde_setup
-	-link /dll  $(PDNTLIB) sfwrite~.obj /export:swrite_tilde_setup
-	-link /dll  $(PDNTLIB) streamin~.obj /export:streamin_tilde_setup
-	-link /dll  $(PDNTLIB) streamout~.obj /export:streamout_tilde_setup
-	-link /dll  $(PDNTLIB) moog~.obj /export:moog_tilde_setup
+%.dll: %.c
+	$(CC) -mms-bitfields $(CFLAGS) $(DEFINES) $(INCLUDE) -o "$*.o" -c "$*.c"
+	gcc -shared -o "$*.dll" "$*.o" $(PDPATH)/bin/pd.dll $(LIBS)
+	rm "$*.o" 
 
 clean:
-	del *.obj 
-	del *.dll
-
-
-.c.obj:
-	-cl $(PDNTCFLAGS) $(PDNTINCLUDE) /c $*.c
-
-.obj.dll:
-
-
-	
-
+	-rm *.a *.def *.dll *.o

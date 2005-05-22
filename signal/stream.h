@@ -8,8 +8,7 @@
 #define SF_ALAW   20
 #define SF_MP3    30
 
-#define SF_SIZEOF(a) (a == SF_FLOAT ? sizeof(t_float) : \
-                     a == SF_16BIT ? sizeof(short) : 1)
+#define SF_SIZEOF(a) (a == SF_FLOAT ? sizeof(t_float) : a == SF_16BIT ? sizeof(short) : 1)
 
 
 
