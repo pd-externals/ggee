@@ -1,0 +1,42 @@
+prefix=$(DESTDIR)/usr
+
+EXTERNALS = $(shell ls *.c)
+STRIP = strip --strip-unneeded -R .note -R .comment
+
+
+
+linux: $(EXTERNALS:.c=.pd_linux)
+win: $(EXTERNALS:.c=.dll)
+osx: $(EXTERNALS:.c=.pd_darwin)
+
+
+
+.SUFFIXES: .pd_linux .pd_darwin .dll
+
+WARNFLAGS = -Wall -W -Wshadow -Wstrict-prototypes  \
+            -Wno-unused -Wno-parentheses -Wno-switch
+
+CFLAGS + = -fPIC -DPD $(WARNFLAGS)
+
+INCLUDES = -I.. -I../include
+
+# the linux compilation target
+
+%.pd_linux: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -o "$*.o" -c $*.c
+	gcc -Wl,-export_dynamic  -shared -o "$*.pd_linux" "$*.o" -lc -lm
+	chmod a-x "$*.pd_linux"
+	rm -f "$*.o" 
+
+# the windows mingw target
+
+%.dll: ../src/%.c
+	$(CC) -mms-bitfields $(CFLAGS) $(DEFINES) $(INCLUDE) -o "$*.o" -c "../src/$*.c"
+	gcc -shared -o "$*.dll" "$*.o" $(PDPATH)/bin/pd.dll
+
+strip:
+	$(STRIP) *.pd_linux
+	
+clean:
+	-rm *.pd_linux *~ *.dll *.pd_darwin *.o
+	
