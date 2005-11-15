@@ -17,6 +17,9 @@
 #include <winsock.h>
 #endif
 
+#ifdef __APPLE__
+#include <unistd.h>
+#endif
 
 /* Utility functions */
 
@@ -202,7 +205,9 @@ static t_int *streamout_perform(t_int *w)
     if (x->x_fd > 0) {
 	 /* send the format tag */
 	 
-#ifdef unix
+#ifdef __APPLE__
+		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),SO_NOSIGPIPE) < 0)
+#elif defined unix
 		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),/*MSG_DONTWAIT|*/MSG_NOSIGNAL) < 0)
 #else
 		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),0) < 0)
@@ -217,7 +222,9 @@ static t_int *streamout_perform(t_int *w)
 	 
 	 for (sent = 0; sent < length;) {
 	      int res = 0;
-#ifdef unix
+#ifdef __APPLE__
+		  res = send(x->x_fd, bp, length-sent, SO_NOSIGPIPE);
+#elif defined unix
 		  res = send(x->x_fd, bp, length-sent, /*MSG_DONTWAIT|*/MSG_NOSIGNAL);
 #else
 		  res = send(x->x_fd, bp, length-sent, 0);

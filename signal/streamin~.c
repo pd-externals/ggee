@@ -21,8 +21,7 @@
 #include <winsock.h>
 #endif
 
-
-
+/* these pragmas are only used for MSVC, not MinGW or Cygwin <hans@at.or.at> */
 #ifdef _MSC_VER
 #pragma warning( disable : 4244 )
 #pragma warning( disable : 4305 )
@@ -79,10 +78,15 @@ int setsocketoptions(int sockfd)
 { 
 #ifdef unix
     int sockopt = 1;
-     if (setsockopt(sockfd, SOL_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0)
-	  DEBUGMESS(post("setsockopt NODELAY failed\n"));
-     else
-	  DEBUGMESS(post("TCP_NODELAY set"));
+	 if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0) 
+	 {
+		 DEBUGMESS(post("setsockopt NODELAY failed\n"));
+	 }
+	 else
+	 {
+		 DEBUGMESS(post("TCP_NODELAY set"));
+	 }
+	 
      
      /* if we don`t use REUSEADDR we have to wait under unix until the 
 	address gets freed after a close ... this can be very annoying 
