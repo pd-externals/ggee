@@ -27,7 +27,7 @@ static t_class *shell_class;
 
 static void drop_priority(void) 
 {
-#ifdef _POSIX_PRIORITY_SCHEDULING
+#if (_POSIX_PRIORITY_SCHEDULING - 0) >=  200112L
     struct sched_param par;
     int p1 ,p2, p3;
     par.sched_priority = 0;
