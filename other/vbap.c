@@ -20,7 +20,9 @@ Laboratory of Acoustics and Audio Signal Processing
 
 #include <math.h>
 #include <stdio.h>
+#ifndef __APPLE__
 #include <malloc.h>
+#endif
 #include <string.h>   /* strtok */
 
 #define MAX_TRIPLET_AMOUNT 64
