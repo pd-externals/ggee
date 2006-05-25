@@ -1,10 +1,9 @@
 /* (C) Guenter Geiger <geiger@epy.co.at> */
 
+/* this doesn't run on Windows (yet?) */
+#ifndef _WIN32
+
 #include <m_pd.h>
-#ifdef _MSC_VER
-#pragma warning( disable : 4244 )
-#pragma warning( disable : 4305 )
-#endif
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -308,5 +307,8 @@ void shell_setup(void)
     class_addbang(shell_class,shell_bang);
     class_addanything(shell_class, shell_anything);
 }
+
+
+#endif /* _WIN32 */
 
 
