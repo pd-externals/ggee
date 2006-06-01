@@ -10,7 +10,7 @@ compile:
 	make -f ../makefile.sub -C experimental
 
 clean:
-	rm -r ggee-$(VERSION)
+	-rm -r ggee-$(VERSION)
 	make -f ../makefile.sub -C control clean
 	make -f ../makefile.sub -C filters clean
 	make -f ../makefile.sub -C gui clean

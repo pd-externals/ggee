@@ -19,7 +19,10 @@ void garray_usedindsp(t_garray *x);
 #define MAXGRAINS 1000
 #define PD_PI 3.14159
 
+
+#if PD_MINOR_VERSION < 38
 static float* cos_table;
+#endif
 static float* halfcos_table;
 static float* exp_table;
 
