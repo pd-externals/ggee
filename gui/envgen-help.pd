@@ -1,29 +1,83 @@
-#N canvas 298 25 460 501 10;
-#X obj 115 276 envgen 203 123 1 0  ;
+#N canvas 91 22 484 479 10;
+#X obj 101 182 envgen 203 123 1 0  ;
 #X text 21 6 envgen:;
 #X text 22 27 Envelope generator. This external delivers value for
 line~ if it is banged. When numbers are sent to its input it delivers
 the corresponding value of the envelope;
-#X msg 136 136 motion 4 4;
-#X msg 91 137 key 4;
-#X msg 167 183 duration 5000;
-#X floatatom 112 427 5 0 0 0 - - -;
-#X floatatom 319 426 5 0 0 0 - - -;
-#X msg 42 158 bang;
-#X msg 155 160 sustain 5;
-#X msg 185 207 freeze 5;
-#X msg 186 236 release;
-#X msg 37 221 resize 22;
-#X text 21 73 arguments;
-#X text 51 82 xsize ysize xmax ymax send_symbol receive_symbol ...
+#X msg 79 145 bang;
+#X text 21 75 arguments;
+#X text 51 84 xsize ysize xmax ymax send_symbol receive_symbol ...
 ;
-#X connect 0 0 6 0;
-#X connect 0 1 7 0;
-#X connect 3 0 0 0;
-#X connect 4 0 0 0;
+#X obj 124 144 metro 2000;
+#X obj 124 120 tgl 15 0 empty empty empty 0 -6 0 8 -24198 -1 -1 1 1
+;
+#X obj 192 124 hsl 128 15 20 2000 0 0 empty empty empty -2 -6 0 8 -262144
+-1 -1 0 1;
+#X msg 345 183 \; pd dsp 1;
+#N canvas 0 22 462 312 guts 0;
+#X obj 151 62 osc~ 250;
+#X obj 151 101 *~;
+#X obj 241 101 *~;
+#X obj 241 61 noise~;
+#X obj 177 172 *~;
+#X obj 133 150 line~;
+#X obj 188 235 dac~;
+#X obj 215 188 hsl 128 15 0.01 1 1 0 empty empty master_amplitude -2
+-6 0 8 -262144 -1 -1 10500 1;
+#X obj 254 11 inlet;
+#X obj 393 18 inlet;
+#X obj 157 15 inlet;
+#X obj 6 8 inlet;
+#X obj 196 207 *~ 0.6;
+#X connect 0 0 1 0;
+#X connect 1 0 4 1;
+#X connect 2 0 4 1;
+#X connect 3 0 2 0;
+#X connect 4 0 12 0;
+#X connect 5 0 4 0;
+#X connect 7 0 12 1;
+#X connect 8 0 1 1;
+#X connect 9 0 2 1;
+#X connect 10 0 0 0;
+#X connect 11 0 5 0;
+#X connect 12 0 6 1;
+#X connect 12 0 6 0;
+#X restore 168 380 pd guts;
+#X obj 183 353 tgl 15 0 empty empty empty 0 -6 0 8 -225271 -1 -1 1
+1;
+#X obj 206 353 tgl 15 1 empty empty empty 0 -6 0 8 -225271 -1 -1 1
+1;
+#X obj 170 329 hsl 128 15 100 1000 0 0 empty empty empty -2 -6 0 8
+-262144 -1 -1 6600 1;
+#N canvas 0 22 454 304 all 0;
+#X obj 124 116 envgen 203 123 1 0  ;
+#X msg 177 36 motion 4 4;
+#X msg 183 78 duration 5000;
+#X floatatom 120 267 5 0 0 0 - - -;
+#X floatatom 327 266 5 0 0 0 - - -;
+#X msg 74 11 bang;
+#X msg 183 57 sustain 5;
+#X msg 286 78 freeze 5;
+#X msg 356 78 release;
+#X msg 30 73 resize 2;
+#X msg 31 52 key 4;
+#X connect 0 0 3 0;
+#X connect 0 1 4 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 0;
 #X connect 5 0 0 0;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
 #X connect 8 0 0 0;
 #X connect 9 0 0 0;
 #X connect 10 0 0 0;
-#X connect 11 0 0 0;
-#X connect 12 0 0 0;
+#X restore 195 413 pd all messages;
+#X text 95 413 For more info:;
+#X connect 0 0 10 0;
+#X connect 3 0 0 0;
+#X connect 6 0 0 0;
+#X connect 7 0 6 0;
+#X connect 8 0 6 1;
+#X connect 11 0 10 2;
+#X connect 12 0 10 3;
+#X connect 13 0 10 1;
