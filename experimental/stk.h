@@ -75,9 +75,9 @@
 #include<Sphere.h>
 #include<StifKarp.h>
 #include<SubNoise.h>
-#include<Table.h>
-#include<TcpWvIn.h>
-#include<TcpWvOut.h>
+//#include<Table.h>
+//#include<TcpWvIn.h>
+//#include<TcpWvOut.h>
 #include<Thread.h>
 #include<TubeBell.h>
 #include<TwoPole.h>
