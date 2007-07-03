@@ -202,7 +202,9 @@ void envgen_release(t_envgen* x) {
 static void envgen_sustain(t_envgen *x, t_floatarg f)
 {
      if (f > 0 && f < x->last_state) 
-	  x->sustain_state = f;
+        x->sustain_state = f;
+     else
+        post("ERROR: sustain value not betweem 0 and %f",x->last_state);
 }
 
 
