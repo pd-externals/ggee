@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#ifdef NT
+#ifdef _WIN32
 #pragma warning( disable : 4244 )
 #pragma warning( disable : 4305 )
 #define abs fabs

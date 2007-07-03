@@ -73,7 +73,7 @@ void state_dosave(t_state *x)
      t_symbol* dir;
      char    dirstr[255];
 
-#ifdef NT
+#ifdef _WIN32
      dir = gensym("");
 #else
      dir = canvas_getdir(x->x_canvas);
@@ -81,7 +81,7 @@ void state_dosave(t_state *x)
 
      strcpy(dirstr,dir->s_name);
 
-#ifndef NT
+#ifndef _WIN32
      strcat(dirstr,"/");
 #endif
 
@@ -176,7 +176,7 @@ void state_load(t_state *x)
      t_symbol* dir;
      char    dirstr[255];
 
-#ifdef NT
+#ifdef _WIN32
      dir = gensym("");
 #else
      dir = canvas_getdir(x->x_canvas);
@@ -184,7 +184,7 @@ void state_load(t_state *x)
 
      strcpy(dirstr,dir->s_name);
 
-#ifndef NT
+#ifndef _WIN32
      strcat(dirstr,"/");
 #endif
 

@@ -41,7 +41,7 @@ static void sys_closesocket(int fd)
 #ifdef UNIX
      close(fd); /* shutdown() ?? */
 #endif
-#ifdef NT
+#ifdef _WIN32
     closesocket(fd);
 #endif
 }

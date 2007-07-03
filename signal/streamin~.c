@@ -45,7 +45,7 @@
 */
 
 
-#ifdef NT
+#ifdef _WIN32
 extern int close(int);
 extern void sys_rmpollfn(int fd);
 extern sys_addpollfn(int fd, void* fn, void *ptr);
@@ -68,7 +68,7 @@ static void sys_closesocket(int fd)
 #ifdef UNIX
     close(fd);
 #endif
-#ifdef NT
+#ifdef _WIN32
     closesocket(fd);
 #endif
 }
@@ -147,7 +147,7 @@ static void streamin_datapoll(t_streamin *x)
      if (x->nbytes == 0) {      /* get the new tag */
 	  ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),MSG_PEEK);
 	  if (ret != sizeof(t_tag)) {
-#ifdef NT
+#ifdef _WIN32
             sys_closesocket(x->x_socket);
             sys_rmpollfn(x->x_socket);
             x->x_socket = -1;

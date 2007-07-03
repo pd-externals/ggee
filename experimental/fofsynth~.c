@@ -10,7 +10,7 @@
 
 /* ------------------------ fofsynth~ ----------------------------- */
 
-#ifndef NT
+#ifndef _WIN32
 void garray_usedindsp(t_garray *x);
 #endif
 

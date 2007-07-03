@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#ifndef NT
+#ifndef _WIN32
 #include <unistd.h>
 #include <sys/mman.h>
 #else
@@ -19,7 +19,7 @@
 #include <sys/stat.h>
 
 
-#ifdef NT
+#ifdef _WIN32
 #define BINREADMODE "rb"
 #define OPENPARAMS O_WRONLY | O_CREAT | O_TRUNC 
 #else
