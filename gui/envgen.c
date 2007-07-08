@@ -204,7 +204,7 @@ static void envgen_sustain(t_envgen *x, t_floatarg f)
      if (f > 0 && f < x->last_state) 
         x->sustain_state = f;
      else
-        post("ERROR: sustain value not betweem 0 and %f",x->last_state);
+		 pd_error(x,"sustain value not betweem 0 and %f, ignoring message", x->last_state);
 }
 
 
