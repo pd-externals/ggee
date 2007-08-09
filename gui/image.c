@@ -28,7 +28,7 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 	  canvas_makefilename(glist_getcanvas(x->x_glist), x->x_fname->s_name,
 			 fname, MAXPDSTRING);
 
-	  sys_vgui("image create photo img%x -file %s\n",x,fname);
+	  sys_vgui("image create photo img%x -file \"%s\"\n",x,fname);
 	  sys_vgui(".x%x.c create image %d %d -image img%x -tags %xS\n", 
 		   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x,x);
 
