@@ -23,26 +23,26 @@ typedef struct _image
 
 void image_drawme(t_image *x, t_glist *glist, int firsttime)
 {
-     if (firsttime) {
-	  char fname[MAXPDSTRING];
-	  canvas_makefilename(glist_getcanvas(x->x_glist), x->x_fname->s_name,
-			 fname, MAXPDSTRING);
+	if (firsttime) {
+		char fname[MAXPDSTRING];
+		canvas_makefilename(glist_getcanvas(x->x_glist), x->x_fname->s_name,
+							fname, MAXPDSTRING);
 
-	  sys_vgui("image create photo img%x -file \"%s\"\n",x,fname);
+	  sys_vgui("image create photo img%x -file {%s}\n",x,fname);
 	  sys_vgui(".x%x.c create image %d %d -image img%x -tags %xS\n", 
-		   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x,x);
+			   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), 
+			   text_ypix(&x->x_obj, glist),x,x);
 
 	  /* TODO callback from gui
 	    sys_vgui("image_size logo");
 	  */
      }     
      else {
-	  sys_vgui(".x%x.c coords %xS \
-%d %d\n",
-		   glist_getcanvas(glist), x,
-		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
+		 sys_vgui(".x%x.c coords %xS %d %d\n",
+				  glist_getcanvas(glist), x,
+				  text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
-
+	
 }
 
 
@@ -159,6 +159,13 @@ void image_color(t_image* x,t_symbol* col)
 */
 }
 
+void image_open(t_image* x, t_symbol* fname)
+{
+    x->x_fname = fname;
+    image_erase(x, x->x_glist);
+    image_drawme(x, x->x_glist, 1);
+}
+
 static void image_setwidget(void)
 {
     image_widgetbehavior.w_getrectfn =     image_getrect;
@@ -186,7 +193,7 @@ static void *image_new(t_symbol* fname)
     x->x_width = 15;
     x->x_height = 15;
 
-    x->x_fname = fname;
+	x->x_fname = fname;
     outlet_new(&x->x_obj, &s_float);
     return (x);
 }
@@ -196,17 +203,17 @@ void image_setup(void)
     image_class = class_new(gensym("image"), (t_newmethod)image_new, 0,
 				sizeof(t_image),0, A_DEFSYM,0);
 
-/*
     class_addmethod(image_class, (t_method)image_size, gensym("size"),
     	A_FLOAT, A_FLOAT, 0);
 
+/*
     class_addmethod(image_class, (t_method)image_color, gensym("color"),
     	A_SYMBOL, 0);
 */
-/*
+
     class_addmethod(image_class, (t_method)image_open, gensym("open"),
     	A_SYMBOL, 0);
-*/
+	
     image_setwidget();
     class_setwidget(image_class,&image_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
