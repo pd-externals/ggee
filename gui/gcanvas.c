@@ -166,9 +166,10 @@ static void gcanvas_vis(t_gobj *z, t_glist *glist, int vis)
 static void gcanvas_save(t_gobj *z, t_binbuf *b)
 {
     t_gcanvas *x = (t_gcanvas *)z;
-    binbuf_addv(b, "ssiisii", gensym("#X"),gensym("obj"),
-		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
-		gensym("gcanvas"),x->x_width,x->x_height);
+    binbuf_addv(b, "ssiisii", gensym("#X"), gensym("obj"),
+                (t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
+                atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
+                x->x_width, x->x_height);
     binbuf_addv(b, ";");
 }
 

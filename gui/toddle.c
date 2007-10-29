@@ -237,9 +237,10 @@ static void toddle_vis(t_gobj *z, t_glist *glist, int vis)
 static void toddle_save(t_gobj *z, t_binbuf *b)
 {
     t_toddle *x = (t_toddle *)z;
-    binbuf_addv(b, "ssiissii", gensym("#X"),gensym("obj"),
-		(t_int)x->x_obj.te_xpos, (t_int)x->x_obj.te_ypos,  
-		gensym("toddle"),x->x_color,x->x_width,x->x_height);
+    binbuf_addv(b, "ssiissii", gensym("#X"), gensym("obj"),
+                (t_int)x->x_obj.te_xpos, (t_int)x->x_obj.te_ypos,  
+                atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
+                x->x_color,x->x_width,x->x_height);
     binbuf_addv(b, ";");
 }
 

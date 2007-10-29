@@ -18,9 +18,10 @@ static void ticker_save(t_gobj *z, t_binbuf *b)
 
     t_fatom *x = (t_fatom *)z;
 
-    binbuf_addv(b, "ssiiss", gensym("#X"),gensym("obj"),
-		x->x_obj.te_xpix, x->x_obj.te_ypix ,  
-		gensym("ticker"),x->x_text,x->x_max,x->x_width);
+    binbuf_addv(b, "ssiiss", gensym("#X"), gensym("obj"),
+                x->x_obj.te_xpix, x->x_obj.te_ypix ,  
+                atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
+                x->x_text,x->x_max,x->x_width);
     binbuf_addv(b, ";");
 }
 

@@ -363,9 +363,10 @@ static void envgen_vis(t_gobj *z, t_glist *glist, int vis)
 static void envgen_save(t_gobj *z, t_binbuf *b)
 {
     t_envgen *x = (t_envgen *)z;
-    binbuf_addv(b, "ssiisiiffss", gensym("#X"),gensym("obj"),
-		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
-		gensym("envgen"),x->w.width,x->w.height,x->max,x->min,x->r_sym,x->s_sym);
+    binbuf_addv(b, "ssiisiiffss", gensym("#X"), gensym("obj"),
+                (t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
+                atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
+                x->w.width,x->w.height,x->max,x->min,x->r_sym,x->s_sym);
     binbuf_addv(b, ";");
 }
 
