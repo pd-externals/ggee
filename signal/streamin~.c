@@ -156,6 +156,12 @@ static void streamin_datapoll(t_streamin *x)
           }
 	  ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),0);
 
+	  if ((x->frames[x->framein].tag.framesize - sizeof(t_tag)) > MAXFRAMESIZE) {
+	   error("streamin~: got an invalid frame size of %d, maximum is %d\n",
+	           x->frames[x->framein].tag.framesize, MAXFRAMESIZE);
+	   x->frames[x->framein].tag.framesize = MAXFRAMESIZE + sizeof(t_tag);
+	  }
+
 	  x->nbytes = n = x->frames[x->framein].tag.framesize;
      }
 
