@@ -1,7 +1,7 @@
 /* (C) Guenter Geiger <geiger@xdv.org> */
 
 
-#include <m_pd.h>
+#include "m_pd.h"
 #include "g_canvas.h"
 
 /* ------------------------ gcanvas ----------------------------- */
@@ -18,6 +18,7 @@ typedef struct _gcanvas
      t_object x_obj;
      t_glist * x_glist;
      t_outlet* out2;
+     t_outlet* out3;
      int x_width;
      int x_height;
      int x;
@@ -249,8 +250,11 @@ static void *gcanvas_new(t_floatarg h,t_floatarg o)
 
     outlet_new(&x->x_obj, &s_float);
     x->out2 = outlet_new(&x->x_obj, &s_float);
+    x->out3 = outlet_new(&x->x_obj, &s_float);
     return (x);
 }
+
+
 
 void gcanvas_setup(void)
 {
