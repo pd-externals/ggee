@@ -1,12 +1,12 @@
-#N canvas 132 175 459 478 10;
+#N canvas 575 176 459 478 10;
 #X obj 116 413 nbx 5 25 -1e+37 1e+37 0 0 empty empty X: -20 14 1 16
--241655 -1 -1 126 256;
+-241655 -1 -1 26 256;
 #X obj 132 192 gcanvas 49 49;
 #X obj 342 412 nbx 5 25 -1e+37 1e+37 0 0 empty empty Y: -20 14 1 16
--241655 -1 -1 27 256;
+-241655 -1 -1 23 256;
 #X msg 132 172 size 49 49;
-#X obj 37 193 vsl 20 200 200 5 0 8.38861e+06 empty empty Y 0 -8 1 11
--241655 -1 -1 15308 0;
+#X obj 37 193 vsl 20 200 200 5 0 0 empty empty Y 0 -8 1 11 -241655
+-1 -1 15308 0;
 #X obj 135 72 hsl 200 20 5 200 0 0 empty empty X -2 -6 1 11 -241655
 -1 -1 4592 0;
 #X obj 20 62 loadbang;
@@ -38,8 +38,12 @@
 #X restore 132 118 pd guts;
 #X text 41 24 click and drag in the grey [gcanvas] to get pixel values
 ;
+#X obj 246 274 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X text 266 275 mouse clicked in box;
 #X connect 1 0 0 0;
 #X connect 1 1 2 0;
+#X connect 1 2 12 0;
 #X connect 3 0 1 0;
 #X connect 4 0 10 0;
 #X connect 5 0 10 1;
