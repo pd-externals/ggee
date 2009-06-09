@@ -24,7 +24,7 @@ INCLUDES = -I.. -I../include
 
 %.pd_linux: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -o "$*.o" -c $*.c
-	gcc -Wl,-export_dynamic  -shared -o "$*.pd_linux" "$*.o" -lc -lm
+	gcc -Wl,--export-dynamic  -shared -o "$*.pd_linux" "$*.o" -lc -lm
 	chmod a-x "$*.pd_linux"
 	rm -f "$*.o" 
 

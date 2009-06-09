@@ -20,7 +20,7 @@ LINUXINCLUDE =  -I/usr/include -I/usr/local/include/stk
 
 .cpp.pd_linux:
 	g++ $(LINUXCFLAGS) $(LINUXINCLUDE) -c $(NAME).cpp
-	g++ -export_dynamic  -shared -o $(NAME).pd_linux $(NAME).o -lc -lstk
+	g++ -Wl,--export-dynamic  -shared -o $(NAME).pd_linux $(NAME).o -lc -lstk
 	strip --strip-unneeded $(NAME).pd_linux
 	rm -f *.o
 # -------------------------------------------------------
