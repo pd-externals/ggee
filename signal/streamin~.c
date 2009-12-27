@@ -3,7 +3,6 @@
 /* Thanks to Anthony Lee for Windows bug fixes */
 
 #include <m_pd.h>
-#include <s_stuff.h>
 #include "stream.h"
 
 #include <sys/types.h>
@@ -48,17 +47,17 @@
 
 #ifdef _WIN32
 extern int close(int);
+#endif
 extern void sys_rmpollfn(int fd);
 extern sys_addpollfn(int fd, void* fn, void *ptr);
-#endif
 
 static void sys_sockerror(char *s)
 {
-#ifdef unix
-    int err = errno;
-#else
+#ifdef _WIN32
     int err = WSAGetLastError();
     if (err == 10054) return;
+#else
+    int err = errno;
 #endif
     post("%s: %s (%d)\n", s, strerror(err), err);
 }
@@ -66,18 +65,17 @@ static void sys_sockerror(char *s)
 
 static void sys_closesocket(int fd)
 {
-#ifdef UNIX
-    close(fd);
-#endif
 #ifdef _WIN32
     closesocket(fd);
+#else
+    close(fd);
 #endif
 }
 
 
 int setsocketoptions(int sockfd)
 { 
-#ifdef unix
+#ifndef _WIN32
     int sockopt = 1;
 	 if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0) 
 	 {
