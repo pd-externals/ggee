@@ -7,14 +7,15 @@
 #include <sys/types.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef unix
+#ifdef _WIN32
+#include <winsock.h>
+#else
 #include <errno.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <unistd.h>
 #define SOCKET_ERROR -1
-#else
-#include <winsock.h>
 #endif
 
 #ifdef __APPLE__

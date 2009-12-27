@@ -3,11 +3,14 @@
 /* Thanks to Anthony Lee for Windows bug fixes */
 
 #include <m_pd.h>
+#include <s_stuff.h>
 #include "stream.h"
 
 #include <sys/types.h>
 #include <string.h>
-#ifdef unix
+#ifdef _WIN32
+#include <winsock.h>
+#else
 #include <sys/socket.h>
 #include <errno.h>
 #include <netinet/in.h>
@@ -17,8 +20,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #define SOCKET_ERROR -1
-#else
-#include <winsock.h>
 #endif
 
 /* these pragmas are only used for MSVC, not MinGW or Cygwin <hans@at.or.at> */
