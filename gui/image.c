@@ -1,3 +1,4 @@
+#include <string.h>
 #include <m_pd.h>
 #include "g_canvas.h"
 
@@ -55,6 +56,24 @@ void image_erase(t_image* x,t_glist* glist)
 }
 	
 
+static t_symbol *get_filename(t_int argc, t_atom *argv)
+{
+    t_symbol *fname;
+    fname = atom_getsymbolarg(0, argc, argv);
+    if(argc > 1)
+    {
+        int i;
+        char buf[MAXPDSTRING];
+        strcpy(buf, fname->s_name);
+        for(i = 1; i < argc; i++)
+        {
+            strcat(buf, " ");
+            strcat(buf, atom_getsymbolarg(i, argc, argv)->s_name);
+        }
+        fname = gensym(buf);
+    }
+    return fname;
+}
 
 /* ------------------------ image widgetbehaviour----------------------------- */
 
@@ -160,9 +179,9 @@ void image_color(t_image* x,t_symbol* col)
 */
 }
 
-void image_open(t_image* x, t_symbol* fname)
+void image_open(t_image* x, t_symbol *s, t_int argc, t_atom *argv)
 {
-    x->x_fname = fname;
+    x->x_fname = get_filename(argc, argv);
     image_erase(x, x->x_glist);
     image_drawme(x, x->x_glist, 1);
 }
@@ -185,7 +204,7 @@ static void image_setwidget(void)
 }
 
 
-static void *image_new(t_symbol* fname)
+static void *image_new(t_symbol *s, t_int argc, t_atom *argv)
 {
     t_image *x = (t_image *)pd_new(image_class);
 
@@ -194,7 +213,7 @@ static void *image_new(t_symbol* fname)
     x->x_width = 15;
     x->x_height = 15;
 
-	x->x_fname = fname;
+    x->x_fname = get_filename(argc, argv);
     outlet_new(&x->x_obj, &s_float);
     return (x);
 }
@@ -202,7 +221,7 @@ static void *image_new(t_symbol* fname)
 void image_setup(void)
 {
     image_class = class_new(gensym("image"), (t_newmethod)image_new, 0,
-				sizeof(t_image),0, A_DEFSYM,0);
+				sizeof(t_image),0, A_GIMME,0);
 
     class_addmethod(image_class, (t_method)image_size, gensym("size"),
     	A_FLOAT, A_FLOAT, 0);
@@ -213,7 +232,7 @@ void image_setup(void)
 */
 
     class_addmethod(image_class, (t_method)image_open, gensym("open"),
-    	A_SYMBOL, 0);
+    	A_GIMME, 0);
 	
     image_setwidget();
     class_setwidget(image_class,&image_widgetbehavior);
