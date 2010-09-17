@@ -272,7 +272,7 @@ static void fatom_displace(t_gobj *z, t_glist *glist,
 	       text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height);
       
       fatom_drawme(x, glist, 0);
-      canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+      canvas_fixlinesfor(glist,(t_text*) x);
     }
     DEBUG(post("displace end");)
 }
@@ -308,27 +308,19 @@ static void fatom_activate(t_gobj *z, t_glist *glist, int state)
 static void fatom_delete(t_gobj *z, t_glist *glist)
 {
     t_text *x = (t_text *)z;
-    canvas_deletelinesfor(glist_getcanvas(glist), x);
+    canvas_deletelinesfor(glist, x);
 }
 
        
 static void fatom_vis(t_gobj *z, t_glist *glist, int vis)
 {
-    t_fatom* s = (t_fatom*)z;
-    t_rtext *y;
+    t_fatom* x = (t_fatom*)z;
     DEBUG(post("vis: %d",vis);)
     if (vis) {
-#ifdef PD_MINOR_VERSION
-      	y = (t_rtext *) rtext_new(glist, (t_text *)z);
-#else
-        y = (t_rtext *) rtext_new(glist, (t_text *)z,0,0);
-#endif
-	 fatom_drawme(s, glist, 1);
+	 fatom_drawme(x, glist, 1);
     }
     else {
-	y = glist_findrtext(glist, (t_text *)z);
-	 fatom_erase(s,glist);
-	rtext_free(y);
+	 fatom_erase(x,glist);
     }
 }
 

@@ -105,7 +105,7 @@ static void image_displace(t_gobj *z, t_glist *glist,
 		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
 
     image_drawme(x, glist, 0);
-    canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+    canvas_fixlinesfor(glist,(t_text*) x);
 }
 
 static void image_select(t_gobj *z, t_glist *glist, int state)
@@ -139,17 +139,17 @@ static void image_activate(t_gobj *z, t_glist *glist, int state)
 static void image_delete(t_gobj *z, t_glist *glist)
 {
     t_text *x = (t_text *)z;
-    canvas_deletelinesfor(glist_getcanvas(glist), x);
+    canvas_deletelinesfor(glist, x);
 }
 
        
 static void image_vis(t_gobj *z, t_glist *glist, int vis)
 {
-    t_image* s = (t_image*)z;
+    t_image* x = (t_image*)z;
     if (vis)
-	 image_drawme(s, glist, 1);
+	 image_drawme(x, glist, 1);
     else
-	 image_erase(s,glist);
+	 image_erase(x,glist);
 }
 
 /* can we use the normal text save function ?? */

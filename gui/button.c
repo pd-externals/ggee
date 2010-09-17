@@ -10,10 +10,6 @@
 #pragma warning( disable : 4305 )
 #endif
 
-#if PD_MINOR_VERSION < 37
-#define t_rtext t_text
-#endif
-
 #ifndef IOWIDTH 
 #define IOWIDTH 4
 #endif
@@ -197,7 +193,7 @@ static void button_displace(t_gobj *z, t_glist *glist,
 	       text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height-2);
       
       button_drawme(x, glist, 0);
-      canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+      canvas_fixlinesfor(glist,(t_text*) x);
     }
     DEBUG(post("displace end");)
 }
@@ -233,27 +229,20 @@ static void button_activate(t_gobj *z, t_glist *glist, int state)
 static void button_delete(t_gobj *z, t_glist *glist)
 {
     t_text *x = (t_text *)z;
-    canvas_deletelinesfor(glist_getcanvas(glist), x);
+    canvas_deletelinesfor(glist, x);
 }
 
        
 static void button_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_button* s = (t_button*)z;
-    t_rtext *y;
     DEBUG(post("vis: %d",vis);)
     if (vis) {
-#ifdef PD_MINOR_VERSION
-      	y = (t_rtext *) rtext_new(glist, (t_text *)z);
-#else
-        y = (t_rtext *) rtext_new(glist, (t_text *)z,0,0);
-#endif
 	 button_drawme(s, glist, 1);
     }
     else {
-	y = glist_findrtext(glist, (t_text *)z);
 	 button_erase(s,glist);
-	rtext_free(y);
+	 sys_unqueuegui(z);
     }
 }
 

@@ -198,7 +198,7 @@ static void toddle_displace(t_gobj *z, t_glist *glist,
     x->x_obj.te_xpos += dx;
     x->x_obj.te_ypos += dy;
     toddle_drawme(x, glist, 0);
-    canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+    canvas_fixlinesfor(glist,(t_text*) x);
 }
 
 static void toddle_select(t_gobj *z, t_glist *glist, int state)
@@ -219,17 +219,17 @@ static void toddle_activate(t_gobj *z, t_glist *glist, int state)
 static void toddle_delete(t_gobj *z, t_glist *glist)
 {
     t_text *x = (t_text *)z;
-    canvas_deletelinesfor(glist_getcanvas(glist), x);
+    canvas_deletelinesfor(glist, x);
 }
 
        
 static void toddle_vis(t_gobj *z, t_glist *glist, int vis)
 {
-    t_toddle* s = (t_toddle*)z;
+    t_toddle* x = (t_toddle*)z;
     if (vis)
-	 toddle_drawme(s, glist, 1);
+	 toddle_drawme(x, glist, 1);
     else
-	 toddle_erase(s,glist);
+	 toddle_erase(x,glist);
 }
 
 /* can we use the normal text save function ?? */

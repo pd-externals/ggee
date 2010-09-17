@@ -220,7 +220,7 @@ static void gcanvas_displace(t_gobj *z, t_glist *glist,
     x->x_obj.te_xpix += dx;
     x->x_obj.te_ypix += dy;
     gcanvas_drawme(x, glist, 0);
-    canvas_fixlinesfor(glist_getcanvas(glist),(t_text*) x);
+    canvas_fixlinesfor(glist,(t_text*) x);
 }
 
 static void gcanvas_select(t_gobj *z, t_glist *glist, int state)
@@ -240,17 +240,17 @@ static void gcanvas_activate(t_gobj *z, t_glist *glist, int state)
 static void gcanvas_delete(t_gobj *z, t_glist *glist)
 {
     t_text *x = (t_text *)z;
-    canvas_deletelinesfor(glist_getcanvas(glist), x);
+    canvas_deletelinesfor(glist, x);
 }
 
        
 static void gcanvas_vis(t_gobj *z, t_glist *glist, int vis)
 {
-    t_gcanvas* s = (t_gcanvas*)z;
+    t_gcanvas* x = (t_gcanvas*)z;
     if (vis)
-	 gcanvas_drawme(s, glist, 1);
+	 gcanvas_drawme(x, glist, 1);
     else
-	 gcanvas_erase(s,glist);
+	 gcanvas_erase(x,glist);
 }
 
 /* can we use the normal text save function ?? */
