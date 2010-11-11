@@ -102,3 +102,6 @@
 0.25 
   - big GUI revival with face lifting
 
+0.26
+  - fixed for packaging for Debian
+
