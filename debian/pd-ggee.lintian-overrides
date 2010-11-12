@@ -1,4 +1,0 @@
-# the upstream library format includes the license file in it, this library
-# has a unique license, so we just leave the file in place, since there is no
-# license file to symlink to.
-pd-ggee: extra-license-file usr/lib/pd/extra/ggee/LICENSE.txt
