@@ -5,5 +5,5 @@
 #X text 10 10 AUTHOR Guenter Geiger;
 #X text 10 10 DESCRIPTION ;
 #X text 10 10 LICENSE BSD;
-#X text 10 10 VERSION 0.25;
+#X text 10 10 VERSION 0.26;
 #X restore 10 10 pd META;
