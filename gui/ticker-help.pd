@@ -1,4 +1,4 @@
-#N canvas 0 22 454 304 10;
+#N canvas 0 22 412 266 10;
 #X obj 76 108 ticker ;
 #X text 25 21 [ticker] is a OS-native checkbox;
 #X obj 44 70 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
@@ -7,6 +7,17 @@
 #X floatatom 75 157 5 0 0 0 - - -;
 #X obj 44 158 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0 1
 ;
+#N canvas 188 140 494 344 META 0;
+#X text 12 5 GENRE help;
+#X text 12 145 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 45 LICENSE Tcl/Tk;
+#X text 12 125 AUTHOR Guenter Geiger;
+#X text 12 25 KEYWORDS control GUI;
+#X text 12 65 DESCRIPTION OS-native checkbox;
+#X text 12 85 INLET_0 bang float;
+#X text 12 105 OUTLET_0 float;
+#X restore 362 246 pd META;
 #X connect 0 0 4 0;
 #X connect 0 0 5 0;
 #X connect 2 0 0 0;

@@ -1,4 +1,4 @@
-#N canvas 96 72 500 495 10;
+#N canvas 0 26 433 454 10;
 #X obj 101 192 envgen 203 123 1 0  ;
 #X text 21 6 envgen:;
 #X text 22 27 Envelope generator. This external delivers value for
@@ -78,7 +78,7 @@ pixels);
 #N canvas 122 39 527 491 saving 0;
 #X obj 73 134 envgen 203 123 1 0  ;
 #X msg 71 26 bang;
-#X msg 90 61 dump;
+#X msg 105 73 dump;
 #X obj 277 278 list prepend set;
 #X obj 277 299 list trim;
 #X msg 195 95 0 50 1 50;
@@ -100,6 +100,18 @@ it back to [envgen];
 #X connect 5 0 0 0;
 #X connect 11 0 0 0;
 #X restore 258 413 pd saving state;
+#N canvas 445 185 494 344 META 0;
+#X text 12 145 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 125 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS control GUI storage;
+#X text 12 45 DESCRIPTION envelope generator;
+#X text 12 65 INLET_0 bang list float duration sustain release motion
+dump;
+#X text 12 85 OUTLET_0 list;
+#X text 12 105 OUTLET_1 list;
+#X restore 382 433 pd META;
 #X connect 0 0 10 0;
 #X connect 3 0 0 0;
 #X connect 6 0 0 0;

@@ -1,4 +1,4 @@
-#N canvas 317 111 789 401 10;
+#N canvas 0 26 789 387 10;
 #X text 7 351 (C) Guenter Geiger 2000;
 #X text 211 298 Attention \, only the left inlet triggers new coefficients
 for biquad~;
@@ -32,6 +32,20 @@ the gains \, the boundaries of the areas through f-low and f-high;
 #X obj 72 80 hsl 128 17 0 100 0 1 empty empty gain0 5 9 0 10 -204786
 -1 -1 2300 0;
 #X obj 129 140 bang;
+#N canvas 450 258 494 344 META 0;
+#X text 12 205 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 185 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS control;
+#X text 12 45 DESCRIPTION high-low shelf coefficients for biquad~;
+#X text 12 65 INLET_0 float;
+#X text 12 85 INLET_1 float;
+#X text 12 105 INLET_2 float;
+#X text 12 125 INLET_3 float;
+#X text 12 145 INLET_4 float;
+#X text 12 165 OUTLET_0 float;
+#X restore 739 366 pd META;
 #X connect 5 0 15 0;
 #X connect 6 0 7 0;
 #X connect 7 0 24 0;

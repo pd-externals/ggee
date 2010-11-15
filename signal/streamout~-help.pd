@@ -1,4 +1,4 @@
-#N canvas 45 154 991 483 12;
+#N canvas 0 26 938 483 12;
 #X floatatom 227 194 0 0 0 0 - - -;
 #X msg 46 32 disconnect;
 #X obj 369 71 osc~;
@@ -33,7 +33,7 @@ port number 3000;
 #X msg 156 37 connect localhost 3001;
 #X text 8 277 format 8bit: send 8 bit integers;
 #X obj 227 162 streamout~;
-#N canvas 0 0 450 300 graph1 0;
+#N canvas 0 0 450 300 (subpatch) 0;
 #X array array1 900 float 1;
 #A 0 0.0890625 0.0875 0.0859375 0.084375 0.0828125 0.08125 0.0796875
 0.0773438 0.0757812 0.0734375 0.0710938 0.0695313 0.0671875 0.0648438
@@ -166,6 +166,16 @@ port number 3000;
 #X obj 460 140 tabwrite~ array1;
 #X msg 541 79 bang;
 #X obj 458 47 *~ 0.1;
+#N canvas 404 187 494 344 META 0;
+#X text 12 124 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 105 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS signal network;
+#X text 12 45 DESCRIPTION needs a description;
+#X text 12 65 INLET_0 signal format disconnect connect float;
+#X text 12 85 OUTLET_0 float;
+#X restore 882 458 pd META;
 #X connect 1 0 29 0;
 #X connect 2 0 29 0;
 #X connect 3 0 4 0;

@@ -1,4 +1,4 @@
-#N canvas 199 124 499 378 10;
+#N canvas 0 31 499 378 10;
 #X obj 35 100 shell;
 #X msg 35 65 ls;
 #X msg 360 97 date +%k%M;
@@ -27,6 +27,17 @@ the right outlet is banged.;
 #X floatatom 408 142 5 0 0 0 - - -;
 #X obj 408 161 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
+#N canvas 479 242 494 344 META 0;
+#X text 12 145 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 125 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS control filesystem;
+#X text 12 65 INLET_0 anything;
+#X text 12 45 DESCRIPTION run commands in a UNIX shell;
+#X text 12 85 OUTLET_0 anything;
+#X text 12 105 OUTLET_1 float;
+#X restore 440 345 pd META;
 #X connect 0 0 18 0;
 #X connect 0 1 17 0;
 #X connect 1 0 0 0;

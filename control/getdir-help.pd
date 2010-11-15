@@ -1,4 +1,4 @@
-#N canvas 196 88 460 383 10;
+#N canvas 0 26 460 383 10;
 #X obj 177 95 getdir;
 #X msg 177 57 bang;
 #X obj 176 133 print;
@@ -14,6 +14,17 @@ to set how many levels up to go:;
 #X obj 294 247 getdir 2;
 #X text 18 331 If there is no parent at that level \, it returns the
 directory as if there was no argument \, i.e. level 0;
+#N canvas 407 106 494 344 META 0;
+#X text 12 125 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 105 AUTHOR Guenter Geiger;
+#X text 12 45 DESCRIPTION get the directory this patch is operating
+in;
+#X text 12 65 INLET_0 bang;
+#X text 12 85 OUTLET_0 symbol;
+#X text 12 5 KEYWORDS control patchfile_op;
+#X restore 410 362 pd META;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 5 0 7 0;

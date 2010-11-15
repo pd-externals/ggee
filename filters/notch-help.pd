@@ -1,4 +1,4 @@
-#N canvas 271 181 461 436 10;
+#N canvas 0 26 422 415 10;
 #X text 63 298 These filters are all controlled by a bandwidth which
 is expressed in octaves. A bandwidth of 100 is equivalent to one octave.
 ;
@@ -19,6 +19,17 @@ for biquad~;
 #X obj 113 244 *~ 0.1;
 #X text 76 12 Notch coefficients for biquad~;
 #X obj 176 185 notch;
+#N canvas 232 266 494 344 META 0;
+#X text 12 145 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 125 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS control;
+#X text 12 45 DESCRIPTION notch coefficients for biquad~;
+#X text 12 65 INLET_0 float;
+#X text 12 85 INLET_1 float;
+#X text 12 105 OUTLET_0 list;
+#X restore 372 395 pd META;
 #X connect 4 0 14 0;
 #X connect 5 0 6 0;
 #X connect 6 0 14 0;

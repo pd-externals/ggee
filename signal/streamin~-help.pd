@@ -1,4 +1,4 @@
-#N canvas 248 65 623 459 12;
+#N canvas 0 26 470 459 12;
 #X obj 45 133 print~;
 #X msg 45 105 bang;
 #X obj 23 62 streamin~ 3000;
@@ -26,6 +26,17 @@ patch.;
 #X msg 40 32 print;
 #X text 96 8 reset \, using n frames (default = 128);
 #X text 96 32 print queue info;
+#N canvas 461 224 494 344 META 0;
+#X text 12 125 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 105 AUTHOR Guenter Geiger;
+#X text 12 45 DESCRIPTION needs a description;
+#X text 12 5 KEYWORDS signal network needs_work (description);
+#X text 12 65 INLET_0 signal reset print connect disconnect format
+;
+#X text 12 85 OUTLET_0 signal;
+#X restore 413 436 pd META;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 2 0 15 0;

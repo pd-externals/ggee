@@ -1,4 +1,4 @@
-#N canvas 226 114 478 387 10;
+#N canvas 0 26 450 387 10;
 #X obj 151 263 stk BeeThree;
 #X obj 142 307 dac~;
 #X msg 14 84 print;
@@ -22,6 +22,18 @@ Synthesis Toolkit;
 #X floatatom 19 310 5 0 0 0 - - -;
 #X text 17 248 aftertouch;
 #X text 18 296 pitchbend;
+#N canvas 335 203 494 344 META 0;
+#X text 12 155 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+Wilkes for Pd version 0.42.;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 135 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS control;
+#X text 12 45 DESCRIPTION external to access the instrument from Perry
+Cook's Synthesis Toolkit;
+#X text 12 75 INLET_0 list print control aftertouch pitchbend;
+#X text 12 95 INLET_1 float;
+#X text 12 115 OUTLET_0 signal;
+#X restore 402 366 pd META;
 #X connect 0 0 1 0;
 #X connect 0 0 1 1;
 #X connect 2 0 0 0;
