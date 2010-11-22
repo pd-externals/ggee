@@ -23,7 +23,7 @@ Wilkes for Pd version 0.42.;
 in;
 #X text 12 65 INLET_0 bang;
 #X text 12 85 OUTLET_0 symbol;
-#X text 12 5 KEYWORDS control patchfile_op;
+#X text 12 5 KEYWORDS control patchfile_op filesystem;
 #X restore 410 362 pd META;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
