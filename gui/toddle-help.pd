@@ -32,15 +32,14 @@
 #X text 75 278 converter \, but routes;
 #X text 76 294 messages through;
 #N canvas 324 237 494 344 META 0;
-#X text 12 5 GENRE help;
-#X text 12 145 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
+#X text 12 125 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
 Wilkes for Pd version 0.42.;
-#X text 12 45 LICENSE Tcl/Tk;
-#X text 12 125 AUTHOR Guenter Geiger;
-#X text 12 25 KEYWORDS control GUI;
-#X text 12 65 DESCRIPTION graphical button;
-#X text 12 85 INLET_0 anything size color;
-#X text 12 105 OUTLET_0 anything;
+#X text 12 25 LICENSE Tcl/Tk;
+#X text 12 105 AUTHOR Guenter Geiger;
+#X text 12 5 KEYWORDS control GUI;
+#X text 12 45 DESCRIPTION graphical button;
+#X text 12 65 INLET_0 anything size color;
+#X text 12 85 OUTLET_0 anything;
 #X restore 572 466 pd META;
 #X connect 0 0 2 0;
 #X connect 3 0 0 0;
