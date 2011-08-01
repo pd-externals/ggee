@@ -2,7 +2,7 @@
 
 #include <m_pd.h>
 
-//#define DEBUG
+#define DEBUG(x) x
 /* ------------------------ envgen~ ----------------------------- */
 
 #define NONE    0
@@ -37,6 +37,7 @@ char dumpy[2000];
 
 void envgen_resize(t_envgen* x,int ns)
 {
+    DEBUG(post("envgen_"););
      if (ns > x->args) {
 	  int newargs = ns*sizeof(t_float); 
 
@@ -50,6 +51,7 @@ void envgen_resize(t_envgen* x,int ns)
 
 void envgen_totaldur(t_envgen* x,t_float dur)
 {
+    DEBUG(post("envgen_"););
      int i;
      float f = dur/x->duration[x->last_state];
 
@@ -65,6 +67,7 @@ void envgen_totaldur(t_envgen* x,t_float dur)
 
 static void envgen_dump(t_envgen* e)
 {
+    DEBUG(post("envgen_"););
      t_atom argv[50];
      int argc= 0;
      t_atom* a = argv;
@@ -83,6 +86,7 @@ static void envgen_dump(t_envgen* e)
 
 void envgen_init(t_envgen *x,int argc,t_atom* argv)
 {
+    DEBUG(post("envgen_"););
      t_float* dur;
      t_float* val;
      t_float tdur = 0;
@@ -127,6 +131,7 @@ void envgen_init(t_envgen *x,int argc,t_atom* argv)
 
 void envgen_list(t_envgen *x,t_symbol* s, int argc,t_atom* argv)
 {
+    DEBUG(post("envgen_"););
      envgen_init(x,argc,argv);
      if (glist_isvisible(x->w.glist)) {
 	  envgen_drawme(x, x->w.glist, 0);
@@ -135,12 +140,14 @@ void envgen_list(t_envgen *x,t_symbol* s, int argc,t_atom* argv)
 
 void envgen_setresize(t_envgen *x, t_floatarg f)
 {
+    DEBUG(post("envgen_setresize"););
      x->resizeable = f;
 }
 
 
 void envgen_float(t_envgen *x, t_floatarg f)
 {
+    DEBUG(post("envgen_float"););
      int state = 0;
      float val;
 
@@ -166,6 +173,7 @@ void envgen_float(t_envgen *x, t_floatarg f)
 
 void envgen_bang(t_envgen *x)
 {
+    DEBUG(post("envgen_bang"););
      t_atom   a[2];
 
      SETFLOAT(a,x->finalvalues[NONE]);
@@ -188,6 +196,7 @@ void envgen_bang(t_envgen *x)
 }
 
 void envgen_release(t_envgen* x) {
+    DEBUG(post("envgen_release"););
      t_atom a[2];
      float del = x->duration[x->x_state] - x->duration[x->x_state-1];
      if (x->x_state <= x->sustain_state) {
@@ -201,6 +210,7 @@ void envgen_release(t_envgen* x) {
 
 static void envgen_sustain(t_envgen *x, t_floatarg f)
 {
+    DEBUG(post("envgen_sustain"););
      if (f > 0 && f < x->last_state) 
         x->sustain_state = f;
      else
@@ -210,6 +220,7 @@ static void envgen_sustain(t_envgen *x, t_floatarg f)
 
 static void envgen_tick(t_envgen* x)
 {
+    DEBUG(post("envgen_tick"););
      t_atom a[2];
      x->x_state++;
      if (x->x_state <= x->last_state && x->x_state != x->sustain_state) {
@@ -225,12 +236,14 @@ static void envgen_tick(t_envgen* x)
 
 static void envgen_freeze(t_envgen* x, t_floatarg f)
 {
+    DEBUG(post("envgen_freeze"););
      x->x_freeze = f;
 }
 
 
 static void bindsym(t_pd* x,t_symbol* o,t_symbol* s)
 {
+    DEBUG(post("bindsym"););
      if (o != &s_) pd_unbind(x,o);
      o = s;
      pd_bind(x,s);
@@ -238,6 +251,7 @@ static void bindsym(t_pd* x,t_symbol* o,t_symbol* s)
 
 static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
 {
+    DEBUG(post("envgen_new"););
      t_envgen *x = (t_envgen *)pd_new(envgen_class);
      
      x->args = STATES;
@@ -315,6 +329,7 @@ t_widgetbehavior envgen_widgetbehavior;
 
 void envgen_setup(void)
 {
+    DEBUG(post("envgen_setup"););
     envgen_class = class_new(gensym("envgen"), (t_newmethod)envgen_new, 0,
     	sizeof(t_envgen), 0,A_GIMME,0);
 
