@@ -267,7 +267,7 @@ libdir_install: $(SOURCES:.c=.$(EXTENSION)) $(SHARED_LIB) install-doc install-ex
 	$(INSTALL_DIR) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
 	$(INSTALL_DATA) $(LIBRARY_NAME)-meta.pd \
 		$(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
-	test -z "$(strip $(SOURCES))" || (\
+	test -z "$(strip $(SOURCES))" || \
 		$(INSTALL_PROGRAM) $(SOURCES:.c=.$(EXTENSION)) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
 # kludge to strip with ggee's custom layout
 	$(STRIP) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)/*.$(EXTENSION)
