@@ -271,6 +271,8 @@ libdir_install: $(SOURCES:.c=.$(EXTENSION)) $(SHARED_LIB) install-doc install-ex
 		$(INSTALL_PROGRAM) $(SOURCES:.c=.$(EXTENSION)) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
 # kludge to strip with ggee's custom layout
 	$(STRIP) $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)/*.$(EXTENSION)
+# kludge to install example image
+	$(INSTALL_DATA) gui/logo100.gif $(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
 	test -z "$(strip $(SHARED_LIB))" || \
 		$(INSTALL_DATA) $(SHARED_LIB) \
 			$(DESTDIR)$(objectsdir)/$(LIBRARY_NAME)
