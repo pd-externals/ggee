@@ -2,7 +2,8 @@
 
 #include <m_pd.h>
 
-#define DEBUG(x) x
+#define DEBUG(x)
+//#define DEBUG(x) x
 /* ------------------------ envgen~ ----------------------------- */
 
 #define NONE    0
