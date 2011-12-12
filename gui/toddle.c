@@ -43,12 +43,12 @@ void toddle_drawbang(t_toddle *x,t_glist *glist,int on)
 {
      if (glist_isvisible(glist)) {
 	  if (on)
-	       sys_vgui(".x%lx.c create oval %d %d %d %d -fill %s -tags %xB\n",glist_getcanvas(glist),
+	       sys_vgui(".x%lx.c create oval %d %d %d %d -fill %s -tags %lxB\n",glist_getcanvas(glist),
 			x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
 			x->x_obj.te_xpos + x->x_width -1,
 			x->x_obj.te_ypos + x->x_height -1,x->x_color->s_name,x);
 	  else
-	       sys_vgui(".x%lx.c delete %xB\n",
+	       sys_vgui(".x%lx.c delete %lxB\n",
 			glist_getcanvas(glist), x);
      }
 }
@@ -61,7 +61,7 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
      if (firsttime) {
 #if 0
 	  sys_vgui(".x%lx.c create line \
-%d %d %d %d %d %d %d %d %d %d -tags %xS\n",
+%d %d %d %d %d %d %d %d %d %d -tags %lxS\n",
 		   glist_getcanvas(glist),
 		   x->x_obj.te_xpos, x->x_obj.te_ypos,
 		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos,
@@ -72,13 +72,13 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 #endif
 
 	  sys_vgui(".x%lx.c create rectangle \
-%d %d %d %d -tags %xS "BACKGROUND"\n",
+%d %d %d %d -tags %lxS "BACKGROUND"\n",
 		   glist_getcanvas(glist),
 		   x->x_obj.te_xpos, x->x_obj.te_ypos,
 		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
 		   x);
 	  sys_vgui(".x%lx.c create oval \
-%d %d %d %d -tags %xP\n",glist_getcanvas(glist),
+%d %d %d %d -tags %lxP\n",glist_getcanvas(glist),
 		   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
 		   x->x_obj.te_xpos + x->x_width -1,
 		   x->x_obj.te_ypos + x->x_height -1,x);
@@ -86,7 +86,7 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
      }     
      else {
 #if 0
-	  sys_vgui(".x%lx.c coords %xS \
+	  sys_vgui(".x%lx.c coords %lxS \
 %d %d %d %d %d %d %d %d %d %d\n",
 		   glist_getcanvas(glist), x,
 		   x->x_obj.te_xpos, x->x_obj.te_ypos,
@@ -95,14 +95,14 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 		   x->x_obj.te_xpos, x->x_obj.te_ypos + x->x_height,
 		   x->x_obj.te_xpos, x->x_obj.te_ypos);
 #endif
-	  sys_vgui(".x%lx.c coords %xS \
+	  sys_vgui(".x%lx.c coords %lxS \
 %d %d %d %d\n",
 		   glist_getcanvas(glist), x,
 		   x->x_obj.te_xpos, x->x_obj.te_ypos,
 		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height);
 
 
-	  sys_vgui(".x%lx.c coords %xP \
+	  sys_vgui(".x%lx.c coords %lxP \
 %d %d %d %d\n",glist_getcanvas(glist),x,
 		   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
 		   x->x_obj.te_xpos + x->x_width-1,
@@ -118,13 +118,13 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 	  {
 	       int onset = x->x_obj.te_xpos + (x->x_width - IOWIDTH) * i / nplus;
 	       if (firsttime)
-		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %xo%d\n",
+		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxo%d\n",
 			     glist_getcanvas(glist),
 			     onset, x->x_obj.te_ypos + x->x_height - 1,
 			     onset + IOWIDTH, x->x_obj.te_ypos + x->x_height,
 			     x, i);
 	       else
-		    sys_vgui(".x%lx.c coords %xo%d %d %d %d %d\n",
+		    sys_vgui(".x%lx.c coords %lxo%d %d %d %d %d\n",
 			     glist_getcanvas(glist), x, i,
 			     onset, x->x_obj.te_ypos + x->x_height - 1,
 			     onset + IOWIDTH, x->x_obj.te_ypos + x->x_height);
@@ -135,13 +135,13 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 	  {
 	       int onset = x->x_obj.te_xpos + (x->x_width - IOWIDTH) * i / nplus;
 	       if (firsttime)
-		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %xi%d\n",
+		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxi%d\n",
 			     glist_getcanvas(glist),
 			     onset, x->x_obj.te_ypos,
 			     onset + IOWIDTH, x->x_obj.te_ypos + 1,
 			     x, i);
 	       else
-		    sys_vgui(".x%lx.c coords %xi%d %d %d %d %d\n",
+		    sys_vgui(".x%lx.c coords %lxi%d %d %d %d %d\n",
 			     glist_getcanvas(glist), x, i,
 			     onset, x->x_obj.te_ypos,
 			     onset + IOWIDTH, x->x_obj.te_ypos + 1);
@@ -157,17 +157,17 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 void toddle_erase(t_toddle* x,t_glist* glist)
 {
      int n;
-     sys_vgui(".x%lx.c delete %xS\n",
+     sys_vgui(".x%lx.c delete %lxS\n",
 	      glist_getcanvas(glist), x);
 
-     sys_vgui(".x%lx.c delete %xP\n",
+     sys_vgui(".x%lx.c delete %lxP\n",
 	      glist_getcanvas(glist), x);
 
      n = 1;
 
      while (n--) {
-	  sys_vgui(".x%lx.c delete %xi%d\n",glist_getcanvas(glist),x,n);
-	  sys_vgui(".x%lx.c delete %xo%d\n",glist_getcanvas(glist),x,n);
+	  sys_vgui(".x%lx.c delete %lxi%d\n",glist_getcanvas(glist),x,n);
+	  sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
      }
 }
 	
@@ -204,7 +204,7 @@ static void toddle_displace(t_gobj *z, t_glist *glist,
 static void toddle_select(t_gobj *z, t_glist *glist, int state)
 {
      t_toddle *x = (t_toddle *)z;
-     sys_vgui(".x%lx.c itemconfigure %xS -fill %s\n", glist, 
+     sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist, 
 	     x, (state? "blue" : BACKGROUNDCOLOR));
 }
 

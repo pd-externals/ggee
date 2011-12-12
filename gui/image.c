@@ -29,8 +29,8 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 		canvas_makefilename(glist_getcanvas(x->x_glist), x->x_fname->s_name,
 							fname, MAXPDSTRING);
 
-	  sys_vgui("image create photo img%x -file {%s}\n",x,fname);
-	  sys_vgui(".x%lx.c create image %d %d -image img%x -tags %xS\n", 
+	  sys_vgui("image create photo img%lx -file {%s}\n",x,fname);
+	  sys_vgui(".x%lx.c create image %d %d -image img%lx -tags %lxS\n", 
 			   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), 
 			   text_ypix(&x->x_obj, glist),x,x);
 
@@ -39,7 +39,7 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 	  */
      }     
      else {
-		 sys_vgui(".x%lx.c coords %xS %d %d\n",
+		 sys_vgui(".x%lx.c coords %lxS %d %d\n",
 				  glist_getcanvas(glist), x,
 				  text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
@@ -50,7 +50,7 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 void image_erase(t_image* x,t_glist* glist)
 {
      int n;
-     sys_vgui(".x%lx.c delete %xS\n",
+     sys_vgui(".x%lx.c delete %lxS\n",
 	      glist_getcanvas(glist), x);
 
 }
@@ -99,7 +99,7 @@ static void image_displace(t_gobj *z, t_glist *glist,
     t_image *x = (t_image *)z;
     x->x_obj.te_xpix += dx;
     x->x_obj.te_ypix += dy;
-    sys_vgui(".x%lx.c coords %xSEL %d %d %d %d\n",
+    sys_vgui(".x%lx.c coords %lxSEL %d %d %d %d\n",
 		   glist_getcanvas(glist), x,
 		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
 		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
@@ -113,14 +113,14 @@ static void image_select(t_gobj *z, t_glist *glist, int state)
      t_image *x = (t_image *)z;
      if (state) {
 	  sys_vgui(".x%lx.c create rectangle \
-%d %d %d %d -tags %xSEL -outline blue\n",
+%d %d %d %d -tags %lxSEL -outline blue\n",
 		   glist_getcanvas(glist),
 		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
 		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height,
 		   x);
      }
      else {
-	  sys_vgui(".x%lx.c delete %xSEL\n",
+	  sys_vgui(".x%lx.c delete %lxSEL\n",
 		   glist_getcanvas(glist), x);
      }
 

@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#ifdef _WIN32
+
+#ifdef _MSC_VER
 #pragma warning( disable : 4244 )
 #pragma warning( disable : 4305 )
+#endif
+
+#ifdef _WIN32
 #define abs fabs
 #endif
 
@@ -23,13 +27,13 @@ static void draw_inlets(t_envgen *x, t_glist *glist, int firsttime, int nin, int
      {
 	  int onset = xpos + (x->w.width-2*BORDER) * i / nplus;
 	  if (firsttime)
-	       sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %xo%d\n",
+	       sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxo%d\n",
 			glist_getcanvas(glist),
 			onset, ypos + x->w.height - 1 + 2*BORDER,
 			onset + IOWIDTH, ypos + x->w.height + 2*BORDER,
 			x, i);
 	  else
-	       sys_vgui(".x%lx.c coords %xo%d %d %d %d %d\n",
+	       sys_vgui(".x%lx.c coords %lxo%d %d %d %d %d\n",
 			glist_getcanvas(glist), x, i,
 			onset, ypos + x->w.height - 1 + 2*BORDER,
 			onset + IOWIDTH, ypos + x->w.height + 2*BORDER);
@@ -40,13 +44,13 @@ static void draw_inlets(t_envgen *x, t_glist *glist, int firsttime, int nin, int
      {
 	  int onset = xpos + (x->w.width - IOWIDTH) * i / nplus - BORDER;
 	  if (firsttime)
-	       sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %xi%d\n",
+	       sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxi%d\n",
 			glist_getcanvas(glist),
 			onset, ypos - BORDER,
 			     onset + IOWIDTH, ypos + 1 - BORDER,
 			x, i);
 	  else
-	       sys_vgui(".x%lx.c coords %xi%d %d %d %d %d\n",
+	       sys_vgui(".x%lx.c coords %lxi%d %d %d %d %d\n",
 			glist_getcanvas(glist), x, i,
 			onset, ypos - BORDER,
 			onset + IOWIDTH, ypos + 1 - BORDER);
@@ -134,12 +138,12 @@ static void envgen_create_doodles(t_envgen *x, t_glist *glist)
      xpos = text_xpix(&x->x_obj,glist);
      ypos = (int) (text_ypix(&x->x_obj,glist) + x->w.height);
      for (i=0;i<=x->last_state;i++) {
-	  sprintf(guistr,".x%lx.c create oval %d %d %d %d -tags %xD%d",(unsigned int)glist_getcanvas(glist),
+	  sprintf(guistr,".x%lx.c create oval %d %d %d %d -tags %lxD%d",(long unsigned int)glist_getcanvas(glist),
 		   (int) (xpos+(x->duration[i] * xscale) - 2),
 		   (int) (ypos - x->finalvalues[i]*yscale - 2),
 		   (int) (xpos+(x->duration[i] * xscale)+2),
 		   (int) (ypos - x->finalvalues[i]*yscale + 2),
-		   (unsigned int)x,i);
+		   (long unsigned int)x,i);
 
 	  if (i == x->w.grabbed) strcat(guistr," -fill red\n");
 	  else strcat(guistr,"\n");
@@ -153,7 +157,7 @@ static void envgen_delete_doodles(t_envgen *x, t_glist *glist)
 {
      int i;
      for (i=0;i<=x->w.numdoodles;i++) {
-	  sys_vgui(".x%lx.c delete %xD%d\n",glist_getcanvas(glist),x,i);
+	  sys_vgui(".x%lx.c delete %lxD%d\n",glist_getcanvas(glist),x,i);
      }
 }
 
@@ -168,7 +172,7 @@ static void envgen_update_doodles(t_envgen *x, t_glist *glist)
 
 static void envgen_delnum(t_envgen *x)
 {
-     sys_vgui(".x%lx.c delete %xT\n",glist_getcanvas(x->w.glist),x); 
+     sys_vgui(".x%lx.c delete %lxT\n",glist_getcanvas(x->w.glist),x); 
 }
 
 
@@ -186,15 +190,15 @@ static void envgen_shownum(t_envgen *x,t_glist* glist)
 
      envgen_delnum(x);
 
-     sys_vgui(".x%lx.c create text %d %d -text %fx%f -tags %xT\n",
-	     (unsigned int)glist_getcanvas(x->w.glist),
+     sys_vgui(".x%lx.c create text %d %d -text %fx%f -tags %lxT\n",
+	     (long unsigned int)glist_getcanvas(x->w.glist),
 	     
 	     (int) (xpos+(x->duration[i] * xscale) + 12),
 	     (int) (ypos - x->finalvalues[i]*yscale - 2),
 	     
 	     x->finalvalues[i]*(x->max-x->min),
 	     x->duration[i],
-	     (unsigned int)x);
+	     (long unsigned int)x);
      clock_delay(x->w.numclock,700);
 }
 
@@ -212,7 +216,7 @@ static void envgen_create(t_envgen *x, t_glist *glist)
      ypos = (int) text_ypix(&x->x_obj,glist);
      x->w.numclock = clock_new(x, (t_method) envgen_delnum);     
      sys_vgui(".x%lx.c create rectangle \
-%d %d %d %d -tags %xS -fill "BACKGROUNDCOLOR"\n",
+%d %d %d %d -tags %lxS -fill "BACKGROUNDCOLOR"\n",
 	      glist_getcanvas(glist),
 	      xpos-BORDER, ypos-BORDER,
 	      xpos + x->w.width+2*BORDER, ypos + x->w.height+2*BORDER,
@@ -221,7 +225,7 @@ static void envgen_create(t_envgen *x, t_glist *glist)
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
      
-     sprintf(buf,".x%lx.c create line",(unsigned int)glist_getcanvas(glist));
+     sprintf(buf,".x%lx.c create line",(long unsigned int)glist_getcanvas(glist));
      for (i=0;i<=x->last_state;i++) {
 	  sprintf(num," %d %d ",(int)(xpos + x->duration[i]*xscale),
 		                (int)(ypos + x->w.height- x->finalvalues[i]*yscale));
@@ -244,7 +248,7 @@ int i;
      int xpos = text_xpix(&x->x_obj,glist);
      int ypos = text_ypix(&x->x_obj,glist);
 
-     sys_vgui(".x%lx.c coords %xS \
+     sys_vgui(".x%lx.c coords %lxS \
 %d %d %d %d\n",
 	      glist_getcanvas(glist), x,
 	      xpos - BORDER, ypos -BORDER,
@@ -254,7 +258,7 @@ int i;
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
      
-     sprintf(buf,".x%lx.c coords %pP",(unsigned int)glist_getcanvas(glist),x);
+     sprintf(buf,".x%lx.c coords %pP",(long unsigned int)glist_getcanvas(glist),x);
 
      for (i=0;i<=x->last_state;i++) {
 	  sprintf(num," %d %d ",(int)(xpos + x->duration[i]*xscale),
@@ -284,16 +288,16 @@ void envgen_drawme(t_envgen *x, t_glist *glist, int firsttime)
 void envgen_erase(t_envgen* x,t_glist* glist)
 {
      int n;
-     sys_vgui(".x%lx.c delete %xS\n",
+     sys_vgui(".x%lx.c delete %lxS\n",
 	      glist_getcanvas(glist), x);
 
      sys_vgui(".x%lx.c delete %pP\n",
 	      glist_getcanvas(glist), x);
 
 
-     sys_vgui(".x%lx.c delete %xi0\n",glist_getcanvas(glist),x);
-     sys_vgui(".x%lx.c delete %xo0\n",glist_getcanvas(glist),x);
-     sys_vgui(".x%lx.c delete %xo1\n",glist_getcanvas(glist),x);
+     sys_vgui(".x%lx.c delete %lxi0\n",glist_getcanvas(glist),x);
+     sys_vgui(".x%lx.c delete %lxo0\n",glist_getcanvas(glist),x);
+     sys_vgui(".x%lx.c delete %lxo1\n",glist_getcanvas(glist),x);
      envgen_delete_doodles(x,glist);
 }
 	
@@ -330,7 +334,7 @@ static void envgen_displace(t_gobj *z, t_glist *glist,
 static void envgen_select(t_gobj *z, t_glist *glist, int state)
 {
      t_envgen *x = (t_envgen *)z;
-    sys_vgui(".x%lx.c itemconfigure %xS -fill %s\n", glist, 
+    sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist, 
 	     x, (state? "blue" : BACKGROUNDCOLOR));
 }
 
@@ -453,7 +457,7 @@ static int envgen_newclick(t_envgen *x, struct _glist *glist,
          if (x->resizeable && (xpos > wxpos + x->w.width) && 
              (ypos > wypos)) {
              x->resizing = 1;     
-             return;
+             return (0);
          }
          
          x->w.shift = shift;
