@@ -38,7 +38,7 @@ char dumpy[2000];
 
 void envgen_resize(t_envgen* x,int ns)
 {
-    DEBUG(post("envgen_"););
+    DEBUG(post("envgen_resize"););
      if (ns > x->args) {
 	  int newargs = ns*sizeof(t_float); 
 
@@ -52,13 +52,13 @@ void envgen_resize(t_envgen* x,int ns)
 
 void envgen_totaldur(t_envgen* x,t_float dur)
 {
-    DEBUG(post("envgen_"););
+    DEBUG(post("envgen_totaldur"););
      int i;
      float f = dur/x->duration[x->last_state];
 
      if (dur < 10) {
-	post("envgen: duration too small %f",dur);
-        return;
+         pd_error(x, "envgen: duration too small %f",dur);
+         return;
      }
 
      for (i=1;i<=x->last_state;i++)
@@ -68,7 +68,7 @@ void envgen_totaldur(t_envgen* x,t_float dur)
 
 static void envgen_dump(t_envgen* e)
 {
-    DEBUG(post("envgen_"););
+    DEBUG(post("envgen_dump"););
      t_atom argv[50];
      int argc= 0;
      t_atom* a = argv;
@@ -87,7 +87,7 @@ static void envgen_dump(t_envgen* e)
 
 void envgen_init(t_envgen *x,int argc,t_atom* argv)
 {
-    DEBUG(post("envgen_"););
+    DEBUG(post("envgen_init"););
      t_float* dur;
      t_float* val;
      t_float tdur = 0;
@@ -109,18 +109,14 @@ void envgen_init(t_envgen *x,int argc,t_atom* argv)
      dur++;val++;argc--;
      for (;argc > 0;argc--) {
 	  tdur += atom_getfloat(argv++);
-#ifdef DEBUG
-	  post("dur =%f",tdur);
-#endif
+	  DEBUG(post("dur =%f",tdur););
 	  *dur++ = tdur; 
 	  argc--;
 	  if (argc > 0)
 	       *val++ = atom_getfloat(argv++); 
 	  else
 	       *val++ = 0; 
-#ifdef DEBUG
-	  post("val =%f",*(val-1));
-#endif
+      DEBUG(post("val =%f",*(val-1)););
 
      }
 
@@ -132,7 +128,7 @@ void envgen_init(t_envgen *x,int argc,t_atom* argv)
 
 void envgen_list(t_envgen *x,t_symbol* s, int argc,t_atom* argv)
 {
-    DEBUG(post("envgen_"););
+    DEBUG(post("envgen_list"););
      envgen_init(x,argc,argv);
      if (glist_isvisible(x->w.glist)) {
 	  envgen_drawme(x, x->w.glist, 0);
@@ -258,9 +254,8 @@ static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
      x->args = STATES;
      x->finalvalues = getbytes( x->args*sizeof(t_float));
      x->duration = getbytes( x->args*sizeof(t_float));
-#ifdef DEBUG
-     post("finalvalues %x",x->finalvalues);
-#endif
+     DEBUG(post("finalvalues %x",x->finalvalues););
+     
      /* widget */
      
      x->w.grabbed = 0;
