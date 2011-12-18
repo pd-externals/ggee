@@ -246,6 +246,11 @@ static void bindsym(t_pd* x,t_symbol* o,t_symbol* s)
      pd_bind(x,s);
 }
 
+static void envgen_free(t_envgen* x)
+{
+    clock_free(x->x_clock);
+}
+
 static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
 {
     DEBUG(post("envgen_new"););
@@ -326,8 +331,13 @@ t_widgetbehavior envgen_widgetbehavior;
 void envgen_setup(void)
 {
     DEBUG(post("envgen_setup"););
-    envgen_class = class_new(gensym("envgen"), (t_newmethod)envgen_new, 0,
-    	sizeof(t_envgen), 0,A_GIMME,0);
+    envgen_class = class_new(gensym("envgen"),
+                             (t_newmethod)envgen_new,
+                             (t_method) envgen_free,
+                             sizeof(t_envgen),
+                             0,
+                             A_GIMME,
+                             0);
 
     class_addcreator((t_newmethod)envgen_new,gensym("envgen~"),A_GIMME,0);
     class_addfloat(envgen_class, envgen_float);
