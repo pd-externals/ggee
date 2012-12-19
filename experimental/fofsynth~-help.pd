@@ -1,4 +1,4 @@
-#N canvas 0 26 828 646 10;
+#N canvas 1 88 828 646 10;
 #X floatatom 103 48 0 0 0 0 - - -;
 #X floatatom 226 82 0 0 0 0 - - -;
 #X floatatom 243 117 0 0 0 0 - - -;
@@ -47,12 +47,11 @@
 #X msg 154 144 200;
 #X msg 47 34 120;
 #X obj 103 181 pack 100 100;
-#N canvas 505 236 494 344 META 0;
+#N canvas 503 244 494 344 META 0;
 #X text 12 205 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
 Wilkes for Pd version 0.42.;
 #X text 12 45 LICENSE Tcl/Tk;
 #X text 12 185 AUTHOR Guenter Geiger;
-#X text 12 25 KEYWORDS needs_work;
 #X text 12 65 DESCRIPTION this is still not really finished;
 #X text 12 85 INLET_0 debug float signal;
 #X text 12 105 INLET_1 float;
@@ -60,6 +59,7 @@ Wilkes for Pd version 0.42.;
 #X text 12 145 INLET_3 float;
 #X text 12 165 OUTLET_0 signal;
 #X text 12 5 ALIAS fof~;
+#X text 12 25 KEYWORDS;
 #X restore 772 622 pd META;
 #X connect 0 0 44 0;
 #X connect 1 0 5 1;

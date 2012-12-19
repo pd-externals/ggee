@@ -1,4 +1,4 @@
-#N canvas 0 26 477 431 12;
+#N canvas 1 88 477 431 12;
 #X obj 185 96 sfwrite~ 2;
 #X msg 65 16 open test.wav;
 #X floatatom 185 16 0 0 0 0 - - -;
@@ -21,17 +21,17 @@
 #X obj 125 372 *~ 0;
 #X msg 125 277 open test.wav \, bang;
 #X floatatom 417 129 0 0 0 0 - - -;
-#N canvas 373 272 494 344 META 0;
+#N canvas 371 280 494 344 META 0;
 #X text 12 165 HELP_PATCH_AUTHORS "pd meta" information added by Jonathan
 Wilkes for Pd version 0.42.;
 #X text 12 25 LICENSE Tcl/Tk;
 #X text 12 145 AUTHOR Guenter Geiger;
 #X text 12 45 DESCRIPTION needs a description;
-#X text 12 5 KEYWORDS signal needs_work (description);
 #X text 12 65 INLET_0 open float;
 #X text 12 85 INLET_1 float;
 #X text 12 105 OUTLET_0 signal;
 #X text 12 125 OUTLET_1 signal;
+#X text 12 5 KEYWORDS signal;
 #X restore 421 406 pd META;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
