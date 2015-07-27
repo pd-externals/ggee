@@ -14,7 +14,7 @@ typedef struct _tabwrite4_tilde
     int x_npoints;
     t_word *x_vec;
     t_symbol *x_arrayname;
-    float x_f;
+    t_float x_f;
     t_sample x_1;
     t_sample x_2;
     t_sample x_3;
