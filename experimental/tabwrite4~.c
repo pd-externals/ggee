@@ -12,7 +12,7 @@ typedef struct _tabwrite4_tilde
     t_object x_obj;
     int x_phase;
     int x_npoints;
-    t_float *x_vec;
+    t_word *x_vec;
     t_symbol *x_arrayname;
     float x_f;
     t_sample x_1;
@@ -52,7 +52,7 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
     int n = (int)(w[4]);    
     t_sample* end2 = in2 + n;
 
-    t_float *buf = x->x_vec;
+    t_word *buf = x->x_vec;
     t_sample a,b,c,d;
     t_sample findex = *in2;
     t_sample frac;
@@ -74,7 +74,7 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
 #if 0
         while ((int)findex > iindex) {
             iindex++;
-            *(buf+iindex) = *(buf+iindex-1);
+            buf[iindex].w_float=buf[iindex-1].w_float;
         }
 #endif
 
@@ -102,10 +102,9 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
             iindex -= maxindex;          
         }
 
-        fp = buf + iindex;
         cminusb = c-b;
 
-        *fp = b + frac * (
+        buf[iindex].w_float = b + frac * (
                     cminusb - 0.1666667f * (1.-frac) * (
                     (d - a - 3.0f * cminusb) * frac + (d + 2.0f*a - 3.0f*b)
                     )
@@ -118,12 +117,12 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
     x->x_3 = d;
 
 #if 0
-    buf[maxindex-2] = buf[maxindex-3]*0.5; 
-    buf[maxindex-1] = buf[maxindex-2]*0.5; 
-    buf[maxindex] = buf[maxindex-1]*0.5; 
-    buf[2] = buf[3]*0.5; 
-    buf[1] = buf[2]*0.5; 
-    buf[0] = buf[1]*0.5; 
+    buf[maxindex-2].w_float = buf[maxindex-3].w_float*0.5; 
+    buf[maxindex-1].w_float = buf[maxindex-2].w_float*0.5; 
+    buf[maxindex].w_float = buf[maxindex-1].w_float*0.5; 
+    buf[2].w_float = buf[3].w_float*0.5; 
+    buf[1].w_float = buf[2].w_float*0.5; 
+    buf[0].w_float = buf[1].w_float*0.5; 
 #endif
 
     if (wraparound)  tabwrite4_tilde_redraw(x);    
@@ -143,7 +142,7 @@ void tabwrite4_tilde_set(t_tabwrite4_tilde *x, t_symbol *s)
             x->x_arrayname->s_name);
         x->x_vec = 0;
     }
-    else if (!garray_getfloatarray(a, &x->x_npoints, &x->x_vec))
+    else if (!garray_getfloatwords(a, &x->x_npoints, &x->x_vec))
     {
         pd_error(x, "%s: bad template for tabwrite4~", x->x_arrayname->s_name);
         x->x_vec = 0;
