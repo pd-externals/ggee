@@ -142,26 +142,26 @@ static t_grain* grain_makecyclic(t_grain* base,int num)
 static t_int *fofsynth_perform(t_int *w)
 {
      t_fofsynth* x = (t_fofsynth*) (w[1]);
-     t_float *in = (t_float *)(w[2]);
-     t_float *out = (t_float *)(w[3]);
+     t_sample *in = (t_sample *)(w[2]);
+     t_sample *out = (t_sample *)(w[3]);
      int n = (int)(w[4]);
 
-     float totaldur = (x->risedur+ x->falldur)*0.01/ *in;
+     t_float totaldur = (x->risedur+ x->falldur)*0.01/ *in;
 
-     float srate = 44100.0; /*((t_signal*)w[2])->s_sr;*/
-     float israte = 1.0/srate;
+     t_sample srate = 44100.0; /*((t_signal*)w[2])->s_sr;*/
+     t_sample israte = 1.0/srate;
 
-     float fundphase = x->fundph;
-     float numperiods = totaldur*x->formfreq;
-     float formphinc = (x->formfreq/srate);
+     t_float fundphase = x->fundph;
+     t_float numperiods = totaldur*x->formfreq;
+     t_float formphinc = (x->formfreq/srate);
 
-     float risinc;
-     float fallinc;
+     t_sample risinc;
+     t_sample fallinc;
 
      t_grain* cur;
 
-     risinc = (x->risedur == 0) ? 1.0 : 1.0/ (srate*totaldur*0.01*x->risedur);
-     fallinc = (x->falldur ==  0.0) ? 1.0 :1.0/ (srate*totaldur*0.01*x->falldur);
+     risinc  = (x->risedur == 0.0) ? 1.0 : 1.0/ (srate*totaldur*0.01*x->risedur);
+     fallinc = (x->falldur == 0.0) ? 1.0 : 1.0/ (srate*totaldur*0.01*x->falldur);
      
      DEBUG(" fundph %3.2f",x->fundph);
      DEBUG(" fundfreq %3.2f",x->fundfreq);
@@ -198,11 +198,11 @@ static t_int *fofsynth_perform(t_int *w)
 
 	  cur = x->grainstart;
 	  while (cur != x->grainend) {
-	       float formphase = cur->formph;
-	       float envelope;
+	       t_sample formphase = cur->formph;
+	       t_sample envelope;
 
-	       float tph = (formphase - (float)((int) formphase));
-	       float val = *(x->x_vec + (int) (tph * x->x_npoints));
+	       t_sample tph = (formphase - (t_sample)((int) formphase));
+	       t_sample val = *(x->x_vec + (int) (tph * x->x_npoints));
 
 	       /* Apply the envelope */
 
