@@ -20,33 +20,32 @@ void garray_usedindsp(t_garray *x);
 #define PD_PI 3.14159
 
 
-#if PD_MINOR_VERSION < 38
-static float* cos_table;
-#endif
-static float* halfcos_table;
-static float* exp_table;
+static t_word* fofcos_table;
+static t_sample* halfcos_table;
+static t_sample* exp_table;
 
 static void cos_maketable(void)
 {
      int i;
-     float *fp, phase, phsinc = (2. * PD_PI) / COSTABSIZE;
+     t_word *fp;
+     t_sample phase, phsinc = (2. * PD_PI) / COSTABSIZE;
      
-     if (cos_table) return;
-     cos_table = (float *)getbytes(sizeof(float) * (COSTABSIZE+1));
+     if (fofcos_table) return;
+     fofcos_table = (t_word *)getbytes(sizeof(t_word) * (COSTABSIZE+1));
      
-     for (i = COSTABSIZE + 1, fp = cos_table, phase = 0; i--;
+     for (i = COSTABSIZE + 1, fp = fofcos_table, phase = 0; i--;
 	  fp++, phase += phsinc) 
-	  *fp = cos(phase);
+	  fp->w_float = cos(phase);
      
 }
 
 static void halfcos_maketable(void)
 {
      int i;
-     float *fp, phase, phsinc = (PD_PI) / COSTABSIZE;
+     t_sample *fp, phase, phsinc = (PD_PI) / COSTABSIZE;
      
      if (halfcos_table) return;
-     halfcos_table = (float *)getbytes(sizeof(float) * (COSTABSIZE+1));
+     halfcos_table = (t_sample *)getbytes(sizeof(t_sample) * (COSTABSIZE+1));
      
      for (i = COSTABSIZE + 1, fp = halfcos_table, phase = PD_PI; i--;
 	  fp++, phase += phsinc) 
@@ -57,10 +56,10 @@ static void halfcos_maketable(void)
 static void exp_maketable(void)
 {
      int i;
-     float *fp, phase, phsinc = (2 * PD_PI) / COSTABSIZE;
+     t_sample *fp, phase, phsinc = (2 * PD_PI) / COSTABSIZE;
      
      if (exp_table) return;
-     exp_table = (float *)getbytes(sizeof(float) * (COSTABSIZE+1));
+     exp_table = (t_sample *)getbytes(sizeof(t_sample) * (COSTABSIZE+1));
      
      for (i = COSTABSIZE + 1, fp = exp_table, phase = 0; i--;
 	  fp++, phase += phsinc) 
@@ -92,7 +91,7 @@ typedef struct _fofsynth
      /* template */
 
      int x_npoints;
-     t_float *x_vec;
+     t_word *x_vec;
      
      /* fof */
      int debug;
@@ -202,7 +201,7 @@ static t_int *fofsynth_perform(t_int *w)
 	       t_sample envelope;
 
 	       t_sample tph = (formphase - (t_sample)((int) formphase));
-	       t_sample val = *(x->x_vec + (int) (tph * x->x_npoints));
+	       t_sample val = x->x_vec[(int) (tph * x->x_npoints)].w_float;
 
 	       /* Apply the envelope */
 
@@ -255,12 +254,12 @@ static t_int *fofsynth_perform(t_int *w)
      return (w+5);
 }
 
-void fofsynth_usearray(t_symbol* s,int* points,t_float** vec)
+void fofsynth_usearray(t_symbol* s,int* points,t_word** vec)
 {
      t_garray *a;
      if (!(a = (t_garray *)pd_findbyclass(s, garray_class))) 
 	  error("%s: no such array", s->s_name);
-     else if (!garray_getfloatarray(a,points,vec))
+     else if (!garray_getfloatwords(a,points,vec))
 	  error("%s: bad template for fof~", s->s_name);
      else
 	  garray_usedindsp(a); 
@@ -273,7 +272,7 @@ static void fofsynth_dsp(t_fofsynth *x, t_signal **sp)
 	  fofsynth_usearray(x->x_arrayname,&x->x_npoints, &x->x_vec);	
      else {
 	  x->x_npoints=COSTABSIZE;
-	  x->x_vec = cos_table;
+	  x->x_vec = fofcos_table;
      }
                
      dsp_add(fofsynth_perform, 4, x,
@@ -342,7 +341,7 @@ static void *fofsynth_new(t_symbol* s,t_float a,t_float b,t_float c,t_float d)
 
 void fofsynth_tilde_setup(void)
 {
-     cos_table = NULL;
+     fofcos_table = NULL;
      halfcos_table = NULL;
      fofsynth_class = class_new(gensym("fof~"), (t_newmethod) fofsynth_new,(t_method) fofsynth_free,
 				sizeof(t_fofsynth), 0,A_DEFSYM, A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
