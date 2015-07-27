@@ -12,7 +12,7 @@ typedef struct _tabwrite4_tilde
     t_object x_obj;
     int x_phase;
     int x_npoints;
-    float *x_vec;
+    t_float *x_vec;
     t_symbol *x_arrayname;
     float x_f;
     t_sample x_1;
@@ -21,8 +21,6 @@ typedef struct _tabwrite4_tilde
     t_sample x_4;
     float x_index;
 } t_tabwrite4_tilde;
-
-static void tabwrite4_tilde_tick(t_tabwrite4_tilde *x);
 
 static void *tabwrite4_tilde_new(t_symbol *s)
 {
@@ -34,7 +32,7 @@ static void *tabwrite4_tilde_new(t_symbol *s)
     x->x_2 = 0.;
     x->x_3 = 0.;
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-    outlet_new(&x->x_obj, &s_signal);       
+    //outlet_new(&x->x_obj, &s_signal);       
     return (x);
 }
 
@@ -49,15 +47,15 @@ static void tabwrite4_tilde_redraw(t_tabwrite4_tilde *x)
 static t_int *tabwrite4_tilde_perform(t_int *w)
 {
     t_tabwrite4_tilde *x = (t_tabwrite4_tilde *)(w[1]);
-    t_float *in1 = (t_float *)(w[2]);
-    t_float *in2 = (t_float *)(w[3]);
+    t_sample *in1 = (t_sample *)(w[2]);
+    t_sample *in2 = (t_sample *)(w[3]);
     int n = (int)(w[4]);    
-    t_float* end = in1 + n;
-    t_float* end2 = in2 + n;
+    t_sample* end2 = in2 + n;
 
-    float *buf = x->x_vec, *fp, a,b,c,d;
-    float findex = *in2;
-    float frac;
+    t_float *buf = x->x_vec;
+    t_sample a,b,c,d;
+    t_sample findex = *in2;
+    t_sample frac;
     int iindex = (int)findex;
     int wraparound = 0;
     int maxindex = x->x_npoints-1;
@@ -85,7 +83,7 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
 //        post("iindex %d, findex %f",iindex,findex);
         if (in2 < end2 && findex > *in2) {
             wraparound = 1;
-            post("wraparound");
+            //post("wraparound");
         }
 
 
@@ -114,7 +112,7 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
                     );
 
     }
-    post("written to %d",iindex);
+    //post("written to %d",iindex);
     x->x_1 = b;
     x->x_2 = c;
     x->x_3 = d;
