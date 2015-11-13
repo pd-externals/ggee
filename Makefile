@@ -32,7 +32,6 @@ class.sources = control/constant.c \
             filters/notch.c \
             gui/button.c \
             gui/envgen.c \
-            gui/fatom.c \
             gui/gcanvas.c \
             gui/image.c \
             gui/slider.c \
@@ -56,8 +55,6 @@ datafiles = control/constant-help.pd \
             control/rl-help.pd \
             control/rtout-help.pd \
             control/serial_bird-help.pd \
-            control/serialctl-help.pd \
-            control/serialctl.pd \
             control/serialize-help.pd \
             control/serial_ms-help.pd \
             control/serial_mt-help.pd \
