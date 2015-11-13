@@ -39,8 +39,6 @@ class.sources = control/constant.c \
             gui/state.c \
             gui/ticker.c \
             gui/toddle.c \
-            other/ls_setup \
-            other/ls_setup16 \
             other/vbap.c \
             signal/atan2~.c \
             signal/mixer~.c \
@@ -86,6 +84,8 @@ datafiles = control/constant-help.pd \
             gui/state-help.pd \
             gui/ticker-help.pd \
             gui/toddle-help.pd \
+            other/ls_setup \
+            other/ls_setup16 \
             other/vbap-help.pd \
             signal/atan2~-help.pd \
             signal/mixer~-help.pd \
