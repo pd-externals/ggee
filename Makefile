@@ -39,7 +39,8 @@ class.sources = control/constant.c \
             gui/state.c \
             gui/ticker.c \
             gui/toddle.c \
-            other/messages.c \
+            other/ls_setup \
+            other/ls_setup16 \
             other/vbap.c \
             signal/atan2~.c \
             signal/mixer~.c \
@@ -48,7 +49,6 @@ class.sources = control/constant.c \
             signal/streamout~.c
 
 datafiles = control/constant-help.pd \
-            control/cvs.pd \
             control/getdir-help.pd \
             control/inv-help.pd \
             control/qread-help.pd \
@@ -69,7 +69,6 @@ datafiles = control/constant-help.pd \
             experimental/tabwrite4~-help.pd \
             filters/bandpass-help.pd \
             filters/equalizer-help.pd \
-            filters/filtgain.pd \
             filters/highpass-help.pd \
             filters/highshelf-help.pd \
             filters/hlshelf-help.pd \
