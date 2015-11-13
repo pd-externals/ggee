@@ -81,6 +81,7 @@ datafiles = control/constant-help.pd \
             gui/envgen-help.pd \
             gui/gcanvas-help.pd \
             gui/image-help.pd \
+            gui/logo100.gif \
             gui/slider-help.pd \
             gui/sliderh-help.pd \
             gui/state-help.pd \
