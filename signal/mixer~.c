@@ -22,21 +22,21 @@ static void *mixer_new(t_symbol *s, t_floatarg num)
   t_mixer *x = (t_mixer *)pd_new(mixer_class);
   if (num < 1)  x->x_n = 1;
   else x->x_n = (int) num;
-	
+
   x->x_m = getbytes(sizeof(t_float)*x->x_n);
 
   for (i=0;i<x->x_n /* - 1 */ ;i++) {
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
     x->x_m[i] = 1.;
-  }	
+  }
 
-  
+
 
   outlet_new(&x->x_obj, &s_signal);
   return (x);
 }
 
-void mixer_list(t_mixer* x,t_symbol* s,t_int argc, t_atom* argv) 
+void mixer_list(t_mixer* x,t_symbol* s,t_int argc, t_atom* argv)
 {
   int chan;
   t_float val;
@@ -69,7 +69,7 @@ t_int *mixer_perform(t_int *w)
   }
 
   out = (t_float *)(w[offset+i]);
-  
+
   while (n--) {
     *out = 0.;
     for (j=0;j<x->x_n;j++) {
@@ -84,7 +84,7 @@ static void mixer_dsp(t_mixer *x, t_signal **sp)
 {
   int i;
   t_int** myvec = getbytes(sizeof(t_int)*(x->x_n + 3));
-  
+
   myvec[0] = (t_int*)x;
   myvec[1] = (t_int*)sp[0]->s_n;
 
@@ -101,7 +101,6 @@ void mixer_tilde_setup(void)
 			  sizeof(t_mixer), 0, A_DEFFLOAT, A_DEFSYM,A_NULL);
   class_addmethod(mixer_class, nullfn, gensym("signal"), 0);
   class_addmethod(mixer_class, (t_method)mixer_dsp, gensym("dsp"), 0);
-  
+
   class_addlist(mixer_class,mixer_list);
 }
-

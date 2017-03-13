@@ -11,7 +11,7 @@
 
 
 
-/* hacks .... this duplicates definitions in pd and must be 
+/* hacks .... this duplicates definitions in pd and must be
  * adjusted if something changes there !!!! */
 
 #define EMPTYSYMBOL "emptysymbol"
@@ -37,7 +37,7 @@ typedef struct _myglist
 #define FIRSTOBJECT(a) (((t_myglist*)a)->g_list)
 
 
-#ifndef vmess 
+#ifndef vmess
 #define vmess pd_vmess
 #endif
 
@@ -98,7 +98,7 @@ void state_dosave(t_state *x)
 
      a = (t_text*)FIRSTOBJECT(x->x_canvas);
 
-     do {  
+     do {
 	  if (a->te_type == T_ATOM) {
 	       if (TATOM(a)->a_type == A_SYMBOL) {
 		    if (strlen(TATOM(a)->a_w.w_symbol->s_name))
@@ -155,14 +155,14 @@ void state_dosave(t_state *x)
 
 }
 
-void state_save(t_state *x) 
+void state_save(t_state *x)
 {
      x->x_save = 1;
      clock_delay(x->x_clock,2000);
 }
 
 
-void state_saveoff(t_state *x) 
+void state_saveoff(t_state *x)
 {
      x->x_save = 0;
 }
@@ -206,7 +206,7 @@ void state_load(t_state *x)
      post("state loading from: %s",name);
      *name = 0;
      do {
-	  if (a->te_type == T_ATOM || 
+	  if (a->te_type == T_ATOM ||
 	      !strcmp(class_getname(a->te_pd),"slider")
 	      || !strcmp(class_getname(a->te_pd),"ticker")
 	      || !strcmp(class_getname(a->te_pd),"sliderh")
@@ -263,7 +263,7 @@ void state_float(t_state *x,t_floatarg f)
 	  state_dosave(x);
 	  return;
      }
-	  
+
      state_load(x);
      outlet_float(x->x_obj.ob_outlet,x->x_slot);
 }
@@ -338,5 +338,3 @@ void state_setup(void)
     class_addsymbol(state_class,state_symbol);
 /*    class_addmethod(state_class, (t_method)state_load, gensym("load"), 0);*/
 }
-
-

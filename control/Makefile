@@ -13,8 +13,8 @@ NTDLLS = *.dll
 
 PDNTCFLAGS = /W3 /WX /DNT /DPD /nologo
 
-PDNTINCLUDE = /I. /I..\..\pd\src 
-	
+PDNTINCLUDE = /I. /I..\..\pd\src
+
 ProgramFiles = c:\Program Files
 PDNTLDIR = "$(ProgramFiles)\Microsoft Visual Studio\Vc98\lib"
 
@@ -23,9 +23,9 @@ PDNTLIB = $(PDNTLDIR)\libc.lib \
 	$(PDNTLDIR)\wsock32.lib \
 	$(PDNTLDIR)\kernel32.lib \
 	$(PDNTLDIR)\uuid.lib \
-	..\..\pd\bin\pd.lib 
+	..\..\pd\bin\pd.lib
 
-nt: $(NTOBJECTS) 
+nt: $(NTOBJECTS)
 	-link /dll  $(PDNTLIB) constant.obj /export:constant_setup
 	-link /dll  $(PDNTLIB) inv.obj /export:inv_setup
 	-link /dll  $(PDNTLIB) qread.obj /export:qread_setup
@@ -39,7 +39,7 @@ nt: $(NTOBJECTS)
 	-link /dll  $(PDNTLIB) unwonk.obj /export:unwonk_setup
 
 clean:
-	del *.obj 
+	del *.obj
 	del *.dll
 
 
@@ -47,7 +47,3 @@ clean:
 	-cl $(PDNTCFLAGS) $(PDNTINCLUDE) /c $*.c
 
 .obj.dll:
-
-
-	
-

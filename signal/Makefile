@@ -8,7 +8,7 @@ all: $(EXTERNALS:.c=.dll)
 
 .SUFFIXES: .dll
 
-DEFINES = -DPD -DNT 
+DEFINES = -DPD -DNT
 CFLAGS = -Wall -W -Wshadow -Wstrict-prototypes \
     -Wno-unused -Wno-parentheses -Wno-switch
 
@@ -18,7 +18,7 @@ LIBS = -lwsock32
 %.dll: %.c
 	$(CC) -mms-bitfields $(CFLAGS) $(DEFINES) $(INCLUDE) -o "$*.o" -c "$*.c"
 	gcc -shared -o "$*.dll" "$*.o" $(PDPATH)/bin/pd.dll $(LIBS)
-	rm "$*.o" 
+	rm "$*.o"
 
 clean:
 	-rm *.a *.def *.dll *.o

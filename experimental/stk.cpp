@@ -39,7 +39,7 @@ void stk_print(t_stk* x) {
 { x->instrument = new name(y);}
 
 
-static void stk_set_instrument(t_stk* x,t_symbol* s) 
+static void stk_set_instrument(t_stk* x,t_symbol* s)
 {
   int i = 0;
 
@@ -109,49 +109,49 @@ static void stk_dsp(t_stk *x, t_signal **sp)
 }
 
 
-static void stk_noteOn(t_stk *x,t_float f) 
+static void stk_noteOn(t_stk *x,t_float f)
 {
      x->instrument->noteOn(f,x->x_velo);
 }
 
 
-static void stk_noteOff(t_stk *x) 
+static void stk_noteOff(t_stk *x)
 {
      x->instrument->noteOff(0);
 }
 
 
-static void stk_control(t_stk *x,t_floatarg f1,t_floatarg f2) 
+static void stk_control(t_stk *x,t_floatarg f1,t_floatarg f2)
 {
      x->instrument->controlChange((int)f1,f2);
 }
 
-static void stk_control1(t_stk *x,t_floatarg f1) 
+static void stk_control1(t_stk *x,t_floatarg f1)
 {
      x->instrument->controlChange(1,f1);
 }
 
-static void stk_control2(t_stk *x,t_floatarg f1) 
+static void stk_control2(t_stk *x,t_floatarg f1)
 {
      x->instrument->controlChange(2,f1);
 }
 
-static void stk_control3(t_stk *x,t_floatarg f1) 
+static void stk_control3(t_stk *x,t_floatarg f1)
 {
      x->instrument->controlChange(3,f1);
 }
 
-static void stk_control4(t_stk *x,t_floatarg f1) 
+static void stk_control4(t_stk *x,t_floatarg f1)
 {
      x->instrument->controlChange(4,f1);
 }
 
-static void stk_aftertouch(t_stk *x,t_floatarg f1) 
+static void stk_aftertouch(t_stk *x,t_floatarg f1)
 {
      x->instrument->controlChange(128,f1);
 }
 
-static void stk_pitchbend(t_stk *x,t_floatarg f1) 
+static void stk_pitchbend(t_stk *x,t_floatarg f1)
 {
      x->instrument->setFrequency(f1);
 }
@@ -159,8 +159,8 @@ static void stk_pitchbend(t_stk *x,t_floatarg f1)
 static void stk_float(t_stk* x,t_floatarg f)
 {
      if (f > 20) stk_noteOn(x,f);
-     else stk_noteOff(x); 
-     
+     else stk_noteOff(x);
+
 }
 
 
@@ -168,7 +168,7 @@ static void *stk_new(t_symbol* s)
 {
     t_stk *x = (t_stk *)pd_new(stk_class);
 
-    stk_set_instrument(x,s); 
+    stk_set_instrument(x,s);
 
     if (x->instrument == NULL) {
       post("stk: %s no such instrument",s->s_name);
@@ -191,7 +191,7 @@ extern "C" {
 				sizeof(t_stk), 0,A_DEFSYM,A_NULL);
 	  class_addmethod(stk_class, nullfn, gensym("signal"), A_NULL);
 	  class_addmethod(stk_class, (t_method) stk_dsp, gensym("dsp"), A_NULL);
-	  
+
 	  class_addbang(stk_class,stk_bang);
 	  class_addfloat(stk_class,stk_float);
 	  class_addmethod(stk_class,(t_method) stk_control,gensym("control"),A_DEFFLOAT,A_DEFFLOAT,A_NULL);
@@ -202,6 +202,6 @@ extern "C" {
 	  class_addmethod(stk_class,(t_method) stk_aftertouch,gensym("aftertouch"),A_DEFFLOAT,A_NULL);
 	  class_addmethod(stk_class,(t_method) stk_pitchbend,gensym("pitchbend"),A_DEFFLOAT,A_NULL);
 	  class_addmethod(stk_class,(t_method) stk_print,gensym("print"),A_NULL);
-	  
+
      }
 }

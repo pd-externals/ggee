@@ -191,6 +191,3 @@ void tabwrite4_tilde_setup(void)
         gensym("start"), A_DEFFLOAT, 0);
     class_addbang(tabwrite4_tilde_class, tabwrite4_tilde_bang);
 }
-
-
-

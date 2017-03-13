@@ -12,13 +12,13 @@ SOURCES_linux =
 
 # list all pd objects (i.e. myobject.pd) files here, and their helpfiles will
 # be included automatically
-PDOBJECTS = 
+PDOBJECTS =
 
 # example patches and related files, in the 'examples' subfolder
-EXAMPLES = 
+EXAMPLES =
 
 # manuals and related files, in the 'manual' subfolder
-MANUAL = 
+MANUAL =
 
 # if you want to include any other files in the source and binary tarballs,
 # list them here.  This can be anything from header files, test patches,
@@ -36,9 +36,9 @@ EXTRA_DIST = gui/fatom.h gui/fatom.c
 #------------------------------------------------------------------------------#
 
 ALL_CFLAGS = -I"$(PD_INCLUDE)"
-ALL_LDFLAGS =  
+ALL_LDFLAGS =
 SHARED_LDFLAGS =
-ALL_LIBS = 
+ALL_LIBS =
 
 
 #------------------------------------------------------------------------------#
@@ -140,7 +140,7 @@ ifeq ($(UNAME),ANDROID)
   NDK_TOOLCHAIN_BASE=$(NDK_BASE)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/$(NDK_UNAME)-x86
   CC := $(NDK_TOOLCHAIN_BASE)/bin/arm-linux-androideabi-gcc --sysroot=$(NDK_SYSROOT)
   OPT_CFLAGS = -O6 -funroll-loops -fomit-frame-pointer
-  CFLAGS += 
+  CFLAGS +=
   LDFLAGS += -rdynamic -shared
   SHARED_LDFLAGS += -Wl,-soname,$(SHARED_LIB) -shared
   LIBS += -lc $(LIBS_android)
@@ -203,7 +203,7 @@ ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
   OS = cygwin
   PD_PATH = $(shell cygpath $$PROGRAMFILES)/pd
   OPT_CFLAGS = -O6 -funroll-loops -fomit-frame-pointer
-  ALL_CFLAGS += 
+  ALL_CFLAGS +=
   ALL_LDFLAGS += -rdynamic -shared -L"$(PD_PATH)/src" -L"$(PD_PATH)/bin"
   SHARED_LDFLAGS += -shared -Wl,-soname,$(SHARED_LIB)
   ALL_LIBS += -lc -lpd $(LIBS_cygwin)

@@ -38,4 +38,3 @@ void rtout_setup(void)
     	sizeof(t_rtout), 0, A_DEFFLOAT, A_DEFFLOAT, 0);
     class_addfloat(rtout_class, rtout_float);
 }
-

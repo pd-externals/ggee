@@ -36,5 +36,3 @@ void messages_setup(void)
 				sizeof(t_messages), 0,0);
     class_addbang(messages_class,messages_bang);
 }
-
-

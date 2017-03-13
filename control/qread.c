@@ -126,5 +126,3 @@ void qread_setup(void)
     class_addmethod(qread_class,(t_method)qread_open,gensym("open"),A_SYMBOL,A_NULL);
     class_addmethod(qread_class,(t_method)qread_stop,gensym("stop"),A_NULL);
 }
-
-

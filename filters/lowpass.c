@@ -83,7 +83,3 @@ void lowpass_setup(void)
     class_addbang(lowpass_class,lowpass_bang);
     class_addfloat(lowpass_class,lowpass_float);
 }
-
-
-
-

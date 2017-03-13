@@ -36,12 +36,12 @@
 #define AVERAGENUM 10
 
 /*#define DEBUGMESS(x) x*/
-#define  DEBUGMESS(x) 
+#define  DEBUGMESS(x)
 
 /* Utility functions */
 
 /* TODO !!!!
-  - check udp support 
+  - check udp support
 */
 
 
@@ -74,10 +74,10 @@ static void sys_closesocket(int fd)
 
 
 int setsocketoptions(int sockfd)
-{ 
+{
 #ifndef _WIN32
     int sockopt = 1;
-	 if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0) 
+	 if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0)
 	 {
 		 DEBUGMESS(post("setsockopt NODELAY failed\n"));
 	 }
@@ -85,14 +85,14 @@ int setsocketoptions(int sockfd)
 	 {
 		 DEBUGMESS(post("TCP_NODELAY set"));
 	 }
-	 
-     
-     /* if we don`t use REUSEADDR we have to wait under unix until the 
-	address gets freed after a close ... this can be very annoying 
+
+
+     /* if we don`t use REUSEADDR we have to wait under unix until the
+	address gets freed after a close ... this can be very annoying
 	when working with netsend/netreceive GG
      */
 
-     sockopt = 1;    
+     sockopt = 1;
      if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &sockopt, sizeof(int)) < 0)
 	  post("setsockopt failed\n");
 #endif
@@ -232,8 +232,8 @@ static int streamin_createsocket(t_streamin* x, int portno,t_symbol* prot)
 
     if (sockfd < 0)
     {
-    	sys_sockerror("socket");
-    	return (0);
+	sys_sockerror("socket");
+	return (0);
     }
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
@@ -246,9 +246,9 @@ static int streamin_createsocket(t_streamin* x, int portno,t_symbol* prot)
 
     setsocketoptions(sockfd);
 
-	 
+
     /* name the socket */
-    
+
     if (bind(sockfd, (struct sockaddr *)&server, sizeof(server)) < 0) {
 	 sys_sockerror("bind");
 	 sys_closesocket(sockfd);
@@ -316,29 +316,29 @@ static t_int *streamin_perform(t_int *w)
      switch (x->frames[x->frameout].tag.format) {
      case SF_FLOAT: {
 	  t_float* buf = (t_float*)(x->frames[x->frameout].data);
-	  while (n--) 
-	       *out++ = *buf++; 
+	  while (n--)
+	       *out++ = *buf++;
 	  x->frameout++;
 	  x->frameout %= MAXFRAMES;
 	  break;
      }
-     case SF_16BIT:     
+     case SF_16BIT:
      {
 	  short* buf = (short*)(x->frames[x->frameout].data);
 
 	  while (n--)
-	       *out++ = (float) *buf++*3.051850e-05; 
+	       *out++ = (float) *buf++*3.051850e-05;
 	  x->frameout++;
 	  x->frameout %= MAXFRAMES;
 
 	  break;
      }
-     case SF_8BIT:     
+     case SF_8BIT:
      {
 	  unsigned char* buf = (char*)(x->frames[x->frameout].data);
 
 	  while (n--)
-	       *out++ = (float) (0.0078125 * (*buf++)) - 1.0; 
+	       *out++ = (float) (0.0078125 * (*buf++)) - 1.0;
 	  x->frameout++;
 	  x->frameout %= MAXFRAMES;
 	  break;
@@ -376,26 +376,26 @@ static void *streamin_new(t_floatarg fportno, t_floatarg prot)
 {
     t_streamin *x;
     int i;
-    
+
     if (fportno == 0) fportno = 4267;
 
     post("port %f",fportno);
     x = (t_streamin *)pd_new(streamin_class);
-    
+
     x->x_connectsocket = -1;
     x->x_socket = -1;
     x->x_tcp = 1;
     outlet_new(&x->x_obj, &s_signal);
     x->x_nconnections = 0;
     x->x_ndrops = 0;
-    
+
     for (i=0;i<MAXFRAMES;i++) {
 	 x->frames[i].data = getbytes(MAXFRAMESIZE);
     }
     x->framein = 0;
     x->frameout = 0;
     x->maxframes = MAXFRAMES/2;
-    
+
     if (prot)
 	 x->x_tcp = 0;
 
@@ -410,14 +410,14 @@ static void *streamin_new(t_floatarg fportno, t_floatarg prot)
 
 void streamin_tilde_setup(void)
 {
-    streamin_class = class_new(gensym("streamin~"), 
-    	(t_newmethod) streamin_new, (t_method) streamin_free,
-    	sizeof(t_streamin),  0, A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+    streamin_class = class_new(gensym("streamin~"),
+	(t_newmethod) streamin_new, (t_method) streamin_free,
+	sizeof(t_streamin),  0, A_DEFFLOAT,A_DEFFLOAT, A_NULL);
 
     class_addmethod(streamin_class, nullfn, gensym("signal"), 0);
     class_addmethod(streamin_class, (t_method) streamin_dsp, gensym("dsp"), 0);
-    class_addmethod(streamin_class, (t_method) streamin_print, 
+    class_addmethod(streamin_class, (t_method) streamin_print,
 		    gensym("print"), 0);
-    class_addmethod(streamin_class, (t_method) streamin_reset, 
+    class_addmethod(streamin_class, (t_method) streamin_reset,
 		    gensym("reset"),A_DEFFLOAT, 0);
 }

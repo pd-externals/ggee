@@ -87,5 +87,3 @@ void lowshelf_setup(void)
     class_addbang(lowshelf_class,lowshelf_bang);
     class_addfloat(lowshelf_class,lowshelf_float);
 }
-
-

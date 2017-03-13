@@ -21,7 +21,7 @@ typedef struct _elem {
     int w;
     int h;
     int g;
-    int type;    
+    int type;
     char* color;
 } t_element;
 
@@ -60,7 +60,7 @@ static void move_object(void* cv,void* o,int c,int x, int y,int w,int h) {
 }
 
 static void color_object(void* cv,void* o,int c,char* color) {
-     sys_vgui(".x%lx.c itemconfigure %lx%d -fill %s\n", cv, 
+     sys_vgui(".x%lx.c itemconfigure %lx%d -fill %s\n", cv,
 	     o, c,color);
 }
 
@@ -81,15 +81,15 @@ static void gcanvas_draw_element(t_gcanvas *x,int num)
     switch (e->type) {
     case RECT:
         rectangle(glist_getcanvas(x->x_glist),x,num,
-                  x->x_obj.te_xpix + e->x, 
+                  x->x_obj.te_xpix + e->x,
                   x->x_obj.te_ypix + e->y,
-                      e->w, e->h,e->color);                            
+                      e->w, e->h,e->color);
         break;
     case LINE:
         line(glist_getcanvas(x->x_glist),x,num,
-             x->x_obj.te_xpix + e->x, 
+             x->x_obj.te_xpix + e->x,
              x->x_obj.te_ypix + e->y,
-             e->w, e->h,e->color);                            
+             e->w, e->h,e->color);
             break;
     default:
         post("gcanvas: unknown element");
@@ -107,7 +107,7 @@ static void gcanvas_move_element(t_gcanvas *x,int num)
 
 static void gcanvas_delete_element(t_gcanvas *x,int num)
 {
-    delete_object(glist_getcanvas(x->x_glist),x,num); 
+    delete_object(glist_getcanvas(x->x_glist),x,num);
 }
 
 
@@ -115,7 +115,7 @@ static void gcanvas_color_element(t_gcanvas* x,int num,char* color)
 {
     t_element* e = x->x_element[num];
     e->color = color;
-    color_object(glist_getcanvas(x->x_glist),x,num,color); 
+    color_object(glist_getcanvas(x->x_glist),x,num,color);
 }
 
 
@@ -128,12 +128,12 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
      if (firsttime) {
           for (i=0;i<x->x_numelem;i++)
               gcanvas_draw_element(x,i);
-     }     
+     }
      else {
           for (i=0;i<x->x_numelem;i++)
               gcanvas_move_element(x,i);
      }
-     
+
      {
        /* outlets */
 	  int n = 3;
@@ -155,7 +155,7 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 			     onset + IOWIDTH, x->x_obj.te_ypix + x->x_height);
 	  }
 	  /* inlets */
-	  n = 0; 
+	  n = 0;
 	  nplus = (n == 1 ? 1 : n-1);
 	  for (i = 0; i < n; i++)
 	  {
@@ -171,7 +171,7 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 			     glist_getcanvas(glist), x, i,
 			     onset, x->x_obj.te_ypix,
 			     onset + IOWIDTH, x->x_obj.te_ypix + 1);
-	       
+
 	  }
      }
 
@@ -192,7 +192,7 @@ void gcanvas_erase(t_gcanvas* x,t_glist* glist)
 	  sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
      }
 }
-	
+
 
 
 /* ------------------------ gcanvas widgetbehaviour----------------------------- */
@@ -243,7 +243,7 @@ static void gcanvas_delete(t_gobj *z, t_glist *glist)
     canvas_deletelinesfor(glist, x);
 }
 
-       
+
 static void gcanvas_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_gcanvas* x = (t_gcanvas*)z;
@@ -259,7 +259,7 @@ static void gcanvas_save(t_gobj *z, t_binbuf *b)
 {
     t_gcanvas *x = (t_gcanvas *)z;
     binbuf_addv(b, "ssiisii", gensym("#X"),gensym("obj"),
-		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
+		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,
 		gensym("gcanvas"),x->x_width,x->x_height);
     binbuf_addv(b, ";");
 }
@@ -298,9 +298,9 @@ static void gcanvas_click(t_gcanvas *x,
 static int gcanvas_newclick(t_gobj *z, struct _glist *glist,
     int xpix, int ypix, int shift, int alt, int dbl, int doit)
 {
-    	if (doit)
+	if (doit)
 	    gcanvas_click((t_gcanvas *)z, (t_floatarg)xpix, (t_floatarg)ypix,
-	    	(t_floatarg)shift, 0, (t_floatarg)alt,dbl);
+		(t_floatarg)shift, 0, (t_floatarg)alt,dbl);
 
     if (dbl) outlet_float(((t_gcanvas*)z)->out3,1);
     return (1);
@@ -329,7 +329,7 @@ static void gcanvas_rect(t_gcanvas* x,t_symbol* c,float xp,float y,float w,float
 {
     t_element* e = getbytes(sizeof(t_element));
     x->x_element[x->x_numelem++] = e;
-    
+
     e->type = RECT;
     e->x = xp;
     e->y = y;
@@ -364,7 +364,7 @@ static void gcanvas_move(t_gcanvas* x,float num,float xp,float y,float w,float h
         e->w = w;
         e->h = h;
         gcanvas_move_element(x,(int)num);
-    }    
+    }
 }
 
 static void gcanvas_color(t_gcanvas* x,t_symbol* c,float num)
@@ -396,7 +396,7 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
     t_gcanvas *x = (t_gcanvas *)pd_new(gcanvas_class);
 
     x->x_glist = (t_glist*) canvas_getcurrent();
-    
+
     for (i=0;i<MAXELEM;i++)
         x->x_element[i] = NULL;
     x->x_numelem = 0;
@@ -410,7 +410,7 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
               error("gcanvas: wrong argument type");
          else
               x->x_width = atom_getfloat(at++);
-         
+
          if (x->x_width < 0 || x->x_width > 2000) {
               error("gcanvas: unallowed width %f",x->x_width);
               x->x_width = DEFAULTSIZE;
@@ -423,9 +423,9 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
     if (ac-- > 0) {
          if (at->a_type != A_FLOAT)
               error("gcanvas: wrong argument type");
-         else 
+         else
               x->x_height = atom_getfloat(at++);
-         
+
          if (x->x_height < 0 || x->x_height > 2000) {
               error("gcanvas: unallowed height %f",x->x_height);
               x->x_width = DEFAULTSIZE;
@@ -434,14 +434,14 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
 
     x->x_element[0] = getbytes(sizeof(t_element));
     x->x_numelem++;
-    
+
     x->x_element[0]->type = RECT;
     x->x_element[0]->x = 0;
     x->x_element[0]->y = 0;
     x->x_element[0]->w = x->x_width;
     x->x_element[0]->h = x->x_height;
     x->x_element[0]->color = "white";
-   
+
 
     outlet_new(&x->x_obj, &s_float);
     x->out2 = outlet_new(&x->x_obj, &s_float);
@@ -457,24 +457,22 @@ void gcanvas_setup(void)
 				sizeof(t_gcanvas),0, A_GIMME,0);
 
     class_addmethod(gcanvas_class, (t_method)gcanvas_click, gensym("click"),
-    	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
+	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_size, gensym("size"),
-    	A_FLOAT, A_FLOAT, 0);
+	A_FLOAT, A_FLOAT, 0);
 
     class_addmethod(gcanvas_class, (t_method)gcanvas_line, gensym("line"),
-    	A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
+	A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_rect, gensym("rect"),
-    	A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
+	A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_move, gensym("move"),
-    	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
+	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_color, gensym("color"),
-    	A_SYMBOL,A_FLOAT,0);
+	A_SYMBOL,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_deletenum,gensym("delete"),
-    	A_FLOAT,0);
+	A_FLOAT,0);
 
     class_addmethod(gcanvas_class, (t_method)gcanvas_reset,gensym("reset"),0);
     gcanvas_setwidget();
     class_setwidget(gcanvas_class,&gcanvas_widgetbehavior);
 }
-
-

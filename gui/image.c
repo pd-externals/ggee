@@ -240,5 +240,3 @@ void image_setup(void)
     class_setsavefn(image_class,&image_save);
 #endif
 }
-
-

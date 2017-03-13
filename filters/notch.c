@@ -82,8 +82,3 @@ void notch_setup(void)
     class_addbang(notch_class,notch_bang);
     class_addfloat(notch_class,notch_float);
 }
-
-
-
-
-

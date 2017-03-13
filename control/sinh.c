@@ -50,5 +50,3 @@ void sinh_setup(void)
     class_addbang(sinh_class,sinh_bang);
     class_addfloat(sinh_class,sinh_float);
 }
-
-

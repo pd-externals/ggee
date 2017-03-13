@@ -11,5 +11,3 @@ void fatom_setup() {
 
   fatom_setup_common(fatom_class);
 }
-
-

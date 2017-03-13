@@ -65,5 +65,3 @@ void constant_setup(void)
                                0);
     class_addbang(constant_class,constant_bang);
 }
-
-

@@ -73,5 +73,3 @@ void serial_mt_setup(void)
     class_addfloat(serial_mt_class,serial_mt_float);
     class_addmethod(serial_mt_class,(t_method) serial_mt_reset,gensym("reset"),0);
 }
-
-

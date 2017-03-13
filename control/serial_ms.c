@@ -116,5 +116,3 @@ void serial_ms_setup(void)
 
 
 }
-
-

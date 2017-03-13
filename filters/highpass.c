@@ -81,7 +81,3 @@ void highpass_setup(void)
     class_addbang(highpass_class,highpass_bang);
     class_addfloat(highpass_class,highpass_float);
 }
-
-
-
-

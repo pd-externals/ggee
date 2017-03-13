@@ -348,5 +348,3 @@ void button_setup(void) {
     class_setsavefn(button_class,&button_save);
 #endif
 }
-
-

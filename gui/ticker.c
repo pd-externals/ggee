@@ -68,4 +68,3 @@ void ticker_setup() {
     class_setsavefn(ticker_class,&ticker_save);
 #endif
 }
-

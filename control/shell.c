@@ -306,5 +306,3 @@ void shell_setup(void)
 
 
 #endif /* _WIN32 */
-
-

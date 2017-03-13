@@ -31,4 +31,3 @@ clean:
 install:
 	cp $(NAME).pd_* $(INSTALLPATH)
 	install -d  $(PDDIR)/doc/5.reference/$(NAME)-help.pd
-

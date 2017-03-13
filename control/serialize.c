@@ -54,5 +54,3 @@ void serialize_setup(void)
 				sizeof(t_serialize),0, A_DEFFLOAT,0);
     class_addfloat(serialize_class,serialize_float);
 }
-
-

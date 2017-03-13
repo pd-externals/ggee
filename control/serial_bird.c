@@ -261,5 +261,3 @@ void serial_bird_setup(void)
     class_addmethod(serial_bird_class,(t_method) serial_bird_poll,gensym("poll"),0);
     class_addmethod(serial_bird_class,(t_method) serial_bird_mode,gensym("mode"),A_SYMBOL,NULL);
 }
-
-

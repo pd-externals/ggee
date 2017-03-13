@@ -86,5 +86,3 @@ void highshelf_setup(void)
     class_addbang(highshelf_class,highshelf_bang);
     class_addfloat(highshelf_class,highshelf_float);
 }
-
-

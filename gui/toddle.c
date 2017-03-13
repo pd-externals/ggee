@@ -82,8 +82,8 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 		   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
 		   x->x_obj.te_xpos + x->x_width -1,
 		   x->x_obj.te_ypos + x->x_height -1,x);
-	  
-     }     
+
+     }
      else {
 #if 0
 	  sys_vgui(".x%lx.c coords %lxS \
@@ -129,7 +129,7 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 			     onset, x->x_obj.te_ypos + x->x_height - 1,
 			     onset + IOWIDTH, x->x_obj.te_ypos + x->x_height);
 	  }
-	  n = 1; 
+	  n = 1;
 	  nplus = (n == 1 ? 1 : n-1);
 	  for (i = 0; i < n; i++)
 	  {
@@ -145,7 +145,7 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 			     glist_getcanvas(glist), x, i,
 			     onset, x->x_obj.te_ypos,
 			     onset + IOWIDTH, x->x_obj.te_ypos + 1);
-	       
+
 	  }
      }
 
@@ -170,7 +170,7 @@ void toddle_erase(t_toddle* x,t_glist* glist)
 	  sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
      }
 }
-	
+
 
 
 /* ------------------------ toddle widgetbehaviour----------------------------- */
@@ -204,7 +204,7 @@ static void toddle_displace(t_gobj *z, t_glist *glist,
 static void toddle_select(t_gobj *z, t_glist *glist, int state)
 {
      t_toddle *x = (t_toddle *)z;
-     sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist, 
+     sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist,
 	     x, (state? "blue" : BACKGROUNDCOLOR));
 }
 
@@ -222,7 +222,7 @@ static void toddle_delete(t_gobj *z, t_glist *glist)
     canvas_deletelinesfor(glist, x);
 }
 
-       
+
 static void toddle_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_toddle* x = (t_toddle*)z;
@@ -238,7 +238,7 @@ static void toddle_save(t_gobj *z, t_binbuf *b)
 {
     t_toddle *x = (t_toddle *)z;
     binbuf_addv(b, "ssiissii", gensym("#X"), gensym("obj"),
-                (t_int)x->x_obj.te_xpos, (t_int)x->x_obj.te_ypos,  
+                (t_int)x->x_obj.te_xpos, (t_int)x->x_obj.te_ypos,
                 atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
                 x->x_color,x->x_width,x->x_height);
     binbuf_addv(b, ";");
@@ -260,16 +260,16 @@ static void toddle_click(t_toddle *x,
     t_floatarg xpos, t_floatarg ypos, t_floatarg shift, t_floatarg ctrl,
     t_floatarg alt)
 {
-     toddle_bang(x);     
+     toddle_bang(x);
 }
 
-#if (PD_VERSION_MINOR > 31) 
+#if (PD_VERSION_MINOR > 31)
 static int toddle_newclick(t_gobj *z, struct _glist *glist,
     int xpix, int ypix, int shift, int alt, int dbl, int doit)
 {
-    	if (doit)
+	if (doit)
 	    toddle_click((t_toddle *)z, (t_floatarg)xpix, (t_floatarg)ypix,
-	    	(t_floatarg)shift, 0, (t_floatarg)alt);
+		(t_floatarg)shift, 0, (t_floatarg)alt);
 	return (1);
 }
 #endif
@@ -278,7 +278,7 @@ void toddle_float(t_toddle *x,t_floatarg f)
 {
 
      toddle_drawbang(x,x->x_glist,1);
-     
+
      clock_delay(x->x_clock, 100);
      outlet_float(x->x_obj.ob_outlet,f);
 }
@@ -311,8 +311,8 @@ void toddle_color(t_toddle* x,t_symbol* col)
      x->x_color = col;
      toddle_drawbang(x,x->x_glist,1);
      clock_delay(x->x_clock, 100);
-/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang .. 
-       so color black does the same as bang, but doesn't forward the bang 
+/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang ..
+       so color black does the same as bang, but doesn't forward the bang
 */
 }
 
@@ -325,8 +325,8 @@ static void toddle_setwidget(void)
     toddle_widgetbehavior.w_deletefn =   toddle_delete;
     toddle_widgetbehavior.w_visfn =   toddle_vis;
     toddle_widgetbehavior.w_clickfn = toddle_newclick;
-#if (PD_MINOR_VERSION < 37) 
-    toddle_widgetbehavior.w_propertiesfn = NULL; 
+#if (PD_MINOR_VERSION < 37)
+    toddle_widgetbehavior.w_propertiesfn = NULL;
     toddle_widgetbehavior.w_savefn =   toddle_save;
 #endif
 
@@ -370,13 +370,13 @@ void toddle_setup(void)
     class_addfloat(toddle_class,toddle_float);
 
     class_addmethod(toddle_class, (t_method)toddle_click, gensym("click"),
-    	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
+	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
 
     class_addmethod(toddle_class, (t_method)toddle_size, gensym("size"),
-    	A_FLOAT, A_FLOAT, 0);
+	A_FLOAT, A_FLOAT, 0);
 
     class_addmethod(toddle_class, (t_method)toddle_color, gensym("color"),
-    	A_SYMBOL, 0);
+	A_SYMBOL, 0);
 
     class_addmethod(toddle_class, (t_method)toddle_on, gensym("on"), 0);
 
@@ -386,5 +386,3 @@ void toddle_setup(void)
     toddle_setwidget();
     class_setwidget(toddle_class,&toddle_widgetbehavior);
 }
-
-

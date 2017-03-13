@@ -222,5 +222,3 @@ void hlshelf_setup(void)
     class_addbang(hlshelf_class,hlshelf_bang);
     class_addfloat(hlshelf_class,hlshelf_float);
 }
-
-

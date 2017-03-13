@@ -13,7 +13,7 @@ NTDLLS = *.dll
 
 PDNTCFLAGS = /W3 /WX /DNT /DPD /nologo
 
-PDNTINCLUDE = /I. /I..\..\pd\src 
+PDNTINCLUDE = /I. /I..\..\pd\src
 ProgramFiles = C:\Program Files
 PDNTLDIR = "$(ProgramFiles)\Microsoft Visual Studio\Vc98\lib"
 #PDNTLDIR = "C:\Programme\Msdev\Vc98\lib"
@@ -23,14 +23,14 @@ PDNTLIB = $(PDNTLDIR)\libc.lib \
 	$(PDNTLDIR)\wsock32.lib \
 	$(PDNTLDIR)\kernel32.lib \
 	$(PDNTLDIR)\uuid.lib \
-	..\..\pd\bin\pd.lib 
+	..\..\pd\bin\pd.lib
 
-nt: $(NTOBJECTS) 
+nt: $(NTOBJECTS)
 	-link /dll  $(PDNTLIB) vbap.obj /export:vbap_setup
 
 
 clean:
-	del *.obj 
+	del *.obj
 	del *.dll
 
 
@@ -38,7 +38,3 @@ clean:
 	-cl $(PDNTCFLAGS) $(PDNTINCLUDE) /c $*.c
 
 .obj.dll:
-
-
-	
-

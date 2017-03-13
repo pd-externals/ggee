@@ -274,27 +274,3 @@ int read_ls_conf(t_vbap* x,FILE *fp ){
      }
      return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

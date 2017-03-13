@@ -467,4 +467,3 @@ static int envgen_newclick(t_envgen *x, struct _glist *glist,
      }
      return (1);
 }
-

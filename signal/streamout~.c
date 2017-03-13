@@ -72,7 +72,7 @@ static void streamout_tempbuf(t_streamout *x,int size) {
 
      if (x->cbuf && x->tbufsize) freebytes(x->cbuf,x->tbufsize);
      x->tbufsize=size*sizeof(float)*x->x_tag.channels;
-     if (!x->cbuf) 
+     if (!x->cbuf)
 	  x->cbuf = getbytes(x->tbufsize);
      x->nsamples = size;
 }
@@ -83,9 +83,9 @@ static void streamout_disconnect(t_streamout *x)
 {
     if (x->x_fd >= 0)
     {
-    	sys_closesocket(x->x_fd);
-    	x->x_fd = -1;
-    	outlet_float(x->x_obj.ob_outlet, 0);
+	sys_closesocket(x->x_fd);
+	x->x_fd = -1;
+	outlet_float(x->x_obj.ob_outlet, 0);
     }
 }
 
@@ -101,7 +101,7 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
     if (!fportno) x->portno = 4267;
     else x->portno = (int) fportno;
     x->x_tag.count = 0;
-    
+
 
     if (x->x_fd >= 0)
     {
@@ -114,7 +114,7 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
     sockfd = socket(AF_INET, x->x_protocol, 0);
     if (sockfd < 0)
     {
-	 post("streamout: Connection to %s on port %d failed",hostname->s_name,portno); 
+	 post("streamout: Connection to %s on port %d failed",hostname->s_name,portno);
 	 sys_sockerror("socket");
 	 return;
     }
@@ -137,9 +137,9 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
        because it might block */
     if (connect(sockfd, (struct sockaddr *) &server, sizeof (server)) < 0)
     {
-    	sys_sockerror("connecting stream socket");
-    	sys_closesocket(sockfd);
-    	return;
+	sys_sockerror("connecting stream socket");
+	sys_closesocket(sockfd);
+	return;
     }
 
     post("connected host %s on port %d",hostname->s_name, portno);
@@ -155,13 +155,13 @@ static t_int *streamout_perform(t_int *w)
     t_streamout* x = (t_streamout*) (w[1]);
     t_float *in[4];
     char* bp;
-    int n; 
+    int n;
     int length;
     int sent = 0;
     int i;
     int chans = x->x_tag.channels;
 
-    
+
     for (i=0;i<chans;i++)
       in[i] =  (t_float *)(w[2+i]);
     n = (int)(w[2+i]);
@@ -179,7 +179,7 @@ static t_int *streamout_perform(t_int *w)
 	 float* cibuf =(float*) x->cbuf;
 	 bp = (char*) x->cbuf;
 	 for (i=0;i<chans;i++)
-	   while (n--) 
+	   while (n--)
 	     *cibuf++ = *(in[i]++);
 	 break;
     }
@@ -187,7 +187,7 @@ static t_int *streamout_perform(t_int *w)
 	 short* cibuf =(short*) x->cbuf;
 	 bp = (char*) x->cbuf;
 	 for (i=0;i<chans;i++)
-	   while (n--) 
+	   while (n--)
 	     *cibuf++ = (short) 32767.0 * *in[i]++;
 	 break;
     }
@@ -195,7 +195,7 @@ static t_int *streamout_perform(t_int *w)
 	 unsigned char*  cbuf = (char*)  x->cbuf;
 	 bp = (char*) x->cbuf;
 	 for (i=0;i<chans;i++)
-	   while (n--) 
+	   while (n--)
 	     *cbuf++ = (unsigned char)(127. * (1.0 + *in[i]++));
 	 break;
     }
@@ -205,7 +205,7 @@ static t_int *streamout_perform(t_int *w)
 
     if (x->x_fd > 0) {
 	 /* send the format tag */
-	 
+
 #ifdef __APPLE__
 		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),SO_NOSIGPIPE) < 0)
 #elif defined unix
@@ -218,9 +218,9 @@ static t_int *streamout_perform(t_int *w)
 	      streamout_disconnect(x);
 	      return (w+4);
 	 }
-	 
+
 	 /* send the buffer */
-	 
+
 	 for (sent = 0; sent < length;) {
 	      int res = 0;
 #ifdef __APPLE__
@@ -271,7 +271,7 @@ static void streamout_dsp(t_streamout *x, t_signal **sp)
 
 
 
-static void streamout_format(t_streamout *x,t_symbol* form) 
+static void streamout_format(t_streamout *x,t_symbol* form)
 {
     if (!strncmp(form->s_name,"float",5))
       x->x_tag.format = (int) SF_FLOAT;
@@ -283,18 +283,18 @@ static void streamout_format(t_streamout *x,t_symbol* form)
       x->x_tag.format = (int) SF_8BIT;
 
 
-    post ("format set to %s", form->s_name); 
+    post ("format set to %s", form->s_name);
 }
 
 
 
-static void streamout_host(t_streamout *x,t_symbol* host) 
+static void streamout_host(t_streamout *x,t_symbol* host)
 {
      if (host != &s_)
 	  x->hostname = host;
 
      if (x->x_fd >= 0) {
-	  streamout_connect(x,x->hostname,(float) x->portno); 
+	  streamout_connect(x,x->hostname,(float) x->portno);
      }
 }
 
@@ -347,11 +347,11 @@ static void streamout_free(t_streamout* x)
 void streamout_tilde_setup(void)
 {
     streamout_class = class_new(gensym("streamout~"), (t_newmethod) streamout_new, (t_method) streamout_free,
-    	sizeof(t_streamout), 0, A_DEFSYM,A_DEFFLOAT, 0);
+	sizeof(t_streamout), 0, A_DEFSYM,A_DEFFLOAT, 0);
     class_addmethod(streamout_class, (t_method) streamout_connect,
-    	gensym("connect"), A_SYMBOL, A_DEFFLOAT, 0);
+	gensym("connect"), A_SYMBOL, A_DEFFLOAT, 0);
     class_addmethod(streamout_class, (t_method) streamout_disconnect,
-    	gensym("disconnect"), 0);
+	gensym("disconnect"), 0);
     class_addfloat(streamout_class,streamout_float);
     class_addmethod(streamout_class, nullfn, gensym("signal"), 0);
     class_addmethod(streamout_class, (t_method) streamout_dsp, gensym("dsp"), 0);

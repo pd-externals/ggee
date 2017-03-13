@@ -81,6 +81,3 @@ void bandpass_setup(void)
     class_addbang(bandpass_class,bandpass_bang);
     class_addfloat(bandpass_class,bandpass_float);
 }
-
-
-

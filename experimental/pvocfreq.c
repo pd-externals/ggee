@@ -110,5 +110,3 @@ void shuffle_setup(void)
 
     class_addfloat(shuffle_class,shuffle_float);
 }
-
-

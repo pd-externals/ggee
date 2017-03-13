@@ -82,8 +82,3 @@ void equalizer_setup(void)
     class_addbang(equ_class,equ_bang);
     class_addfloat(equ_class,equ_float);
 }
-
-
-
-
-

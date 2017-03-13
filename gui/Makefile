@@ -24,9 +24,9 @@ PDNTLIB = $(PDNTLDIR)\libc.lib \
 	$(PDNTLDIR)\wsock32.lib \
 	$(PDNTLDIR)\kernel32.lib \
 	$(PDNTLDIR)\uuid.lib \
-	..\..\pd\bin\pd.lib 
+	..\..\pd\bin\pd.lib
 
-nt: $(NTOBJECTS) 
+nt: $(NTOBJECTS)
 	-link /dll  $(PDNTLIB) envgen.obj /export:envgen_setup
 	-link /dll  $(PDNTLIB) slider.obj /export:slider_setup
 	-link /dll  $(PDNTLIB) state.obj /export:state_setup
@@ -35,7 +35,7 @@ nt: $(NTOBJECTS)
 	-copy slider.dll hslider.dll
 
 clean:
-	del *.obj 
+	del *.obj
 	del *.dll
 
 
@@ -43,7 +43,3 @@ clean:
 	-cl $(PDNTCFLAGS) $(PDNTINCLUDE) /c $*.c
 
 .obj.dll:
-
-
-	
-
