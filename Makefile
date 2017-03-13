@@ -55,8 +55,8 @@ class.sources = \
     signal/streamout~.c \
     $(nada)
 
-class.sources += \
-    gui/fatom.c
+#class.sources += \
+#    gui/fatom.c
 
 datafiles = \
  $(wildcard */*-help.pd) \
