@@ -4,7 +4,7 @@
 /*
 
  These filter coefficients computations are taken from
- http://www.harmony-central.com/Computer/Programming/Audio-EQ-Cookbook.txt  
+ http://www.harmony-central.com/Computer/Programming/Audio-EQ-Cookbook.txt
 
  written by Robert Bristow-Johnson
 
@@ -41,7 +41,7 @@ void lowshelf_bang(t_rbjfilter *x)
      t_float a2 =      ((A+1) + (A-1)*cs - beta*sn);
 
 /*     post("bang %f %f %f",x->x_freq, x->x_gain, x->x_bw); */
-     
+
      if (!check_stability(-a1/a0,-a2/a0,b0/a0,b1/a0,b2/a0)) {
        post("lowshelf: filter unstable -> resetting");
        a0=1.;a1=0.;a2=0.;
@@ -53,7 +53,7 @@ void lowshelf_bang(t_rbjfilter *x)
      SETFLOAT(at+2,b0/a0);
      SETFLOAT(at+3,b1/a0);
      SETFLOAT(at+4,b2/a0);
-     
+
      outlet_list(x->x_obj.ob_outlet,&s_list,5,at);
 }
 
@@ -71,7 +71,7 @@ static void *lowshelf_new(t_floatarg f,t_floatarg g,t_floatarg bw)
 
     x->x_rate = 44100.0;
     outlet_new(&x->x_obj,&s_float);
-    floatinlet_new(&x->x_obj, &x->x_gain);    
+    floatinlet_new(&x->x_obj, &x->x_gain);
     floatinlet_new(&x->x_obj, &x->x_bw);
     if (f > 0.) x->x_freq = f;
     if (bw > 0.) x->x_bw = bw;

@@ -10,7 +10,7 @@ static void slider_save(t_gobj *z, t_binbuf *b)
     t_fatom *x = (t_fatom *)z;
 
     binbuf_addv(b, "ssiisiii", gensym("#X"), gensym("obj"),
-                x->x_obj.te_xpix, x->x_obj.te_ypix ,  
+                x->x_obj.te_xpix, x->x_obj.te_ypix ,
                 atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
                 x->x_max,x->x_min,x->x_width);
     binbuf_addv(b, ";");
@@ -26,7 +26,7 @@ static void *slider_new(t_floatarg max, t_floatarg min, t_floatarg h)
 
 
 t_widgetbehavior   slider_widgetbehavior;
- 
+
 
 void slider_setup() {
     slider_class = class_new(gensym("slider"), (t_newmethod)slider_new, 0,
@@ -43,7 +43,7 @@ void slider_setup() {
   slider_widgetbehavior.w_propertiesfn = NULL,
 #endif
   slider_widgetbehavior.w_clickfn =   NULL,
- 
+
 	fatom_setup_common(slider_class);
     class_setwidget(slider_class,&slider_widgetbehavior);
 #if PD_MINOR_VERSION >= 37

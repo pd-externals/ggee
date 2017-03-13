@@ -37,7 +37,7 @@ typedef struct _hlshelf
 
 
 int hlshelf_check_stability(t_float fb1,
-			    t_float fb2, 
+			    t_float fb2,
 			    t_float ff1,
 			    t_float ff2,
 			    t_float ff3)
@@ -69,7 +69,7 @@ void hlshelf_check(t_hlshelf *x)
 {
 
      if(x->s_gain0 - x->s_gain1 > MAX_GAIN) {
-	  x->s_gain0 = x->s_gain1 + MAX_GAIN; 
+	  x->s_gain0 = x->s_gain1 + MAX_GAIN;
 	  post("setting gain0 to %f",x->s_gain0);
      }
 
@@ -80,17 +80,17 @@ void hlshelf_check(t_hlshelf *x)
      }
 
      if(x->s_gain2 - x->s_gain1 > MAX_GAIN) {
-	  x->s_gain2 = x->s_gain1 + MAX_GAIN; 
+	  x->s_gain2 = x->s_gain1 + MAX_GAIN;
 	  post("setting gain2 to %f",x->s_gain2);
      }
 
   /* constrain: 0 <= x->s_ltransfq < x->s_htransfq. */
      x->s_ltransfq = (x->s_ltransfq < x->s_htransfq) ? x->s_ltransfq : x->s_htransfq - 0.5f;
-     
+
      if (x->s_ltransfq < 0) x->s_ltransfq = 0.0f;
-     
+
      x->s_lradians = M_PI * x->s_ltransfq / x->s_rate;
-     x->s_hradians= M_PI * (0.5f - (x->s_htransfq / x->s_rate));	
+     x->s_hradians= M_PI * (0.5f - (x->s_htransfq / x->s_rate));
 
 }
 
@@ -103,7 +103,7 @@ void hlshelf_bang(t_hlshelf *x)
      double xf;
 
      hlshelf_check(x);
-     
+
      /* low shelf */
      xf = 0.5 * 0.115129255 * (double)(x->s_gain0 - x->s_gain1); /* ln(10) / 20 = 0.115129255 */
      if(xf < -200.) /* exp(x) -> 0 */
@@ -118,12 +118,12 @@ void hlshelf_bang(t_hlshelf *x)
 	  double e = exp(xf);
 	  double r = t / e;
 	  double kr = t * e;
-	  
-	  a1 = (r - 1) / (r + 1);		
+
+	  a1 = (r - 1) / (r + 1);
 	  b1 = (kr - 1) / (kr + 1);
 	  g1 = (kr + 1) / (r + 1);
      }
-     
+
      /* high shelf */
      xf = 0.5 * 0.115129255 * (double)(x->s_gain2 - x->s_gain1); /* ln(10) / 20 = 0.115129255 */
      if(xf < -200.) /* exp(x) -> 0 */
@@ -138,12 +138,12 @@ void hlshelf_bang(t_hlshelf *x)
 	  double e = exp(xf);
 	  double r = t / e;
 	  double kr = t * e;
-	  
+
 	  a2 = (1 - r) / (1 + r);
 	  b2 = (1 - kr) / (1 + kr);
 	  g2 = (1 + kr) / (1 + r);
      }
-     
+
      /* form product */
      c0 = g1 * g2 * (float)(exp((double)(x->s_gain1) * 0.05f * 2.302585093f));  ;
      c1 = a1 + a2;
@@ -163,7 +163,7 @@ void hlshelf_bang(t_hlshelf *x)
      SETFLOAT(at+2,d0/d0);
      SETFLOAT(at+3,d1/d0);
      SETFLOAT(at+4,d2/d0);
-     
+
      outlet_list(x->x_obj.ob_outlet,&s_list,5,at);
 }
 
@@ -188,18 +188,18 @@ static void *hlshelf_new(t_symbol* s,t_int argc, t_atom* at)
     f2 = atom_getfloat(at);
 
     if ((f1 == 0.0f && f2 == 0.0f) || f1 > f2){ /* all gains = 0db */
-	 f1 = 150.0f;	
+	 f1 = 150.0f;
 	 f2 = 5000.0f;
     }
 
     if (f1 < 0) f1 = 0.0f;
     if (f2 > SRATE) f2 = .5f*SRATE;
- 
+
     x->s_rate = SRATE;		/* srate default  */
     x->s_gain0 = k0;
     x->s_gain1 = k1;
     x->s_gain2 = k2;
-    
+
     x->s_ltransfq = 0.0f;
     x->s_htransfq = SRATE/2;
 

@@ -71,7 +71,7 @@ static void *unwonk_new(t_symbol *s, int argc, t_atom *argv)
 
     u->u_type =  A_GIMME;
     u->u_outlet = outlet_new(&x->x_obj, &s_list);
-    
+
     return (x);
 }
 
@@ -102,7 +102,7 @@ static void unwonk_list(t_unwonk *x, t_symbol *s, int argc, t_atom *argv)
     	    outlet_symbol(u->u_outlet, ap->a_w.w_symbol);
     	else outlet_pointer(u->u_outlet, ap->a_w.w_gpointer);
     }
-    
+
 
 }
 

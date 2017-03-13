@@ -32,7 +32,7 @@ static void *tabwrite4_tilde_new(t_symbol *s)
     x->x_2 = 0.;
     x->x_3 = 0.;
     inlet_new(&x->x_obj, &x->x_obj.ob_pd, &s_signal, &s_signal);
-    //outlet_new(&x->x_obj, &s_signal);       
+    //outlet_new(&x->x_obj, &s_signal);
     return (x);
 }
 
@@ -49,7 +49,7 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
     t_tabwrite4_tilde *x = (t_tabwrite4_tilde *)(w[1]);
     t_sample *in1 = (t_sample *)(w[2]);
     t_sample *in2 = (t_sample *)(w[3]);
-    int n = (int)(w[4]);    
+    int n = (int)(w[4]);
     t_sample* end2 = in2 + n;
 
     t_word *buf = x->x_vec;
@@ -99,7 +99,7 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
             iindex += maxindex+1;
         }
         else if (iindex > maxindex) {
-            iindex -= maxindex;          
+            iindex -= maxindex;
         }
 
         cminusb = c-b;
@@ -117,15 +117,15 @@ static t_int *tabwrite4_tilde_perform(t_int *w)
     x->x_3 = d;
 
 #if 0
-    buf[maxindex-2].w_float = buf[maxindex-3].w_float*0.5; 
-    buf[maxindex-1].w_float = buf[maxindex-2].w_float*0.5; 
-    buf[maxindex].w_float = buf[maxindex-1].w_float*0.5; 
-    buf[2].w_float = buf[3].w_float*0.5; 
-    buf[1].w_float = buf[2].w_float*0.5; 
-    buf[0].w_float = buf[1].w_float*0.5; 
+    buf[maxindex-2].w_float = buf[maxindex-3].w_float*0.5;
+    buf[maxindex-1].w_float = buf[maxindex-2].w_float*0.5;
+    buf[maxindex].w_float = buf[maxindex-1].w_float*0.5;
+    buf[2].w_float = buf[3].w_float*0.5;
+    buf[1].w_float = buf[2].w_float*0.5;
+    buf[0].w_float = buf[1].w_float*0.5;
 #endif
 
-    if (wraparound)  tabwrite4_tilde_redraw(x);    
+    if (wraparound)  tabwrite4_tilde_redraw(x);
 
     return (w+5);
 }

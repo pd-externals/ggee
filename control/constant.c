@@ -32,7 +32,7 @@ void constant_bang(t_constant *x)
 static void *constant_new(t_symbol* s)
 {
     t_constant *x = (t_constant *)pd_new(constant_class);
-    
+
     if (s == &s_)
         x->x_constant = M_PI;
     else if (!strcmp(s->s_name,"pi"))
@@ -61,7 +61,7 @@ void constant_setup(void)
                                0,
                                sizeof(t_constant),
                                0,
-                               A_DEFSYMBOL, 
+                               A_DEFSYMBOL,
                                0);
     class_addbang(constant_class,constant_bang);
 }

@@ -83,14 +83,14 @@ void qread_next(t_qread *x)
 
 
      clock_delay(x->x_clock,delay);
-     
+
      outlet_list(x->x_obj.ob_outlet, gensym(name), ac, at);
 }
 
 static void qread_bang(t_qread *x)
 {
      if (!x->x_file) return;
-     
+
      fseek(x->x_file,0,SEEK_SET);
      clock_delay(x->x_clock,0);
 

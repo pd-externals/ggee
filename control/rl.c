@@ -53,7 +53,7 @@ static void *lreceive_new(t_symbol *s)
 {
     t_lreceive *x = (t_lreceive *)pd_new(lreceive_class);
     char mysym[MAXPDSTRING];
-    
+
     sprintf(mysym,"%s%p",s->s_name,canvas_getcurrent());
     x->x_sym = gensym(mysym);
     pd_bind(&x->x_obj.ob_pd, x->x_sym);
@@ -68,7 +68,7 @@ static void lreceive_free(t_lreceive *x)
 
 void rl_setup(void)
 {
-    lreceive_class = class_new(gensym("receivelocal"), (t_newmethod)lreceive_new, 
+    lreceive_class = class_new(gensym("receivelocal"), (t_newmethod)lreceive_new,
     	(t_method)lreceive_free, sizeof(t_lreceive), CLASS_NOINLET, A_SYMBOL, 0);
     class_addcreator((t_newmethod)lreceive_new, gensym("rl"), A_DEFSYM, 0);
     class_addbang(lreceive_class, lreceive_bang);

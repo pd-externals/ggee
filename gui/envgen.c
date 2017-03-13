@@ -8,7 +8,7 @@
 
 #define NONE    0
 #define ATTACK  1
-#define SUSTAIN -1 
+#define SUSTAIN -1
 #define STATES  100
 
 #include "envgen.h"
@@ -28,7 +28,7 @@ char dumpy[2000];
 
 #include <stdio.h>
 
-/* 
+/*
    envgen crashes frequently when reallocating memory ....
    I really don't know why, it crashes during resizebytes,
    which means it is unable to realloc() the memory ?????
@@ -40,11 +40,11 @@ void envgen_resize(t_envgen* x,int ns)
 {
     DEBUG(post("envgen_resize"););
      if (ns > x->args) {
-	  int newargs = ns*sizeof(t_float); 
+	  int newargs = ns*sizeof(t_float);
 
 	  x->duration = resizebytes(x->duration,x->args*sizeof(t_float),newargs);
 	  x->finalvalues = resizebytes(x->finalvalues,x->args*sizeof(t_float),newargs);
-	  x->args = ns;  
+	  x->args = ns;
      }
 }
 
@@ -82,7 +82,7 @@ static void envgen_dump(t_envgen* e)
 	  argc++;
      }
      outlet_list(e->out2,&s_list,argc,(t_atom*)&argv);
-     
+
 }
 
 void envgen_init(t_envgen *x,int argc,t_atom* argv)
@@ -110,12 +110,12 @@ void envgen_init(t_envgen *x,int argc,t_atom* argv)
      for (;argc > 0;argc--) {
 	  tdur += atom_getfloat(argv++);
 	  DEBUG(post("dur =%f",tdur););
-	  *dur++ = tdur; 
+	  *dur++ = tdur;
 	  argc--;
 	  if (argc > 0)
-	       *val++ = atom_getfloat(argv++); 
+	       *val++ = atom_getfloat(argv++);
 	  else
-	       *val++ = 0; 
+	       *val++ = 0;
       DEBUG(post("val =%f",*(val-1)););
 
      }
@@ -157,9 +157,9 @@ void envgen_float(t_envgen *x, t_floatarg f)
 	  return;
      }
 
-     val = x->finalvalues[state-1] + 
+     val = x->finalvalues[state-1] +
 		  (f - x->duration[state-1])*
-		  (x->finalvalues[state] - x->finalvalues[state-1])/ 
+		  (x->finalvalues[state] - x->finalvalues[state-1])/
 		  (x->duration[state] - x->duration[state-1]);
 
      val *= (x->max - x->min);
@@ -208,7 +208,7 @@ void envgen_release(t_envgen* x) {
 static void envgen_sustain(t_envgen *x, t_floatarg f)
 {
     DEBUG(post("envgen_sustain"););
-     if (f > 0 && f < x->last_state) 
+     if (f > 0 && f < x->last_state)
         x->sustain_state = f;
      else
 		 pd_error(x,"sustain value not betweem 0 and %f, ignoring message", x->last_state);
@@ -255,20 +255,20 @@ static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
 {
     DEBUG(post("envgen_new"););
      t_envgen *x = (t_envgen *)pd_new(envgen_class);
-     
+
      x->args = STATES;
      x->finalvalues = getbytes( x->args*sizeof(t_float));
      x->duration = getbytes( x->args*sizeof(t_float));
      DEBUG(post("finalvalues %lx",x->finalvalues););
-     
+
      /* widget */
-     
+
      x->w.grabbed = 0;
      x->resizing = 0;
      x->resizeable = 1;
-     
+
      x->w.glist = (t_glist*) canvas_getcurrent();
-     
+
      x->w.width = 200;
      if (argc) x->w.width = atom_getfloat(argv++),argc--;
      x->w.height = 140;
@@ -303,16 +303,16 @@ static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
 	  SETFLOAT(a+3,50);
 	  SETFLOAT(a+4,0);
 	  envgen_init(x,5,a);
-     }	 
-     
+     }
+
      x->x_val = 0.0;
      x->x_state = NONE;
      x->sustain_state = SUSTAIN;
      x->x_freeze = 0;
-     
+
      outlet_new(&x->x_obj, &s_float);
      x->out2 = outlet_new(&x->x_obj, &s_float);
-     
+
      x->x_clock = clock_new(x, (t_method) envgen_tick);
      return (x);
 }

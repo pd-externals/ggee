@@ -1,7 +1,7 @@
 
 ggee is a library by Guenter Geiger with five sections: control, experimental,
 filters, gui, and signal.
- 
+
  * objects for controlling things: constant rl serial_ms sl getdir rtout
    serial_mt stripdir inv serial_bird shell unserialize qread serialize sinh
    unwonk

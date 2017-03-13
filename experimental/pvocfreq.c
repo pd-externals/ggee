@@ -38,14 +38,14 @@ static t_int *shuffle_perform(t_int *w)
      if (x->x <= 0) {
 	  while (n--) {
 	       *out++ = *in1++;
-	  }    
+	  }
 	  return w+6;
      }
 
      if (x->x < 0.5) {
 	  t_int index = 1/x->x;
 	  while (n--) {
-	       if (n%index){ 
+	       if (n%index){
 		    *out++ = *in1++;
 		    in2++;
 	       }
@@ -60,14 +60,14 @@ static t_int *shuffle_perform(t_int *w)
      if (x->x > 1.0) {
 	  while (n--) {
 	       *out++ = *in2++;
-	  }    
+	  }
 	  return w+6;
      }
 
      if (x->x >= 0.5) {
 	  t_int index = 1/(1.0- x->x);
 	  while (n--) {
-	       if (n%index) { 
+	       if (n%index) {
 		    *out++ = *in2++;
 		    in1++;
 	       }
@@ -84,7 +84,7 @@ static t_int *shuffle_perform(t_int *w)
 
 static void shuffle_dsp(t_shuffle *x, t_signal **sp)
 {
-	  dsp_add(shuffle_perform, 5, x, sp[0]->s_vec, 
+	  dsp_add(shuffle_perform, 5, x, sp[0]->s_vec,
 		  sp[1]->s_vec,sp[2]->s_vec, sp[0]->s_n);
 
 }
@@ -104,10 +104,10 @@ void shuffle_setup(void)
 {
     shuffle_class = class_new(gensym("shuffle~"), (t_newmethod)shuffle_new, 0,
 				sizeof(t_shuffle), 0,0);
-    
+
     class_addmethod(shuffle_class, nullfn, gensym("signal"), 0);
     class_addmethod(shuffle_class, (t_method) shuffle_dsp, gensym("dsp"), 0);
-    
+
     class_addfloat(shuffle_class,shuffle_float);
 }
 

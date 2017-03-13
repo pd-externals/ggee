@@ -49,7 +49,7 @@ static void *unserialize_new(t_floatarg f)
 
 void unserialize_setup(void)
 {
-    unserialize_class = class_new(gensym("unserialize"), (t_newmethod)unserialize_new, 
+    unserialize_class = class_new(gensym("unserialize"), (t_newmethod)unserialize_new,
 				  0,sizeof(t_unserialize),0, A_DEFFLOAT,0);
     class_addfloat(unserialize_class,unserialize_float);
 }

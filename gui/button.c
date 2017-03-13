@@ -10,7 +10,7 @@
 #pragma warning( disable : 4305 )
 #endif
 
-#ifndef IOWIDTH 
+#ifndef IOWIDTH
 #define IOWIDTH 4
 #endif
 
@@ -55,7 +55,7 @@ static void draw_inlets(t_button *x, t_glist *glist, int firsttime, int nin, int
 			onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 2,
 			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height-1);
      }
-     n = nout; 
+     n = nout;
      nplus = (n == 1 ? 1 : n-1);
      for (i = 0; i < n; i++)
      {
@@ -71,7 +71,7 @@ static void draw_inlets(t_button *x, t_glist *glist, int firsttime, int nin, int
 			glist_getcanvas(glist), x, i,
 			onset, text_ypix(&x->x_obj, glist),
 			onset + IOWIDTH, text_ypix(&x->x_obj, glist)+5);
-	  
+
      }
      DEBUG(post("draw inlet end");)
 }
@@ -88,7 +88,7 @@ static void draw_handle(t_button *x, t_glist *glist, int firsttime) {
 	     x);
   else
     sys_vgui(".x%lx.c coords %lxhandle %d %d %d %d\n",
-	     glist_getcanvas(glist), x, 
+	     glist_getcanvas(glist), x,
 	     onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 12,
 	     onset + IOWIDTH-2, text_ypix(&x->x_obj, glist) + x->x_rect_height-4);
 }
@@ -124,13 +124,13 @@ static void button_drawme(t_button *x, t_glist *glist, int firsttime)
      if (firsttime) {
        DEBUG(post("glist %lx canvas %lx",x->x_glist,canvas);)
 	 //       if (x->x_glist != canvas) {
-	 create_widget(x,glist);	       
+	 create_widget(x,glist);
 	 x->x_glist = canvas;
 	 //       }
-       sys_vgui(".x%lx.c create window %d %d -anchor nw -window .x%lx.c.s%lx -tags %lxS\n", 
+       sys_vgui(".x%lx.c create window %d %d -anchor nw -window .x%lx.c.s%lx -tags %lxS\n",
 		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),x->x_glist,x,x);
-              
-     }     
+
+     }
      else {
        sys_vgui(".x%lx.c coords %lxS \
 %d %d\n",
@@ -153,12 +153,12 @@ static void button_erase(t_button* x,t_glist* glist)
      sys_vgui(".x%lx.c delete %lxS\n",glist_getcanvas(glist), x);
 
      /* inlets and outlets */
-     
+
      sys_vgui(".x%lx.c delete %lxi%d\n",glist_getcanvas(glist),x,0);
      sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,0);
      sys_vgui(".x%lx.c delete  %lxhandle\n",glist_getcanvas(glist),x,0);
 }
-	
+
 
 
 /* ------------------------ button widgetbehaviour----------------------------- */
@@ -191,7 +191,7 @@ static void button_displace(t_gobj *z, t_glist *glist,
 	       glist_getcanvas(glist), x,
 	       text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)-1,
 	       text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height-2);
-      
+
       button_drawme(x, glist, 0);
       canvas_fixlinesfor(glist,(t_text*) x);
     }
@@ -232,7 +232,7 @@ static void button_delete(t_gobj *z, t_glist *glist)
     canvas_deletelinesfor(glist, x);
 }
 
-       
+
 static void button_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_button* s = (t_button*)z;
@@ -259,21 +259,21 @@ void button_size(t_button* x,t_floatarg w,t_floatarg h) {
 
 void button_color(t_button* x,t_symbol* col)
 {
-/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang .. 
-       so color black does the same as bang, but doesn't forward the bang 
+/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang ..
+       so color black does the same as bang, but doesn't forward the bang
 */
 }
 
 static void button_bang(t_button* x)
 {
   sys_vgui(".x%lx.c.s%lx flash\n",x->x_glist,x);
-  outlet_bang(x->x_obj.ob_outlet); 
+  outlet_bang(x->x_obj.ob_outlet);
 }
 
 
 static void button_b(t_button* x)
 {
-  outlet_bang(x->x_obj.ob_outlet); 
+  outlet_bang(x->x_obj.ob_outlet);
 }
 
 
@@ -284,7 +284,7 @@ static void button_save(t_gobj *z, t_binbuf *b)
     t_button *x = (t_button *)z;
 
     binbuf_addv(b, "ssiiss", gensym("#X"), gensym("obj"),
-                x->x_obj.te_xpix, x->x_obj.te_ypix ,  
+                x->x_obj.te_xpix, x->x_obj.te_ypix ,
                 atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
                 x->x_text);
     binbuf_addv(b, ";");

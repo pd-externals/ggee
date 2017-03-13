@@ -1,7 +1,7 @@
 /* ------------------------ fatom ----------------------------- */
 
 #define x_val a_pos.a_w.w_float
-#define DEBUG(x) 
+#define DEBUG(x)
 
 #include <string.h>
 #include <stdio.h>
@@ -51,7 +51,7 @@ static void draw_inlets(t_fatom *x, t_glist *glist, int firsttime, int nin, int 
 			onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 1,
 			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height);
      }
-     n = nout; 
+     n = nout;
      nplus = (n == 1 ? 1 : n-1);
      for (i = 0; i < n; i++)
      {
@@ -67,7 +67,7 @@ static void draw_inlets(t_fatom *x, t_glist *glist, int firsttime, int nin, int 
 			glist_getcanvas(glist), x, i,
 			onset, text_ypix(&x->x_obj, glist),
 			onset + IOWIDTH, text_ypix(&x->x_obj, glist) + 1);
-	  
+
      }
      DEBUG(post("draw inlet end");)
 }
@@ -84,7 +84,7 @@ static void draw_handle(t_fatom *x, t_glist *glist, int firsttime) {
 	     x);
   else
     sys_vgui(".x%lx.c coords %lxhandle %d %d %d %d\n",
-	     glist_getcanvas(glist), x, 
+	     glist_getcanvas(glist), x,
 	     onset, text_ypix(&x->x_obj, glist) + x->x_rect_height - 12,
 	     onset + IOWIDTH, text_ypix(&x->x_obj, glist) + x->x_rect_height-4);
 }
@@ -97,7 +97,7 @@ static void create_widget(t_fatom *x, t_glist *glist)
   if (!strcmp(x->x_type->s_name,"vslider")) {
     x->x_rect_width = x->x_width+15;
     x->x_rect_height =  x->x_max-x->x_min+26;
-    
+
     sys_vgui("scale .x%lx.c.s%lx \
                     -sliderlength 10 \
                     -showvalue 0 \
@@ -180,7 +180,7 @@ static void create_widget(t_fatom *x, t_glist *glist)
                     -length 131 \
                     -from 127 -to 0 \
                     -command fatom_cb%lx\n",canvas,x,x);
-     }     
+     }
 
   /* set the start value */
      if (!strcmp(x->x_type->s_name,"checkbutton")) {
@@ -203,13 +203,13 @@ static void fatom_drawme(t_fatom *x, t_glist *glist, int firsttime)
   DEBUG(post("drawme %d",firsttime);)
      if (firsttime) {
        DEBUG(post("glist %lx canvas %lx",x->x_glist,canvas));
-       create_widget(x,glist);	       
+       create_widget(x,glist);
        x->x_glist = canvas;
        post("create window to hold widget");
-       sys_vgui(".x%lx.c create window %d %d -anchor nw -window .x%lx.c.s%lx -tags %lxS\n", 
+       sys_vgui(".x%lx.c create window %d %d -anchor nw -window .x%lx.c.s%lx -tags %lxS\n",
 		canvas,text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist)+2,x->x_glist,x,x);
-              
-     }     
+
+     }
      else {
        sys_vgui(".x%lx.c coords %lxS \
 %d %d\n",
@@ -232,12 +232,12 @@ static void fatom_erase(t_fatom* x,t_glist* glist)
      sys_vgui(".x%lx.c delete %lxS\n",glist_getcanvas(glist), x);
 
      /* inlets and outlets */
-     
+
      sys_vgui(".x%lx.c delete %lxi%d\n",glist_getcanvas(glist),x,0);
      sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,0);
      sys_vgui(".x%lx.c delete  %lxhandle\n",glist_getcanvas(glist),x,0);
 }
-	
+
 
 
 /* ------------------------ fatom widgetbehaviour----------------------------- */
@@ -270,7 +270,7 @@ static void fatom_displace(t_gobj *z, t_glist *glist,
 	       glist_getcanvas(glist), x,
 	       text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
 	       text_xpix(&x->x_obj, glist) + x->x_rect_width, text_ypix(&x->x_obj, glist) + x->x_rect_height);
-      
+
       fatom_drawme(x, glist, 0);
       canvas_fixlinesfor(glist,(t_text*) x);
     }
@@ -311,7 +311,7 @@ static void fatom_delete(t_gobj *z, t_glist *glist)
     canvas_deletelinesfor(glist, x);
 }
 
-       
+
 static void fatom_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_fatom* x = (t_fatom*)z;
@@ -328,7 +328,7 @@ static void fatom_save(t_gobj *z, t_binbuf *b);
 
 t_widgetbehavior   fatom_widgetbehavior;
 
- 
+
 
 
 void fatom_size(t_fatom* x,t_floatarg w,t_floatarg h) {
@@ -338,14 +338,14 @@ void fatom_size(t_fatom* x,t_floatarg w,t_floatarg h) {
 
 void fatom_color(t_fatom* x,t_symbol* col)
 {
-/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang .. 
-       so color black does the same as bang, but doesn't forward the bang 
+/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang ..
+       so color black does the same as bang, but doesn't forward the bang
 */
 }
 
-static void fatom_float(t_fatom* x,t_floatarg f) 
+static void fatom_float(t_fatom* x,t_floatarg f)
 {
- 
+
     x->x_val = f;
     if (glist_isvisible(x->x_glist)) {
      if (!strcmp(x->x_type->s_name,"checkbutton")) {
@@ -359,12 +359,12 @@ static void fatom_float(t_fatom* x,t_floatarg f)
      outlet_float(x->x_obj.ob_outlet,f);
 }
 
-static void fatom_bang(t_fatom* x,t_floatarg f) 
+static void fatom_bang(t_fatom* x,t_floatarg f)
 {
      outlet_float(x->x_obj.ob_outlet,x->x_val);
 }
 
-static void fatom_f(t_fatom* x,t_floatarg f) 
+static void fatom_f(t_fatom* x,t_floatarg f)
 {
      x->x_val = f;
      outlet_float(x->x_obj.ob_outlet,f);
@@ -383,7 +383,7 @@ static void fatom_save(t_gobj *z, t_binbuf *b)
     t_fatom *x = (t_fatom *)z;
 
     binbuf_addv(b, "ssiiss", gensym("#X"),gensym("obj"),
-		x->x_obj.te_xpix, x->x_obj.te_ypix ,  
+		x->x_obj.te_xpix, x->x_obj.te_ypix ,
 		gensym("fatom"),x->x_type);
     binbuf_addv(b, ";");
 }
@@ -398,10 +398,10 @@ static void *fatom_new(t_fatom* x,t_floatarg max, t_floatarg min, t_floatarg h,t
     else x->x_text = gensym("");
     x->a_pos.a_type = A_FLOAT;
 
-    if (!max) x->x_max = 127; 
+    if (!max) x->x_max = 127;
     else
       x->x_max = max;
-    x->x_min = min;    
+    x->x_min = min;
     if (h) x->x_width = h;
     else x->x_width = 15;
 

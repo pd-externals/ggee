@@ -53,7 +53,7 @@ static void *lsend_new(t_symbol *s)
 {
     t_lsend *x = (t_lsend *)pd_new(lsend_class);
     char mysym[MAXPDSTRING];
-    
+
     sprintf(mysym,"%s%p",s->s_name,canvas_getcurrent());
     x->x_sym = gensym(mysym);
     return (x);

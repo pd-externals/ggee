@@ -30,20 +30,20 @@ void image_drawme(t_image *x, t_glist *glist, int firsttime)
 							fname, MAXPDSTRING);
 
 	  sys_vgui("image create photo img%lx -file {%s}\n",x,fname);
-	  sys_vgui(".x%lx.c create image %d %d -image img%lx -tags %lxS\n", 
-			   glist_getcanvas(glist),text_xpix(&x->x_obj, glist), 
+	  sys_vgui(".x%lx.c create image %d %d -image img%lx -tags %lxS\n",
+			   glist_getcanvas(glist),text_xpix(&x->x_obj, glist),
 			   text_ypix(&x->x_obj, glist),x,x);
 
 	  /* TODO callback from gui
 	    sys_vgui("image_size logo");
 	  */
-     }     
+     }
      else {
 		 sys_vgui(".x%lx.c coords %lxS %d %d\n",
 				  glist_getcanvas(glist), x,
 				  text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
-	
+
 }
 
 
@@ -54,7 +54,7 @@ void image_erase(t_image* x,t_glist* glist)
 	      glist_getcanvas(glist), x);
 
 }
-	
+
 
 static t_symbol *get_filename(t_int argc, t_atom *argv)
 {
@@ -142,7 +142,7 @@ static void image_delete(t_gobj *z, t_glist *glist)
     canvas_deletelinesfor(glist, x);
 }
 
-       
+
 static void image_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_image* x = (t_image*)z;
@@ -158,7 +158,7 @@ static void image_save(t_gobj *z, t_binbuf *b)
 {
     t_image *x = (t_image *)z;
     binbuf_addv(b, "ssiiss", gensym("#X"), gensym("obj"),
-                x->x_obj.te_xpix, x->x_obj.te_ypix,   
+                x->x_obj.te_xpix, x->x_obj.te_ypix,
                 atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
                 x->x_fname);
     binbuf_addv(b, ";");
@@ -174,8 +174,8 @@ void image_size(t_image* x,t_floatarg w,t_floatarg h) {
 
 void image_color(t_image* x,t_symbol* col)
 {
-/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang .. 
-       so color black does the same as bang, but doesn't forward the bang 
+/*     outlet_bang(x->x_obj.ob_outlet); only bang if there was a bang ..
+       so color black does the same as bang, but doesn't forward the bang
 */
 }
 
@@ -194,9 +194,9 @@ static void image_setwidget(void)
     image_widgetbehavior.w_activatefn =   image_activate;
     image_widgetbehavior.w_deletefn =   image_delete;
     image_widgetbehavior.w_visfn =   image_vis;
-#if (PD_VERSION_MINOR > 31) 
+#if (PD_VERSION_MINOR > 31)
     image_widgetbehavior.w_clickfn = NULL;
-    image_widgetbehavior.w_propertiesfn = NULL; 
+    image_widgetbehavior.w_propertiesfn = NULL;
 #endif
 #if PD_MINOR_VERSION < 37
     image_widgetbehavior.w_savefn =   image_save;
@@ -233,7 +233,7 @@ void image_setup(void)
 
     class_addmethod(image_class, (t_method)image_open, gensym("open"),
     	A_GIMME, 0);
-	
+
     image_setwidget();
     class_setwidget(image_class,&image_widgetbehavior);
 #if PD_MINOR_VERSION >= 37

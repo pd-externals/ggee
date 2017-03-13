@@ -20,7 +20,7 @@ typedef struct _envgen
      t_object x_obj;
 
      t_float x_val;
-     
+
      int x_state;
      int last_state;
      int sustain_state;

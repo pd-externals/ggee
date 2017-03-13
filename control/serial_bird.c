@@ -4,7 +4,7 @@
 #include <m_pd.h>
 #include <string.h>
 
-#define DEBUG(x) 
+#define DEBUG(x)
 /*#define DEBUG(x) x*/
 
 static t_class *serial_bird_class;
@@ -73,7 +73,7 @@ static void serial_bird_float( t_serial_bird* x,t_floatarg f)
 	  x->x_c[x->x_count] = c;
 
      DEBUG(post("data %d in = %x, start = %d",x->x_count,c,c&BIRD_DATA_START);)
-     
+
      if (x->x_count == x->x_maxcount-1) {
 	  switch (x->x_dataformat) {
 	  case BIRDCMD_MODE_POS:
@@ -132,7 +132,7 @@ static void serial_bird_float( t_serial_bird* x,t_floatarg f)
      x->x_count = (++x->x_count)%(x->x_maxcount);
 }
 
-static void serial_bird_poll( t_serial_bird* x) 
+static void serial_bird_poll( t_serial_bird* x)
 {
      post("poll");
      /*     outlet_float(x->x_out2,(float)x->x_dataformat);*/
@@ -171,9 +171,9 @@ static void serial_bird_mode( t_serial_bird* x,t_symbol* s)
      }
 
      outlet_float(x->x_out2,(float)x->x_dataformat);
-} 
+}
 
-static void serial_bird_init( t_serial_bird* x) 
+static void serial_bird_init( t_serial_bird* x)
 {
   t_atom  cmd[8];
 
@@ -214,7 +214,7 @@ static void serial_bird_init( t_serial_bird* x)
 
 }
 
-static void serial_bird_start( t_serial_bird* x) 
+static void serial_bird_start( t_serial_bird* x)
 {
      post("start");
      /*     outlet_float(x->x_out2,(float)x->x_dataformat);*/
@@ -231,7 +231,7 @@ static void serial_bird_stop( t_serial_bird* x)
 static void *serial_bird_new(t_symbol *s)
 {
      t_serial_bird *x = (t_serial_bird *)pd_new(serial_bird_class);
-     
+
      x->x_count = 0;
      x->x_posx = 0;
      x->x_posy = 0;
@@ -241,14 +241,14 @@ static void *serial_bird_new(t_symbol *s)
 
      outlet_new(&x->x_obj, &s_float);
      x->x_out2 = outlet_new(&x->x_obj, &s_float);
-     
+
      return x;
 }
 
 
 void serial_bird_setup(void)
 {
-    serial_bird_class = class_new(gensym("serial_bird"), (t_newmethod)serial_bird_new, 
+    serial_bird_class = class_new(gensym("serial_bird"), (t_newmethod)serial_bird_new,
 			     NULL,
 			     sizeof(t_serial_bird), 0,A_DEFSYM,0);
     class_addfloat(serial_bird_class,serial_bird_float);

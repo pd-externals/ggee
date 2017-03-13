@@ -38,7 +38,7 @@ static void draw_inlets(t_envgen *x, t_glist *glist, int firsttime, int nin, int
 			onset, ypos + x->w.height - 1 + 2*BORDER,
 			onset + IOWIDTH, ypos + x->w.height + 2*BORDER);
      }
-     n = nin; 
+     n = nin;
      nplus = (n == 1 ? 1 : n-1);
      for (i = 0; i < n; i++)
      {
@@ -54,7 +54,7 @@ static void draw_inlets(t_envgen *x, t_glist *glist, int firsttime, int nin, int
 			glist_getcanvas(glist), x, i,
 			onset, ypos - BORDER,
 			onset + IOWIDTH, ypos + 1 - BORDER);
-	  
+
      }
 }
 
@@ -71,12 +71,12 @@ static int envgen_next_doodle(t_envgen *x, struct _glist *glist,
      int i;
      int insertpos = -1;
 
-     if (xpos > text_xpix(&x->x_obj,glist) + x->w.width) 
+     if (xpos > text_xpix(&x->x_obj,glist) + x->w.width)
          xpos = text_xpix(&x->x_obj,glist) + x->w.width;
 
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
-     
+
      dxpos = text_xpix(&x->x_obj,glist);/* + BORDER */;
      dypos = text_ypix(&x->x_obj,glist) + BORDER;
 
@@ -89,7 +89,7 @@ static int envgen_next_doodle(t_envgen *x, struct _glist *glist,
 	  tval = sqrt(dx2+dy2);
 
 	  if (tval <= minval) {
-	    minval = tval;	    
+	    minval = tval;
 	    insertpos = i;
 	  }
      }
@@ -114,11 +114,11 @@ static int envgen_next_doodle(t_envgen *x, struct _glist *glist,
 	  x->w.pointery = ypos;
      }
      else {
-	  x->w.pointerx = text_xpix(&x->x_obj,glist) + x->duration[insertpos]*x->w.width/x->duration[x->last_state]; 
+	  x->w.pointerx = text_xpix(&x->x_obj,glist) + x->duration[insertpos]*x->w.width/x->duration[x->last_state];
 
 
-	  x->w.pointery = text_ypix(&x->x_obj,glist) + 
-	       (1.f - x->finalvalues[insertpos])*x->w.height;	  
+	  x->w.pointery = text_ypix(&x->x_obj,glist) +
+	       (1.f - x->finalvalues[insertpos])*x->w.height;
      }
 
      x->w.grabbed = insertpos;
@@ -131,10 +131,10 @@ static void envgen_create_doodles(t_envgen *x, t_glist *glist)
      int xpos,ypos;
      int i;
      char guistr[255];
-     
+
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
-     
+
      xpos = text_xpix(&x->x_obj,glist);
      ypos = (int) (text_ypix(&x->x_obj,glist) + x->w.height);
      for (i=0;i<=x->last_state;i++) {
@@ -172,11 +172,11 @@ static void envgen_update_doodles(t_envgen *x, t_glist *glist)
 
 static void envgen_delnum(t_envgen *x)
 {
-     sys_vgui(".x%lx.c delete %lxT\n",glist_getcanvas(x->w.glist),x); 
+     sys_vgui(".x%lx.c delete %lxT\n",glist_getcanvas(x->w.glist),x);
 }
 
 
-static void envgen_shownum(t_envgen *x,t_glist* glist) 
+static void envgen_shownum(t_envgen *x,t_glist* glist)
 {
      float xscale,yscale;
      int xpos,ypos;
@@ -184,7 +184,7 @@ static void envgen_shownum(t_envgen *x,t_glist* glist)
 
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
-     
+
      xpos = text_xpix(&x->x_obj,glist);
      ypos = (int) (text_ypix(&x->x_obj,glist) + x->w.height);
 
@@ -192,10 +192,10 @@ static void envgen_shownum(t_envgen *x,t_glist* glist)
 
      sys_vgui(".x%lx.c create text %d %d -text %fx%f -tags %lxT\n",
 	     (long unsigned int)glist_getcanvas(x->w.glist),
-	     
+
 	     (int) (xpos+(x->duration[i] * xscale) + 12),
 	     (int) (ypos - x->finalvalues[i]*yscale - 2),
-	     
+
 	     x->finalvalues[i]*(x->max-x->min),
 	     x->duration[i],
 	     (long unsigned int)x);
@@ -214,24 +214,24 @@ static void envgen_create(t_envgen *x, t_glist *glist)
 
      xpos = text_xpix(&x->x_obj,glist);
      ypos = (int) text_ypix(&x->x_obj,glist);
-     x->w.numclock = clock_new(x, (t_method) envgen_delnum);     
+     x->w.numclock = clock_new(x, (t_method) envgen_delnum);
      sys_vgui(".x%lx.c create rectangle \
 %d %d %d %d -tags %lxS -fill "BACKGROUNDCOLOR"\n",
 	      glist_getcanvas(glist),
 	      xpos-BORDER, ypos-BORDER,
 	      xpos + x->w.width+2*BORDER, ypos + x->w.height+2*BORDER,
 	      x);
-     
+
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
-     
+
      sprintf(buf,".x%lx.c create line",(long unsigned int)glist_getcanvas(glist));
      for (i=0;i<=x->last_state;i++) {
 	  sprintf(num," %d %d ",(int)(xpos + x->duration[i]*xscale),
 		                (int)(ypos + x->w.height- x->finalvalues[i]*yscale));
 	  strcat(buf,num);
      }
-     
+
      sprintf(num,"-tags %pP\n",x);
      strcat(buf,num);
      sys_vgui("%s",buf);
@@ -253,11 +253,11 @@ int i;
 	      glist_getcanvas(glist), x,
 	      xpos - BORDER, ypos -BORDER,
 	      xpos + x->w.width+2*BORDER, ypos + x->w.height+2*BORDER);
-     
-     
+
+
      xscale = x->w.width/x->duration[x->last_state];
      yscale = x->w.height;
-     
+
      sprintf(buf,".x%lx.c coords %pP",(long unsigned int)glist_getcanvas(glist),x);
 
      for (i=0;i<=x->last_state;i++) {
@@ -300,7 +300,7 @@ void envgen_erase(t_envgen* x,t_glist* glist)
      sys_vgui(".x%lx.c delete %lxo1\n",glist_getcanvas(glist),x);
      envgen_delete_doodles(x,glist);
 }
-	
+
 
 
 /* ------------------------ envgen widgetbehaviour----------------------------- */
@@ -334,7 +334,7 @@ static void envgen_displace(t_gobj *z, t_glist *glist,
 static void envgen_select(t_gobj *z, t_glist *glist, int state)
 {
      t_envgen *x = (t_envgen *)z;
-    sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist, 
+    sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist,
 	     x, (state? "blue" : BACKGROUNDCOLOR));
 }
 
@@ -352,7 +352,7 @@ static void envgen_delete(t_gobj *z, t_glist *glist)
     canvas_deletelinesfor(glist, x);
 }
 
-       
+
 static void envgen_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_envgen* s = (t_envgen*)z;
@@ -368,7 +368,7 @@ static void envgen_save(t_gobj *z, t_binbuf *b)
 {
     t_envgen *x = (t_envgen *)z;
     binbuf_addv(b, "ssiisiiffss", gensym("#X"), gensym("obj"),
-                (t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,  
+                (t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,
                 atom_getsymbol(binbuf_getvec(x->x_obj.te_binbuf)),
                 x->w.width,x->w.height,x->max,x->min,x->r_sym,x->s_sym);
     binbuf_addv(b, ";");
@@ -382,19 +382,19 @@ static void envgen_followpointer(t_envgen* x,t_glist* glist)
      float xscale = x->duration[x->last_state]/x->w.width;
 
      if  ((x->w.grabbed > 0) && (x->w.grabbed < x->last_state)) {
-	  
+
 	  dur = (x->w.pointerx - text_xpix(&x->x_obj,glist))*xscale;
 	  if (dur < x->duration[x->w.grabbed-1])
 	       dur = x->duration[x->w.grabbed-1];
-	  if (dur > x->duration[x->w.grabbed+1])	  
+	  if (dur > x->duration[x->w.grabbed+1])
 	       dur = x->duration[x->w.grabbed+1];
 
 	  x->duration[x->w.grabbed] = dur;
      }
-     
+
 
      x->finalvalues[x->w.grabbed] = 1.0f - (x->w.pointery - (float)text_ypix(&x->x_obj,glist))/(float)x->w.height;
-     if (x->finalvalues[x->w.grabbed] < 0.0) 
+     if (x->finalvalues[x->w.grabbed] < 0.0)
 	  x->finalvalues[x->w.grabbed]= 0.0;
      else if (x->finalvalues[x->w.grabbed] > 1.0)
 	  x->finalvalues[x->w.grabbed]= 1.0;
@@ -453,13 +453,13 @@ static int envgen_newclick(t_envgen *x, struct _glist *glist,
          glist_grab(x->w.glist, &x->x_obj.te_g, (t_glistmotionfn) envgen_motion,
                     (t_glistkeyfn) envgen_key, xpos, ypos);
 
-         x->resizing = 0;     
-         if (x->resizeable && (xpos > wxpos + x->w.width) && 
+         x->resizing = 0;
+         if (x->resizeable && (xpos > wxpos + x->w.width) &&
              (ypos > wypos)) {
-             x->resizing = 1;     
+             x->resizing = 1;
              return (0);
          }
-         
+
          x->w.shift = shift;
          envgen_followpointer(x,glist);
          envgen_shownum(x,glist);

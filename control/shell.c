@@ -24,7 +24,7 @@ void sys_addpollfn(int fd, void* fn, void *ptr);
 static t_class *shell_class;
 
 
-static void drop_priority(void) 
+static void drop_priority(void)
 {
 #if (_POSIX_PRIORITY_SCHEDULING - 0) >=  200112L
     struct sched_param par;
@@ -167,7 +167,7 @@ void shell_read(t_shell *x, int fd)
 	 int natom;
 	 t_atom *at;
 	 binbuf_text(bbuf, buf, strlen(buf));
-	 
+
 	 natom = binbuf_getnatom(bbuf);
 	 at = binbuf_getvec(bbuf);
 	 shell_doit(x,bbuf);
@@ -188,10 +188,10 @@ static void shell_send(t_shell *x, t_symbol *s,int ac, t_atom *at)
 	  atom_string(at,tmp+size,MAXPDSTRING - size);
 	  at++;
 	  size=strlen(tmp);
-	  tmp[size++] = ' ';	  
+	  tmp[size++] = ' ';
      }
      tmp[size-1] = '\0';
-     post("sending %s",tmp); 
+     post("sending %s",tmp);
      write(x->fdinpipe[0],tmp,strlen(tmp));
 }
 
@@ -209,7 +209,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 
      argv[0] = s->s_name;
 
-     if (x->fdpipe[0] != -1) { 
+     if (x->fdpipe[0] != -1) {
 	  post("shell: old process still running");
 	  kill(x->pid,SIGKILL);
 	  shell_cleanup(x);
@@ -233,7 +233,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
          /* reassign stdout */
          dup2(x->fdpipe[1],1);
          dup2(x->fdinpipe[1],0);
-         
+
          /* drop privileges */
          drop_priority();
          seteuid(getuid());          /* lose setuid priveliges */
@@ -265,7 +265,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
      clock_delay(x->x_clock,x->x_del);
 
      if (x->x_echo)
-	  outlet_anything(x->x_obj.ob_outlet, s, ac, at); 
+	  outlet_anything(x->x_obj.ob_outlet, s, ac, at);
 }
 
 
@@ -298,7 +298,7 @@ static void *shell_new(void)
 
 void shell_setup(void)
 {
-    shell_class = class_new(gensym("shell"), (t_newmethod)shell_new, 
+    shell_class = class_new(gensym("shell"), (t_newmethod)shell_new,
 			    (t_method)shell_free,sizeof(t_shell), 0,0);
     class_addbang(shell_class,shell_bang);
     class_addanything(shell_class, shell_anything);

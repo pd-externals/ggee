@@ -29,26 +29,26 @@ static void cos_maketable(void)
      int i;
      t_word *fp;
      t_sample phase, phsinc = (2. * PD_PI) / COSTABSIZE;
-     
+
      if (fofcos_table) return;
      fofcos_table = (t_word *)getbytes(sizeof(t_word) * (COSTABSIZE+1));
-     
+
      for (i = COSTABSIZE + 1, fp = fofcos_table, phase = 0; i--;
-	  fp++, phase += phsinc) 
+	  fp++, phase += phsinc)
 	  fp->w_float = cos(phase);
-     
+
 }
 
 static void halfcos_maketable(void)
 {
      int i;
      t_sample *fp, phase, phsinc = (PD_PI) / COSTABSIZE;
-     
+
      if (halfcos_table) return;
      halfcos_table = (t_sample *)getbytes(sizeof(t_sample) * (COSTABSIZE+1));
-     
+
      for (i = COSTABSIZE + 1, fp = halfcos_table, phase = PD_PI; i--;
-	  fp++, phase += phsinc) 
+	  fp++, phase += phsinc)
 	  *fp = 0.5*(cos(phase) + 1.0);
 }
 
@@ -57,23 +57,23 @@ static void exp_maketable(void)
 {
      int i;
      t_sample *fp, phase, phsinc = (2 * PD_PI) / COSTABSIZE;
-     
+
      if (exp_table) return;
      exp_table = (t_sample *)getbytes(sizeof(t_sample) * (COSTABSIZE+1));
-     
+
      for (i = COSTABSIZE + 1, fp = exp_table, phase = 0; i--;
-	  fp++, phase += phsinc) 
+	  fp++, phase += phsinc)
 	  *fp = exp(-phase);
 }
 
 
 static t_class *fofsynth_class;
 
-typedef struct _grain 
+typedef struct _grain
 {
      struct _grain *next;
      t_float formph; /* 0 ... 1 */
-     t_float formphinc; 
+     t_float formphinc;
      t_float envph;
      int falling;
 } t_grain;
@@ -92,7 +92,7 @@ typedef struct _fofsynth
 
      int x_npoints;
      t_word *x_vec;
-     
+
      /* fof */
      int debug;
 
@@ -106,7 +106,7 @@ typedef struct _fofsynth
      t_grain* grainbase;
      t_grain* grainstart;
      t_grain* grainend;
-     
+
 
      t_float fundph; /* 0 to 1; if 1 -> add a new grain */
 
@@ -161,7 +161,7 @@ static t_int *fofsynth_perform(t_int *w)
 
      risinc  = (x->risedur == 0.0) ? 1.0 : 1.0/ (srate*totaldur*0.01*x->risedur);
      fallinc = (x->falldur == 0.0) ? 1.0 : 1.0/ (srate*totaldur*0.01*x->falldur);
-     
+
      DEBUG(" fundph %3.2f",x->fundph);
      DEBUG(" fundfreq %3.2f",x->fundfreq);
      DEBUG(" formfreq %3.2f",x->formfreq);
@@ -172,7 +172,7 @@ static t_int *fofsynth_perform(t_int *w)
      DEBUG(" fallinc %0.6f",fallinc);
      DEBUG(" formant increase %3.2f",formphinc);
      DEBUG(" numgrains %d",x->numgrains);
-    
+
      while (n--)
      {
 	  fundphase+=*++in*israte;
@@ -182,8 +182,8 @@ static t_int *fofsynth_perform(t_int *w)
 	       t_grain* newgrain = x->grainend;
 /*	       DEBUG("new grain created",0); */
 	       if (newgrain->next == x->grainstart) {
-		    post("fof: grain overflow");		   
-		    x->neednewgrain = 0;  
+		    post("fof: grain overflow");
+		    x->neednewgrain = 0;
 	       }
 	       else {
 		    x->numgrains++;
@@ -191,7 +191,7 @@ static t_int *fofsynth_perform(t_int *w)
 		    newgrain->formphinc = formphinc;
 		    newgrain->falling = 0;
 		    newgrain->formph = newgrain->envph = 0.0;
-		    x->neednewgrain = 0;  
+		    x->neednewgrain = 0;
 	       }
 	  }
 
@@ -205,7 +205,7 @@ static t_int *fofsynth_perform(t_int *w)
 
 	       /* Apply the envelope */
 
-	       if (!cur->falling && (cur->envph <= 1.0)) { 
+	       if (!cur->falling && (cur->envph <= 1.0)) {
 		    envelope = *(halfcos_table + (int) (cur->envph * COSTABSIZE));
 		    cur->envph+=risinc;
 		    val *= envelope;
@@ -215,30 +215,30 @@ static t_int *fofsynth_perform(t_int *w)
 		    cur->falling = 1;
 		    cur->envph = 0;
 	       }
-	       
+
 
 	       if (cur->falling) {
 		    envelope = *(exp_table + (int) (cur->envph * COSTABSIZE));
 		    cur->envph+=fallinc;
 		    val *= envelope;
-	       }		    
+	       }
 
 	       /* end of envelope code */
 
 
 	       formphase+=cur->formphinc;
 	       cur->formph = formphase;
-	       
+
 	       if (formphase >= numperiods) { /* dead */
 		    DEBUG("grain died",0);
 		    x->grainstart = cur->next;
 		    x->numgrains--;/* not needed */
 	       }
-	       
+
 	       cur = cur->next;
 	       *out += val;
 	  }
-	  
+
 
 	  if (fundphase > 1.0) {
 	       fundphase -=  1.0;
@@ -257,24 +257,24 @@ static t_int *fofsynth_perform(t_int *w)
 void fofsynth_usearray(t_symbol* s,int* points,t_word** vec)
 {
      t_garray *a;
-     if (!(a = (t_garray *)pd_findbyclass(s, garray_class))) 
+     if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
 	  error("%s: no such array", s->s_name);
      else if (!garray_getfloatwords(a,points,vec))
 	  error("%s: bad template for fof~", s->s_name);
      else
-	  garray_usedindsp(a); 
+	  garray_usedindsp(a);
 }
 
 static void fofsynth_dsp(t_fofsynth *x, t_signal **sp)
 {
-     
+
      if (x->x_arrayname)
-	  fofsynth_usearray(x->x_arrayname,&x->x_npoints, &x->x_vec);	
+	  fofsynth_usearray(x->x_arrayname,&x->x_npoints, &x->x_vec);
      else {
 	  x->x_npoints=COSTABSIZE;
 	  x->x_vec = fofcos_table;
      }
-               
+
      dsp_add(fofsynth_perform, 4, x,
 	     sp[0]->s_vec,sp[1]->s_vec, sp[0]->s_n);
 }
@@ -310,12 +310,12 @@ static void *fofsynth_new(t_symbol* s,t_float a,t_float b,t_float c,t_float d)
 	  x->x_arrayname = NULL;
 
      /* setup the grain queue */
-     
+
      x->grainbase = getbytes(sizeof(t_grain)*maxgrains);
      x->maxgrains = maxgrains;
      grain_makecyclic(x->grainbase,maxgrains);
      x->grainstart = x->grainbase;
-     x->grainend = x->grainbase;    
+     x->grainend = x->grainbase;
      x->numgrains = 0;
 
      /* some of them could be signals too */
@@ -324,16 +324,16 @@ static void *fofsynth_new(t_symbol* s,t_float a,t_float b,t_float c,t_float d)
      floatinlet_new(&x->x_obj, &x->risedur);
      floatinlet_new(&x->x_obj, &x->falldur);
 
-     x->fundph = 0.0; 
+     x->fundph = 0.0;
      x->fundfreq = 200.0;
-     x->formfreq = 600.0; 
-     x->risedur = 5.0; 
-     x->falldur = 140.0; 
+     x->formfreq = 600.0;
+     x->risedur = 5.0;
+     x->falldur = 140.0;
 
      if (a) x->fundfreq = a;
-     if (b) x->formfreq = b; 
-     if (c) x->risedur = c; 
-     if (d) x->falldur = d; 
+     if (b) x->formfreq = b;
+     if (c) x->risedur = c;
+     if (d) x->falldur = d;
 
      outlet_new(&x->x_obj, &s_signal);
      return (x);

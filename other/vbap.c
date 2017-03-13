@@ -6,7 +6,7 @@
 
 
 based on code by:
-(c) Ville Pulkki   2.2.1999   
+(c) Ville Pulkki   2.2.1999
 Helsinki University of Technology
 Laboratory of Acoustics and Audio Signal Processing
 */
@@ -27,7 +27,7 @@ Laboratory of Acoustics and Audio Signal Processing
 
 #define MAX_TRIPLET_AMOUNT 64
 
-/* this is related to the number of ls .. 
+/* this is related to the number of ls ..
 
    and shoud be 3**(MAX_LS_AMOUNT / 4)
 
@@ -76,7 +76,7 @@ void vbap_list(t_vbap *x,t_symbol* s,t_int argc,t_atom* argv)
 	  int i;
 	  azi =  atom_getfloat(argv++);
 	  ele =  atom_getfloat(argv++);
-	  
+
 	  vbap(x,g,ls,azi,ele);
 
 	  for (i=0;i<x->dimension;i++) {
@@ -92,9 +92,9 @@ void vbap_list(t_vbap *x,t_symbol* s,t_int argc,t_atom* argv)
 	       SETFLOAT(a,(t_float)ls[i]);
 	       SETFLOAT(a+1,g[i]);
 	       outlet_list(x->x_ob.ob_outlet, &s_list,2 ,(t_atom*)&a);
-	       
+
 	  }
-     }     
+     }
 
 }
 
@@ -110,8 +110,8 @@ static void *vbap_new(t_symbol* s)
 {
      FILE *fp;
      t_vbap *x = (t_vbap *)pd_new(vbap_class);
-     char fname[MAXPDSTRING];   
- 
+     char fname[MAXPDSTRING];
+
      if (s == &s_) {
 	  post("vbap: Using default loudspeaker setup");
 	  s = gensym("ls_setup");
@@ -136,7 +136,7 @@ static void *vbap_new(t_symbol* s)
      x->lasttrip[0] = 0;
      x->lasttrip[1] = 1;
      x->lasttrip[2] = 2;
-     
+
      outlet_new(&x->x_ob, &s_list);
 
      return (x);
@@ -165,7 +165,7 @@ t_float *angle_to_cart(t_float azi, t_float ele)
 }
 
 
-void vbap(t_vbap* x,t_float g[3], int ls[3], float azi, float ele) 
+void vbap(t_vbap* x,t_float g[3], int ls[3], float azi, float ele)
 {
      /* calculates gain factors using loudspeaker setup and given direction */
      t_float *cartdir;
@@ -174,23 +174,23 @@ void vbap(t_vbap* x,t_float g[3], int ls[3], float azi, float ele)
      t_float small_g;
      t_float big_sm_g, gtmp[3];
      int winner_triplet;
-     
-     cartdir=angle_to_cart(azi,ele);  
+
+     cartdir=angle_to_cart(azi,ele);
      big_sm_g = -100000.0;
      for(i=0;i<x->triplet_amount;i++){
 	  small_g = 10000000.0;
 	  for(j=0;j<x->dimension;j++){
 	       gtmp[j]=0.0;
 	       for(k=0;k<x->dimension;k++)
-		    gtmp[j]+=cartdir[k]*x->lsm[i][k+j*x->dimension]; 
+		    gtmp[j]+=cartdir[k]*x->lsm[i][k+j*x->dimension];
 	       if(gtmp[j] < small_g)
 		    small_g = gtmp[j];
 	  }
 	  if(small_g > big_sm_g){
 	       big_sm_g = small_g;
 	       winner_triplet=i;
-	       g[0]=gtmp[0]; g[1]=gtmp[1]; 
-	       ls[0]=x->lstripl[i][0]; ls[1]=x->lstripl[i][1]; 
+	       g[0]=gtmp[0]; g[1]=gtmp[1];
+	       ls[0]=x->lstripl[i][0]; ls[1]=x->lstripl[i][1];
 	       if(x->dimension==3){
 		    g[2]=gtmp[2];
 		    ls[2]=x->lstripl[i][2];
@@ -200,13 +200,13 @@ void vbap(t_vbap* x,t_float g[3], int ls[3], float azi, float ele)
 	       }
 	  }
      }
-     
+
      /* this should probably be optimized somehow */
 
      power=sqrt(g[0]*g[0] + g[1]*g[1] + g[2]*g[2]);
      /*  power=g[0]+g[1];*/
-     
-     g[0] /= power; 
+
+     g[0] /= power;
      g[1] /= power;
      g[2] /= power;
 
@@ -241,7 +241,7 @@ int read_ls_conf(t_vbap* x,FILE *fp ){
 
      for(i=0;i<amount;i++){
 	  fgets(c,1000,fp);
-	  toke = (char *) strtok(c, " "); 
+	  toke = (char *) strtok(c, " ");
 	  if(strncmp(toke,"Trip",4)!=0 && x->dimension==3){
 	       fprintf(stderr,"Something wrong in ls matrix file\n");
 	       return 0;
@@ -250,13 +250,13 @@ int read_ls_conf(t_vbap* x,FILE *fp ){
 	       fprintf(stderr,"Something wrong in ls matrix file\n");
 	       return 0;
 	  }
-	  toke = (char *) strtok(NULL, " "); 
+	  toke = (char *) strtok(NULL, " ");
 	  toke = (char *) strtok(NULL, " "); toke = (char *) strtok(NULL, " ");
 	  sscanf(toke, "%d",&a);
-	  x->lstripl[i][0]=a; 
+	  x->lstripl[i][0]=a;
 	  toke = (char *) strtok(NULL, " ");
 	  sscanf(toke, "%d",&b);
-	  x->lstripl[i][1]=b; 
+	  x->lstripl[i][1]=b;
 	  if (x->dimension==3){
 	       toke = (char *) strtok(NULL, " ");
 	       sscanf(toke, "%d",&d);
