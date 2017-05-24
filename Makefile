@@ -104,4 +104,6 @@ endif
 # Katja Vetter. You can get it from:
 # https://github.com/pure-data/pd-lib-builder
 
-include ../pd-lib-builder/Makefile.pdlibbuilder
+PDLIBBUILDER_DIR=pd-lib-builder/
+include $(firstword $(wildcard $(PDLIBBUILDER_DIR)/Makefile.pdlibbuilder Makefile.pdlibbuilder))
+
