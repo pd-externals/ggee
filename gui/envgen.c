@@ -4,7 +4,7 @@
 
 #define DEBUG(x)
 //#define DEBUG(x) x
-/* ------------------------ envgen~ ----------------------------- */
+/* ------------------------ envgen ----------------------------- */
 
 #define NONE    0
 #define ATTACK  1
@@ -339,7 +339,6 @@ void envgen_setup(void)
                              A_GIMME,
                              0);
 
-    class_addcreator((t_newmethod)envgen_new,gensym("envgen~"),A_GIMME,0);
     class_addfloat(envgen_class, envgen_float);
 
     class_addbang(envgen_class,envgen_bang);
