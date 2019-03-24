@@ -24,7 +24,7 @@ void sys_addpollfn(int fd, void* fn, void *ptr);
 static t_class *shell_class;
 
 
-static void drop_priority(void) 
+static void drop_priority(void)
 {
 #if (_POSIX_PRIORITY_SCHEDULING - 0) >=  200112L
     struct sched_param par;
@@ -167,7 +167,7 @@ void shell_read(t_shell *x, int fd)
 	 int natom;
 	 t_atom *at;
 	 binbuf_text(bbuf, buf, strlen(buf));
-	 
+
 	 natom = binbuf_getnatom(bbuf);
 	 at = binbuf_getvec(bbuf);
 	 shell_doit(x,bbuf);
@@ -188,10 +188,10 @@ static void shell_send(t_shell *x, t_symbol *s,int ac, t_atom *at)
 	  atom_string(at,tmp+size,MAXPDSTRING - size);
 	  at++;
 	  size=strlen(tmp);
-	  tmp[size++] = ' ';	  
+	  tmp[size++] = ' '; 
      }
      tmp[size-1] = '\0';
-     post("sending %s",tmp); 
+     post("sending %s",tmp);
      write(x->fdinpipe[0],tmp,strlen(tmp));
 }
 
@@ -209,7 +209,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 
      argv[0] = s->s_name;
 
-     if (x->fdpipe[0] != -1) { 
+     if (x->fdpipe[0] != -1) {
 	  post("shell: old process still running");
 	  kill(x->pid,SIGKILL);
 	  shell_cleanup(x);
@@ -233,7 +233,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
          /* reassign stdout */
          dup2(x->fdpipe[1],1);
          dup2(x->fdinpipe[1],0);
-         
+
          /* drop privileges */
          drop_priority();
          seteuid(getuid());          /* lose setuid priveliges */
@@ -247,19 +247,8 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	  argv[i] = 0;
 	  execvp(s->s_name,argv);
 #else
-/*	  char* cmd = getbytes(1024);
-	  char* tcmd = getbytes(1024);
-	  strcpy(cmd,s->s_name);
-      for (i=1;i<=ac;i++) {
-	       atom_string(at,tcmd,255);
-	       strcat(cmd," ");
-               strcat(cmd,tcmd);
-               at++;
-	  }
-	  verbose(4,"executing %s",cmd);
-	  
-	system(cmd);
-*/
+	// changed linux part: use execvp() instead system()
+	// see https://github.com/umlaeute/Gem/issues/224
 
 	  for (i=1;i<=ac;i++) {
 	       argv[i] = getbytes(255);
