@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# Makefile to the 'iemguts' library for Pure Data.
+# Makefile to the 'ggee' library for Pure Data.
 # Needs Makefile.pdlibbuilder as helper makefile for platform-dependent build
 # settings and rules (https://github.com/pure-data/pd-lib-builder).
 
