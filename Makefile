@@ -69,6 +69,10 @@ datafiles = \
 
 datadirs =
 
+define forWindows
+  ldlibs = -lwsock32
+endef
+
 #cflags = -DVERSION=$(lib.version)
 
 ################################################################################
