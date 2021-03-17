@@ -188,7 +188,7 @@ static void shell_send(t_shell *x, t_symbol *s,int ac, t_atom *at)
 	  atom_string(at,tmp+size,MAXPDSTRING - size);
 	  at++;
 	  size=strlen(tmp);
-	  tmp[size++] = ' ';
+	  tmp[size++] = ' '; 
      }
      tmp[size-1] = '\0';
      post("sending %s",tmp);
@@ -247,17 +247,16 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 	  argv[i] = 0;
 	  execvp(s->s_name,argv);
 #else
-	  char* cmd = getbytes(1024);
-	  char* tcmd = getbytes(1024);
-	  strcpy(cmd,s->s_name);
-      for (i=1;i<=ac;i++) {
-	       atom_string(at,tcmd,255);
-	       strcat(cmd," ");
-               strcat(cmd,tcmd);
-               at++;
+	// changed linux part: use execvp() instead system()
+	// see https://github.com/umlaeute/Gem/issues/224
+
+	  for (i=1;i<=ac;i++) {
+	       argv[i] = getbytes(255);
+	       atom_string(at,argv[i],255);
+	       at++;
 	  }
-	  verbose(4,"executing %s",cmd);
-	  system(cmd);
+	  argv[i] = 0;
+	  execvp(s->s_name,argv);
 #endif /* __APPLE__ */
 	  exit(0);
      }
@@ -265,7 +264,7 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
      clock_delay(x->x_clock,x->x_del);
 
      if (x->x_echo)
-	  outlet_anything(x->x_obj.ob_outlet, s, ac, at);
+	  outlet_anything(x->x_obj.ob_outlet, s, ac, at); 
 }
 
 
@@ -298,7 +297,7 @@ static void *shell_new(void)
 
 void shell_setup(void)
 {
-    shell_class = class_new(gensym("shell"), (t_newmethod)shell_new,
+    shell_class = class_new(gensym("shell"), (t_newmethod)shell_new, 
 			    (t_method)shell_free,sizeof(t_shell), 0,0);
     class_addbang(shell_class,shell_bang);
     class_addanything(shell_class, shell_anything);
@@ -306,3 +305,5 @@ void shell_setup(void)
 
 
 #endif /* _WIN32 */
+
+
