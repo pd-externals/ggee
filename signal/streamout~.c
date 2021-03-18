@@ -26,11 +26,11 @@
 
 static void sys_sockerror(char *s)
 {
-#ifdef unix
-    int err = errno;
-#else
+#ifdef _WIN32
     int err = WSAGetLastError();
     if (err == 10054) return;
+#else
+    int err = errno;
 #endif
     post("%s: %s (%d)\n", s, strerror(err), err);
 }
