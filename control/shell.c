@@ -1,9 +1,9 @@
 /* (C) Guenter Geiger <geiger@epy.co.at> */
 
-/* this doesn't run on Windows (yet?) */
-#ifndef _WIN32
-
 #include <m_pd.h>
+
+#ifndef _WIN32
+/* this doesn't run on Windows (yet?) */
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -295,6 +295,30 @@ static void *shell_new(void)
     return (x);
 }
 
+#else /* _WIN32 */
+static t_class *shell_class;
+
+static void shell_bang(t_pd*x)
+{ (void)x; }
+static void shell_anything(t_pd*x, t_symbol*s, int argc, t_atom*argv)
+{ (void)x; (void)s; (void)argc; (void)argv; }
+static void *shell_new(void)
+{
+    t_pd *x = pd_new(shell_class);
+    static int firsttime = 1;
+    if (firsttime)
+    {
+        firsttime = 0;
+        pd_error(x, "shell: does not work on Windows.");
+    }
+    outlet_new(&x->x_obj, gensym("list"));
+    outlet_new(&x->x_obj, gensym("bang"));
+    return (x);
+}
+
+#endif /* _WIN32 */
+
+
 void shell_setup(void)
 {
     shell_class = class_new(gensym("shell"), (t_newmethod)shell_new, 
@@ -302,8 +326,3 @@ void shell_setup(void)
     class_addbang(shell_class,shell_bang);
     class_addanything(shell_class, shell_anything);
 }
-
-
-#endif /* _WIN32 */
-
-
