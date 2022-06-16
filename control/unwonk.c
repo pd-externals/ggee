@@ -56,7 +56,7 @@ static void *unwonk_new(t_symbol *s, int argc, t_atom *argv)
     	    }
     	    else
     	    {
-    	    	if (c != 'f') error("unwonk: %s: bad type",
+                if (c != 'f') pd_error(x, "unwonk: %s: bad type",
     	    	    ap->a_w.w_symbol->s_name);
     	    	u->u_type = A_FLOAT;
     	    	u->u_outlet = outlet_new(&x->x_obj, &s_float);
@@ -95,7 +95,7 @@ static void unwonk_list(t_unwonk *x, t_symbol *s, int argc, t_atom *argv)
     {
     	t_atomtype type = u->u_type;
     	if (type != ap->a_type)
-    	    error("unwonk: type mismatch");
+            pd_error(x, "unwonk: type mismatch");
     	else if (type == A_FLOAT)
     	    outlet_float(u->u_outlet, ap->a_w.w_float);
     	else if (type == A_SYMBOL)

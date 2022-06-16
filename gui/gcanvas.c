@@ -407,12 +407,12 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
     x->x_width = DEFAULTSIZE;
     if (ac-- > 0) {
          if (at->a_type != A_FLOAT)
-              error("gcanvas: wrong argument type");
+              pd_error(x, "gcanvas: wrong argument type");
          else
               x->x_width = atom_getfloat(at++);
 
          if (x->x_width < 0 || x->x_width > 2000) {
-              error("gcanvas: unallowed width %f",x->x_width);
+              pd_error(x, "gcanvas: unallowed width %f",x->x_width);
               x->x_width = DEFAULTSIZE;
          }
     }
@@ -422,12 +422,12 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
     x->x_height = DEFAULTSIZE;
     if (ac-- > 0) {
          if (at->a_type != A_FLOAT)
-              error("gcanvas: wrong argument type");
+              pd_error(x, "gcanvas: wrong argument type");
          else
               x->x_height = atom_getfloat(at++);
 
          if (x->x_height < 0 || x->x_height > 2000) {
-              error("gcanvas: unallowed height %f",x->x_height);
+              pd_error(x, "gcanvas: unallowed height %f",x->x_height);
               x->x_width = DEFAULTSIZE;
          }
     }

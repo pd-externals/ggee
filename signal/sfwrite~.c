@@ -125,7 +125,7 @@ static void sfwrite_open(t_sfwrite *x,t_symbol *filename)
 
      if ((x->x_file = open(fname,OPENPARAMS,0664)) < 0)
      {
-	  error("can't create %s",fname);
+	  pd_error(x, "can't create %s",fname);
 	  return;
      }
 

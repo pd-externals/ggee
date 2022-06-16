@@ -258,9 +258,9 @@ void fofsynth_usearray(t_symbol* s,int* points,t_word** vec)
 {
      t_garray *a;
      if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-	  error("%s: no such array", s->s_name);
+	  pd_error(0, "%s: no such array", s->s_name);
      else if (!garray_getfloatwords(a,points,vec))
-	  error("%s: bad template for fof~", s->s_name);
+	  pd_error(0, "%s: bad template for fof~", s->s_name);
      else
 	  garray_usedindsp(a);
 }

@@ -45,7 +45,7 @@ static void qread_open(t_qread *x,t_symbol *filename)
 
      if (!(x->x_file = fopen(fname,"r")))
      {
-	  error("can't open %s",fname);
+	  pd_error(x, "can't open %s",fname);
 	  return;
      }
 
