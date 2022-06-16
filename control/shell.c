@@ -148,7 +148,7 @@ void shell_read(t_shell *x, int fd)
        if (buf[i] == '\n') buf[i] = ';';
      if (ret < 0)
        {
-	 error("shell: pipe read error");
+	 pd_error(x, "shell: pipe read error");
 	 sys_rmpollfn(fd);
 	 x->fdpipe[0] = -1;
 	 close(fd);
@@ -217,12 +217,12 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
 
 
      if (pipe(x->fdpipe) < 0) {
-	  error("unable to create pipe");
+	  pd_error(x, "unable to create pipe");
 	  return;
      }
 
      if (pipe(x->fdinpipe) < 0) {
-	  error("unable to create input pipe");
+	  pd_error(x, "unable to create input pipe");
 	  return;
      }
 
