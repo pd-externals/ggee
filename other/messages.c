@@ -33,6 +33,6 @@ static void *messages_new()
 void messages_setup(void)
 {
     messages_class = class_new(gensym("messages"), (t_newmethod)messages_new, 0,
-				sizeof(t_messages), 0,0);
+                                sizeof(t_messages), 0,0);
     class_addbang(messages_class,messages_bang);
 }

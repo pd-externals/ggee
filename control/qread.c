@@ -31,12 +31,12 @@ static void qread_open(t_qread *x,t_symbol *filename)
      char fname[MAXPDSTRING];
 
      if (filename == &s_) {
-	  post("sfread: open without filename");
-	  return;
+          post("sfread: open without filename");
+          return;
      }
 
      canvas_makefilename((void*)glist_getcanvas(x->x_glist), filename->s_name,
-			 fname, MAXPDSTRING);
+                         fname, MAXPDSTRING);
 
 
      /* close the old file */
@@ -45,8 +45,8 @@ static void qread_open(t_qread *x,t_symbol *filename)
 
      if (!(x->x_file = fopen(fname,"r")))
      {
-	  pd_error(x, "can't open %s",fname);
-	  return;
+          pd_error(x, "can't open %s",fname);
+          return;
      }
 
 
@@ -65,8 +65,8 @@ void qread_next(t_qread *x)
 
      fscanf(x->x_file,"%f",&delay);
      if (feof(x->x_file)) {
-	  clock_unset(x->x_clock);
-	  return;
+          clock_unset(x->x_clock);
+          return;
      }
 
      fscanf(x->x_file,"%s",name);
@@ -75,8 +75,8 @@ void qread_next(t_qread *x)
 #endif
 
      for (i=0;i<=x->x_num  && !feof(x->x_file);i++) {
-	  fscanf(x->x_file,"%f",&ff);
-	  SETFLOAT(at+i,ff);
+          fscanf(x->x_file,"%f",&ff);
+          SETFLOAT(at+i,ff);
      }
      ac = i-1;
      fscanf(x->x_file,";");
@@ -120,7 +120,7 @@ static void *qread_new(t_floatarg n)
 void qread_setup(void)
 {
     qread_class = class_new(gensym("qread"), (t_newmethod)qread_new, 0,
-				sizeof(t_qread), 0,A_DEFFLOAT,A_NULL);
+                                sizeof(t_qread), 0,A_DEFFLOAT,A_NULL);
     class_addbang(qread_class,qread_bang);
     class_addmethod(qread_class,(t_method)qread_next,gensym("next"),A_NULL);
     class_addmethod(qread_class,(t_method)qread_open,gensym("open"),A_SYMBOL,A_NULL);

@@ -35,6 +35,6 @@ static void rtout_float(t_rtout *x, t_float f)
 void rtout_setup(void)
 {
     rtout_class = class_new(gensym("rtout"), (t_newmethod)rtout_new, 0,
-    	sizeof(t_rtout), 0, A_DEFFLOAT, A_DEFFLOAT, 0);
+        sizeof(t_rtout), 0, A_DEFFLOAT, A_DEFFLOAT, 0);
     class_addfloat(rtout_class, rtout_float);
 }

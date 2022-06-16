@@ -77,7 +77,7 @@ static void *highpass_new(t_floatarg f,t_floatarg bw)
 void highpass_setup(void)
 {
     highpass_class = class_new(gensym("highpass"), (t_newmethod)highpass_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(highpass_class,highpass_bang);
     class_addfloat(highpass_class,highpass_float);
 }

@@ -44,7 +44,7 @@ t_widgetbehavior   ticker_widgetbehavior;
 
 void ticker_setup() {
     ticker_class = class_new(gensym("ticker"), (t_newmethod)ticker_new, 0,
-				sizeof(t_fatom),0,A_DEFSYMBOL,0);
+                                sizeof(t_fatom),0,A_DEFSYMBOL,0);
 
     class_addbang(ticker_class,ticker_bang);
     fatom_setup_common(ticker_class);
@@ -63,7 +63,7 @@ void ticker_setup() {
     ticker_widgetbehavior.w_clickfn=   NULL;
 
 
-	class_setwidget(ticker_class,&ticker_widgetbehavior);
+        class_setwidget(ticker_class,&ticker_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
     class_setsavefn(ticker_class,&ticker_save);
 #endif

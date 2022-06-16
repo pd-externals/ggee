@@ -29,8 +29,8 @@ void unserialize_float(t_unserialize *x,t_floatarg f)
      x->x_count++;
 
      if (x->x_count == x->x_elements) {
-	  outlet_list(x->x_obj.ob_outlet,0,x->x_count,x->x_abuf);
-	  x->x_count = 0;
+          outlet_list(x->x_obj.ob_outlet,0,x->x_count,x->x_abuf);
+          x->x_count = 0;
      }
 }
 
@@ -50,6 +50,6 @@ static void *unserialize_new(t_floatarg f)
 void unserialize_setup(void)
 {
     unserialize_class = class_new(gensym("unserialize"), (t_newmethod)unserialize_new,
-				  0,sizeof(t_unserialize),0, A_DEFFLOAT,0);
+                                  0,sizeof(t_unserialize),0, A_DEFFLOAT,0);
     class_addfloat(unserialize_class,unserialize_float);
 }

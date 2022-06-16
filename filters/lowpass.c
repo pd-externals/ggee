@@ -79,7 +79,7 @@ static void *lowpass_new(t_floatarg f,t_floatarg bw)
 void lowpass_setup(void)
 {
     lowpass_class = class_new(gensym("lowpass"), (t_newmethod)lowpass_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(lowpass_class,lowpass_bang);
     class_addfloat(lowpass_class,lowpass_float);
 }

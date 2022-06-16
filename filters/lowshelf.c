@@ -83,7 +83,7 @@ static void *lowshelf_new(t_floatarg f,t_floatarg g,t_floatarg bw)
 void lowshelf_setup(void)
 {
     lowshelf_class = class_new(gensym("lowshelf"), (t_newmethod)lowshelf_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(lowshelf_class,lowshelf_bang);
     class_addfloat(lowshelf_class,lowshelf_float);
 }

@@ -46,7 +46,7 @@ static void *sinh_new()
 void sinh_setup(void)
 {
     sinh_class = class_new(gensym("sinh"), (t_newmethod)sinh_new, 0,
-				sizeof(t_sinh), 0,0);
+                                sizeof(t_sinh), 0,0);
     class_addbang(sinh_class,sinh_bang);
     class_addfloat(sinh_class,sinh_float);
 }

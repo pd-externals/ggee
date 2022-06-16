@@ -82,7 +82,7 @@ static void *highshelf_new(t_floatarg f,t_floatarg g,t_floatarg bw)
 void highshelf_setup(void)
 {
     highshelf_class = class_new(gensym("highshelf"), (t_newmethod)highshelf_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(highshelf_class,highshelf_bang);
     class_addfloat(highshelf_class,highshelf_float);
 }

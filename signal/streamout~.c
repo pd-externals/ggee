@@ -73,7 +73,7 @@ static void streamout_tempbuf(t_streamout *x,int size) {
      if (x->cbuf && x->tbufsize) freebytes(x->cbuf,x->tbufsize);
      x->tbufsize=size*sizeof(float)*x->x_tag.channels;
      if (!x->cbuf)
-	  x->cbuf = getbytes(x->tbufsize);
+          x->cbuf = getbytes(x->tbufsize);
      x->nsamples = size;
 }
 
@@ -83,9 +83,9 @@ static void streamout_disconnect(t_streamout *x)
 {
     if (x->x_fd >= 0)
     {
-	sys_closesocket(x->x_fd);
-	x->x_fd = -1;
-	outlet_float(x->x_obj.ob_outlet, 0);
+        sys_closesocket(x->x_fd);
+        x->x_fd = -1;
+        outlet_float(x->x_obj.ob_outlet, 0);
     }
 }
 
@@ -105,8 +105,8 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
 
     if (x->x_fd >= 0)
     {
-	 post("streamout~: already connected");
-	 return;
+         post("streamout~: already connected");
+         return;
     }
 
     /* create a socket */
@@ -114,9 +114,9 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
     sockfd = socket(AF_INET, x->x_protocol, 0);
     if (sockfd < 0)
     {
-	 post("streamout: Connection to %s on port %d failed",hostname->s_name,portno);
-	 sys_sockerror("socket");
-	 return;
+         post("streamout: Connection to %s on port %d failed",hostname->s_name,portno);
+         sys_sockerror("socket");
+         return;
     }
 
     /* connect socket using hostname provided in command line */
@@ -125,8 +125,8 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
     hp = gethostbyname(x->hostname->s_name);
     if (hp == 0)
     {
-	post("bad host?\n");
-	return;
+        post("bad host?\n");
+        return;
     }
     memcpy((char *)&server.sin_addr, (char *)hp->h_addr, hp->h_length);
 
@@ -137,9 +137,9 @@ static void streamout_connect(t_streamout *x, t_symbol *hostname, t_floatarg fpo
        because it might block */
     if (connect(sockfd, (struct sockaddr *) &server, sizeof (server)) < 0)
     {
-	sys_sockerror("connecting stream socket");
-	sys_closesocket(sockfd);
-	return;
+        sys_sockerror("connecting stream socket");
+        sys_closesocket(sockfd);
+        return;
     }
 
     post("connected host %s on port %d",hostname->s_name, portno);
@@ -176,72 +176,72 @@ static t_int *streamout_perform(t_int *w)
 
     switch (x->x_tag.format) {
     case SF_FLOAT: {
-	 float* cibuf =(float*) x->cbuf;
-	 bp = (char*) x->cbuf;
-	 for (i=0;i<chans;i++)
-	   while (n--)
-	     *cibuf++ = *(in[i]++);
-	 break;
+         float* cibuf =(float*) x->cbuf;
+         bp = (char*) x->cbuf;
+         for (i=0;i<chans;i++)
+           while (n--)
+             *cibuf++ = *(in[i]++);
+         break;
     }
     case SF_16BIT: {
-	 short* cibuf =(short*) x->cbuf;
-	 bp = (char*) x->cbuf;
-	 for (i=0;i<chans;i++)
-	   while (n--)
-	     *cibuf++ = (short) 32767.0 * *in[i]++;
-	 break;
+         short* cibuf =(short*) x->cbuf;
+         bp = (char*) x->cbuf;
+         for (i=0;i<chans;i++)
+           while (n--)
+             *cibuf++ = (short) 32767.0 * *in[i]++;
+         break;
     }
     case SF_8BIT: {
-	 unsigned char*  cbuf = (char*)  x->cbuf;
-	 bp = (char*) x->cbuf;
-	 for (i=0;i<chans;i++)
-	   while (n--)
-	     *cbuf++ = (unsigned char)(127. * (1.0 + *in[i]++));
-	 break;
+         unsigned char*  cbuf = (char*)  x->cbuf;
+         bp = (char*) x->cbuf;
+         for (i=0;i<chans;i++)
+           while (n--)
+             *cbuf++ = (unsigned char)(127. * (1.0 + *in[i]++));
+         break;
     }
     default:
-	 break;
+         break;
     }
 
     if (x->x_fd > 0) {
-	 /* send the format tag */
+         /* send the format tag */
 
 #ifdef __APPLE__
-		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),SO_NOSIGPIPE) < 0)
+                if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),SO_NOSIGPIPE) < 0)
 #elif defined unix
-		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),/*MSG_DONTWAIT|*/MSG_NOSIGNAL) < 0)
+                if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),/*MSG_DONTWAIT|*/MSG_NOSIGNAL) < 0)
 #else
-		if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),0) < 0)
+                if (send(x->x_fd,(char*)&x->x_tag,sizeof(t_tag),0) < 0)
 #endif
-		{
-	      sys_sockerror("streamout");
-	      streamout_disconnect(x);
-	      return (w+4);
-	 }
+                {
+              sys_sockerror("streamout");
+              streamout_disconnect(x);
+              return (w+4);
+         }
 
-	 /* send the buffer */
+         /* send the buffer */
 
-	 for (sent = 0; sent < length;) {
-	      int res = 0;
+         for (sent = 0; sent < length;) {
+              int res = 0;
 #ifdef __APPLE__
-		  res = send(x->x_fd, bp, length-sent, SO_NOSIGPIPE);
+                  res = send(x->x_fd, bp, length-sent, SO_NOSIGPIPE);
 #elif defined unix
-		  res = send(x->x_fd, bp, length-sent, /*MSG_DONTWAIT|*/MSG_NOSIGNAL);
+                  res = send(x->x_fd, bp, length-sent, /*MSG_DONTWAIT|*/MSG_NOSIGNAL);
 #else
-		  res = send(x->x_fd, bp, length-sent, 0);
+                  res = send(x->x_fd, bp, length-sent, 0);
 #endif
-	      if (res <= 0)
-	      {
-		   sys_sockerror("streamout");
-		   streamout_disconnect(x);
-		   break;
-	      }
-	      else
-	      {
-		   sent += res;
-		   bp += res;
-	      }
-	 }
+              if (res <= 0)
+              {
+                   sys_sockerror("streamout");
+                   streamout_disconnect(x);
+                   break;
+              }
+              else
+              {
+                   sent += res;
+                   bp += res;
+              }
+         }
     }
     return (w+3+chans);
 }
@@ -261,7 +261,7 @@ static void streamout_dsp(t_streamout *x, t_signal **sp)
     break;
   case 4:
     dsp_add(streamout_perform, 6, x,sp[0]->s_vec, sp[1]->s_vec,
-	    sp[2]->s_vec,sp[3]->s_vec,sp[0]->s_n);
+            sp[2]->s_vec,sp[3]->s_vec,sp[0]->s_n);
     post("four channel mode");
     break;
   default:
@@ -291,10 +291,10 @@ static void streamout_format(t_streamout *x,t_symbol* form)
 static void streamout_host(t_streamout *x,t_symbol* host)
 {
      if (host != &s_)
-	  x->hostname = host;
+          x->hostname = host;
 
      if (x->x_fd >= 0) {
-	  streamout_connect(x,x->hostname,(float) x->portno);
+          streamout_connect(x,x->hostname,(float) x->portno);
      }
 }
 
@@ -304,9 +304,9 @@ static void streamout_host(t_streamout *x,t_symbol* host)
 static void streamout_float(t_streamout* x,t_float arg)
 {
      if (arg == 0.0)
-	  streamout_disconnect(x);
+          streamout_disconnect(x);
      else
-	  streamout_connect(x,x->hostname,(float) x->portno);
+          streamout_connect(x,x->hostname,(float) x->portno);
 }
 
 
@@ -324,8 +324,8 @@ static void *streamout_new(t_symbol* prot,float channels)
     x->x_protocol = SOCK_STREAM;
 
     if (prot != &s_)
-	 if (!strncmp(prot->s_name,"udp",3))
-	      x->x_protocol = SOCK_DGRAM;
+         if (!strncmp(prot->s_name,"udp",3))
+              x->x_protocol = SOCK_DGRAM;
 
     x->x_tag.format = SF_FLOAT;
     x->x_tag.channels = channels;
@@ -347,11 +347,11 @@ static void streamout_free(t_streamout* x)
 void streamout_tilde_setup(void)
 {
     streamout_class = class_new(gensym("streamout~"), (t_newmethod) streamout_new, (t_method) streamout_free,
-	sizeof(t_streamout), 0, A_DEFSYM,A_DEFFLOAT, 0);
+        sizeof(t_streamout), 0, A_DEFSYM,A_DEFFLOAT, 0);
     class_addmethod(streamout_class, (t_method) streamout_connect,
-	gensym("connect"), A_SYMBOL, A_DEFFLOAT, 0);
+        gensym("connect"), A_SYMBOL, A_DEFFLOAT, 0);
     class_addmethod(streamout_class, (t_method) streamout_disconnect,
-	gensym("disconnect"), 0);
+        gensym("disconnect"), 0);
     class_addfloat(streamout_class,streamout_float);
     class_addmethod(streamout_class, nullfn, gensym("signal"), 0);
     class_addmethod(streamout_class, (t_method) streamout_dsp, gensym("dsp"), 0);

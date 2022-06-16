@@ -77,7 +77,7 @@ static void *bandpass_new(t_floatarg f,t_floatarg bw)
 void bandpass_setup(void)
 {
     bandpass_class = class_new(gensym("bandpass"), (t_newmethod)bandpass_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(bandpass_class,bandpass_bang);
     class_addfloat(bandpass_class,bandpass_float);
 }

@@ -72,17 +72,17 @@ static void serial_ms_float( t_serial_ms* x,t_floatarg f)
      x->x_count = (++x->x_count)%3;
 
      if (x->x_count==2) {
-	  dx=      (signed char)(((x->x_c[0] & 0x03) << 6) |
-				 (x->x_c[1] & 0x3F));
-	  dy=      (signed char)(((x->x_c[0] & 0x0C) << 4) |
-				 (x->x_c[2] & 0x3F));
-	  x->x_posx += dx;
-	  x->x_posy += dy;
-/*	  post("posx %d, posy %d",x->x_posx,x->x_posy);*/
+          dx=      (signed char)(((x->x_c[0] & 0x03) << 6) |
+                                 (x->x_c[1] & 0x3F));
+          dy=      (signed char)(((x->x_c[0] & 0x0C) << 4) |
+                                 (x->x_c[2] & 0x3F));
+          x->x_posx += dx;
+          x->x_posy += dy;
+/*        post("posx %d, posy %d",x->x_posx,x->x_posy);*/
 
-	  SETFLOAT(at,x->x_posx);
-	  SETFLOAT(at+1,x->x_posy);
-	  outlet_list(x->x_obj.ob_outlet,&s_list, 2, at);
+          SETFLOAT(at,x->x_posx);
+          SETFLOAT(at+1,x->x_posy);
+          outlet_list(x->x_obj.ob_outlet,&s_list, 2, at);
      }
 
 
@@ -108,8 +108,8 @@ static void *serial_ms_new(t_symbol *s)
 void serial_ms_setup(void)
 {
     serial_ms_class = class_new(gensym("serial_ms"), (t_newmethod)serial_ms_new,
-			     NULL,
-			     sizeof(t_serial_ms), 0,A_DEFSYM,0);
+                             NULL,
+                             sizeof(t_serial_ms), 0,A_DEFSYM,0);
     class_addfloat(serial_ms_class,serial_ms_float);
     class_addmethod(serial_ms_class,(t_method) serial_ms_reset,gensym("reset"),0);
     class_addmethod(serial_ms_class, (t_method)serial_ms_init, gensym("init"),0);

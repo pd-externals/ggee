@@ -29,10 +29,10 @@ static void *unwonk_new(t_symbol *s, int argc, t_atom *argv)
     int i;
     if (!argc)
     {
-    	argv = defarg;
-    	argc = 2;
-    	SETFLOAT(&defarg[0], 0);
-    	SETFLOAT(&defarg[1], 0);
+        argv = defarg;
+        argc = 2;
+        SETFLOAT(&defarg[0], 0);
+        SETFLOAT(&defarg[1], 0);
     }
 
     x->x_n = argc + 1;
@@ -40,33 +40,33 @@ static void *unwonk_new(t_symbol *s, int argc, t_atom *argv)
 
     for (i = 0, ap = argv, u = x->x_vec; i < argc; u++, ap++, i++)
     {
-    	t_atomtype type = ap->a_type;
-    	if (type == A_SYMBOL)
-    	{
-    	    char c = *ap->a_w.w_symbol->s_name;
-    	    if (c == 's')
-    	    {
-    	    	u->u_type = A_SYMBOL;
-    	    	u->u_outlet = outlet_new(&x->x_obj, &s_symbol);
-    	    }
-    	    else if (c == 'p')
-    	    {
-    	    	u->u_type =  A_POINTER;
-    	    	u->u_outlet = outlet_new(&x->x_obj, &s_pointer);
-    	    }
-    	    else
-    	    {
+        t_atomtype type = ap->a_type;
+        if (type == A_SYMBOL)
+        {
+            char c = *ap->a_w.w_symbol->s_name;
+            if (c == 's')
+            {
+                u->u_type = A_SYMBOL;
+                u->u_outlet = outlet_new(&x->x_obj, &s_symbol);
+            }
+            else if (c == 'p')
+            {
+                u->u_type =  A_POINTER;
+                u->u_outlet = outlet_new(&x->x_obj, &s_pointer);
+            }
+            else
+            {
                 if (c != 'f') pd_error(x, "unwonk: %s: bad type",
-    	    	    ap->a_w.w_symbol->s_name);
-    	    	u->u_type = A_FLOAT;
-    	    	u->u_outlet = outlet_new(&x->x_obj, &s_float);
-    	    }
-    	}
-    	else
-    	{
-    	    u->u_type =  A_FLOAT;
-    	    u->u_outlet = outlet_new(&x->x_obj, &s_float);
-    	}
+                    ap->a_w.w_symbol->s_name);
+                u->u_type = A_FLOAT;
+                u->u_outlet = outlet_new(&x->x_obj, &s_float);
+            }
+        }
+        else
+        {
+            u->u_type =  A_FLOAT;
+            u->u_outlet = outlet_new(&x->x_obj, &s_float);
+        }
     }
 
     u->u_type =  A_GIMME;
@@ -86,21 +86,21 @@ static void unwonk_list(t_unwonk *x, t_symbol *s, int argc, t_atom *argv)
     if (argc > x->x_n - 1) margc = x->x_n - 1;
 
     if (argc - margc > 0) {
-	 ap = argv + margc;
-	 u = x->x_vec + margc;
-	 outlet_list(u->u_outlet,0,argc - margc, ap);
+         ap = argv + margc;
+         u = x->x_vec + margc;
+         outlet_list(u->u_outlet,0,argc - margc, ap);
     }
 
     for (i = margc, u = x->x_vec + i, ap = argv + i; u--, ap--, i--;)
     {
-    	t_atomtype type = u->u_type;
-    	if (type != ap->a_type)
+        t_atomtype type = u->u_type;
+        if (type != ap->a_type)
             pd_error(x, "unwonk: type mismatch");
-    	else if (type == A_FLOAT)
-    	    outlet_float(u->u_outlet, ap->a_w.w_float);
-    	else if (type == A_SYMBOL)
-    	    outlet_symbol(u->u_outlet, ap->a_w.w_symbol);
-    	else outlet_pointer(u->u_outlet, ap->a_w.w_gpointer);
+        else if (type == A_FLOAT)
+            outlet_float(u->u_outlet, ap->a_w.w_float);
+        else if (type == A_SYMBOL)
+            outlet_symbol(u->u_outlet, ap->a_w.w_symbol);
+        else outlet_pointer(u->u_outlet, ap->a_w.w_gpointer);
     }
 
 
@@ -114,6 +114,6 @@ static void unwonk_free(t_unwonk *x)
 void unwonk_setup(void)
 {
     unwonk_class = class_new(gensym("unwonk"), (t_newmethod)unwonk_new,
-    	(t_method)unwonk_free, sizeof(t_unwonk), 0, A_GIMME, 0);
+        (t_method)unwonk_free, sizeof(t_unwonk), 0, A_GIMME, 0);
     class_addlist(unwonk_class, unwonk_list);
 }

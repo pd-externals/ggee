@@ -42,14 +42,14 @@ typedef struct _toddle
 void toddle_drawbang(t_toddle *x,t_glist *glist,int on)
 {
      if (glist_isvisible(glist)) {
-	  if (on)
-	       sys_vgui(".x%lx.c create oval %d %d %d %d -fill %s -tags %lxB\n",glist_getcanvas(glist),
-			x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
-			x->x_obj.te_xpos + x->x_width -1,
-			x->x_obj.te_ypos + x->x_height -1,x->x_color->s_name,x);
-	  else
-	       sys_vgui(".x%lx.c delete %lxB\n",
-			glist_getcanvas(glist), x);
+          if (on)
+               sys_vgui(".x%lx.c create oval %d %d %d %d -fill %s -tags %lxB\n",glist_getcanvas(glist),
+                        x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
+                        x->x_obj.te_xpos + x->x_width -1,
+                        x->x_obj.te_ypos + x->x_height -1,x->x_color->s_name,x);
+          else
+               sys_vgui(".x%lx.c delete %lxB\n",
+                        glist_getcanvas(glist), x);
      }
 }
 
@@ -60,93 +60,93 @@ void toddle_drawme(t_toddle *x, t_glist *glist, int firsttime)
 {
      if (firsttime) {
 #if 0
-	  sys_vgui(".x%lx.c create line \
+          sys_vgui(".x%lx.c create line \
 %d %d %d %d %d %d %d %d %d %d -tags %lxS\n",
-		   glist_getcanvas(glist),
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos + x->x_height,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x);
+                   glist_getcanvas(glist),
+                   x->x_obj.te_xpos, x->x_obj.te_ypos,
+                   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos,
+                   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
+                   x->x_obj.te_xpos, x->x_obj.te_ypos + x->x_height,
+                   x->x_obj.te_xpos, x->x_obj.te_ypos,
+                   x);
 #endif
 
-	  sys_vgui(".x%lx.c create rectangle \
+          sys_vgui(".x%lx.c create rectangle \
 %d %d %d %d -tags %lxS "BACKGROUND"\n",
-		   glist_getcanvas(glist),
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
-		   x);
-	  sys_vgui(".x%lx.c create oval \
+                   glist_getcanvas(glist),
+                   x->x_obj.te_xpos, x->x_obj.te_ypos,
+                   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
+                   x);
+          sys_vgui(".x%lx.c create oval \
 %d %d %d %d -tags %lxP\n",glist_getcanvas(glist),
-		   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
-		   x->x_obj.te_xpos + x->x_width -1,
-		   x->x_obj.te_ypos + x->x_height -1,x);
+                   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
+                   x->x_obj.te_xpos + x->x_width -1,
+                   x->x_obj.te_ypos + x->x_height -1,x);
 
      }
      else {
 #if 0
-	  sys_vgui(".x%lx.c coords %lxS \
+          sys_vgui(".x%lx.c coords %lxS \
 %d %d %d %d %d %d %d %d %d %d\n",
-		   glist_getcanvas(glist), x,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos + x->x_height,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos);
+                   glist_getcanvas(glist), x,
+                   x->x_obj.te_xpos, x->x_obj.te_ypos,
+                   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos,
+                   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height,
+                   x->x_obj.te_xpos, x->x_obj.te_ypos + x->x_height,
+                   x->x_obj.te_xpos, x->x_obj.te_ypos);
 #endif
-	  sys_vgui(".x%lx.c coords %lxS \
+          sys_vgui(".x%lx.c coords %lxS \
 %d %d %d %d\n",
-		   glist_getcanvas(glist), x,
-		   x->x_obj.te_xpos, x->x_obj.te_ypos,
-		   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height);
+                   glist_getcanvas(glist), x,
+                   x->x_obj.te_xpos, x->x_obj.te_ypos,
+                   x->x_obj.te_xpos + x->x_width, x->x_obj.te_ypos + x->x_height);
 
 
-	  sys_vgui(".x%lx.c coords %lxP \
+          sys_vgui(".x%lx.c coords %lxP \
 %d %d %d %d\n",glist_getcanvas(glist),x,
-		   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
-		   x->x_obj.te_xpos + x->x_width-1,
-		   x->x_obj.te_ypos + x->x_height-1);
+                   x->x_obj.te_xpos+1,x->x_obj.te_ypos+1,
+                   x->x_obj.te_xpos + x->x_width-1,
+                   x->x_obj.te_ypos + x->x_height-1);
      }
 
 
      {
-	  int n = 1;
-	  int nplus, i;
-	  nplus = (n == 1 ? 1 : n-1);
-	  for (i = 0; i < n; i++)
-	  {
-	       int onset = x->x_obj.te_xpos + (x->x_width - IOWIDTH) * i / nplus;
-	       if (firsttime)
-		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxo%d\n",
-			     glist_getcanvas(glist),
-			     onset, x->x_obj.te_ypos + x->x_height - 1,
-			     onset + IOWIDTH, x->x_obj.te_ypos + x->x_height,
-			     x, i);
-	       else
-		    sys_vgui(".x%lx.c coords %lxo%d %d %d %d %d\n",
-			     glist_getcanvas(glist), x, i,
-			     onset, x->x_obj.te_ypos + x->x_height - 1,
-			     onset + IOWIDTH, x->x_obj.te_ypos + x->x_height);
-	  }
-	  n = 1;
-	  nplus = (n == 1 ? 1 : n-1);
-	  for (i = 0; i < n; i++)
-	  {
-	       int onset = x->x_obj.te_xpos + (x->x_width - IOWIDTH) * i / nplus;
-	       if (firsttime)
-		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxi%d\n",
-			     glist_getcanvas(glist),
-			     onset, x->x_obj.te_ypos,
-			     onset + IOWIDTH, x->x_obj.te_ypos + 1,
-			     x, i);
-	       else
-		    sys_vgui(".x%lx.c coords %lxi%d %d %d %d %d\n",
-			     glist_getcanvas(glist), x, i,
-			     onset, x->x_obj.te_ypos,
-			     onset + IOWIDTH, x->x_obj.te_ypos + 1);
+          int n = 1;
+          int nplus, i;
+          nplus = (n == 1 ? 1 : n-1);
+          for (i = 0; i < n; i++)
+          {
+               int onset = x->x_obj.te_xpos + (x->x_width - IOWIDTH) * i / nplus;
+               if (firsttime)
+                    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxo%d\n",
+                             glist_getcanvas(glist),
+                             onset, x->x_obj.te_ypos + x->x_height - 1,
+                             onset + IOWIDTH, x->x_obj.te_ypos + x->x_height,
+                             x, i);
+               else
+                    sys_vgui(".x%lx.c coords %lxo%d %d %d %d %d\n",
+                             glist_getcanvas(glist), x, i,
+                             onset, x->x_obj.te_ypos + x->x_height - 1,
+                             onset + IOWIDTH, x->x_obj.te_ypos + x->x_height);
+          }
+          n = 1;
+          nplus = (n == 1 ? 1 : n-1);
+          for (i = 0; i < n; i++)
+          {
+               int onset = x->x_obj.te_xpos + (x->x_width - IOWIDTH) * i / nplus;
+               if (firsttime)
+                    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxi%d\n",
+                             glist_getcanvas(glist),
+                             onset, x->x_obj.te_ypos,
+                             onset + IOWIDTH, x->x_obj.te_ypos + 1,
+                             x, i);
+               else
+                    sys_vgui(".x%lx.c coords %lxi%d %d %d %d %d\n",
+                             glist_getcanvas(glist), x, i,
+                             onset, x->x_obj.te_ypos,
+                             onset + IOWIDTH, x->x_obj.te_ypos + 1);
 
-	  }
+          }
      }
 
 }
@@ -158,16 +158,16 @@ void toddle_erase(t_toddle* x,t_glist* glist)
 {
      int n;
      sys_vgui(".x%lx.c delete %lxS\n",
-	      glist_getcanvas(glist), x);
+              glist_getcanvas(glist), x);
 
      sys_vgui(".x%lx.c delete %lxP\n",
-	      glist_getcanvas(glist), x);
+              glist_getcanvas(glist), x);
 
      n = 1;
 
      while (n--) {
-	  sys_vgui(".x%lx.c delete %lxi%d\n",glist_getcanvas(glist),x,n);
-	  sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
+          sys_vgui(".x%lx.c delete %lxi%d\n",glist_getcanvas(glist),x,n);
+          sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
      }
 }
 
@@ -205,7 +205,7 @@ static void toddle_select(t_gobj *z, t_glist *glist, int state)
 {
      t_toddle *x = (t_toddle *)z;
      sys_vgui(".x%lx.c itemconfigure %lxS -fill %s\n", glist,
-	     x, (state? "blue" : BACKGROUNDCOLOR));
+             x, (state? "blue" : BACKGROUNDCOLOR));
 }
 
 
@@ -227,9 +227,9 @@ static void toddle_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_toddle* x = (t_toddle*)z;
     if (vis)
-	 toddle_drawme(x, glist, 1);
+         toddle_drawme(x, glist, 1);
     else
-	 toddle_erase(x,glist);
+         toddle_erase(x,glist);
 }
 
 /* can we use the normal text save function ?? */
@@ -267,10 +267,10 @@ static void toddle_click(t_toddle *x,
 static int toddle_newclick(t_gobj *z, struct _glist *glist,
     int xpix, int ypix, int shift, int alt, int dbl, int doit)
 {
-	if (doit)
-	    toddle_click((t_toddle *)z, (t_floatarg)xpix, (t_floatarg)ypix,
-		(t_floatarg)shift, 0, (t_floatarg)alt);
-	return (1);
+        if (doit)
+            toddle_click((t_toddle *)z, (t_floatarg)xpix, (t_floatarg)ypix,
+                (t_floatarg)shift, 0, (t_floatarg)alt);
+        return (1);
 }
 #endif
 
@@ -344,16 +344,16 @@ static void *toddle_new(t_symbol* col,t_floatarg h,t_floatarg o)
     x->x_glist = (t_glist*) canvas_getcurrent();
     if (h) x->x_width = h;
     else
-	 x->x_width = DEFAULTSIZE;
+         x->x_width = DEFAULTSIZE;
 
     if (o) x->x_height = o;
     else
-	 x->x_height = DEFAULTSIZE;
+         x->x_height = DEFAULTSIZE;
 
     if (col != &s_)
-	 x->x_color = col;
+         x->x_color = col;
     else
-	 x->x_color = gensym(DEFAULTCOLOR);
+         x->x_color = gensym(DEFAULTCOLOR);
     x->x_clock = clock_new(x, (t_method)toddle_tick);
 
     outlet_new(&x->x_obj, &s_float);
@@ -363,20 +363,20 @@ static void *toddle_new(t_symbol* col,t_floatarg h,t_floatarg o)
 void toddle_setup(void)
 {
     toddle_class = class_new(gensym("toddle"), (t_newmethod)toddle_new, 0,
-				sizeof(t_toddle),0, A_DEFSYM,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_toddle),0, A_DEFSYM,A_DEFFLOAT,A_DEFFLOAT,0);
 
     class_addcreator((t_newmethod)toddle_new,gensym("bng"),A_DEFSYM,A_DEFFLOAT,A_DEFFLOAT,A_GIMME,0);
     class_addbang(toddle_class,toddle_bang);
     class_addfloat(toddle_class,toddle_float);
 
     class_addmethod(toddle_class, (t_method)toddle_click, gensym("click"),
-	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
+        A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
 
     class_addmethod(toddle_class, (t_method)toddle_size, gensym("size"),
-	A_FLOAT, A_FLOAT, 0);
+        A_FLOAT, A_FLOAT, 0);
 
     class_addmethod(toddle_class, (t_method)toddle_color, gensym("color"),
-	A_SYMBOL, 0);
+        A_SYMBOL, 0);
 
     class_addmethod(toddle_class, (t_method)toddle_on, gensym("on"), 0);
 

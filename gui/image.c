@@ -24,24 +24,24 @@ typedef struct _image
 
 void image_drawme(t_image *x, t_glist *glist, int firsttime)
 {
-	if (firsttime) {
-		char fname[MAXPDSTRING];
-		canvas_makefilename(glist_getcanvas(x->x_glist), x->x_fname->s_name,
-							fname, MAXPDSTRING);
+        if (firsttime) {
+                char fname[MAXPDSTRING];
+                canvas_makefilename(glist_getcanvas(x->x_glist), x->x_fname->s_name,
+                                                        fname, MAXPDSTRING);
 
-	  sys_vgui("image create photo img%lx -file {%s}\n",x,fname);
-	  sys_vgui(".x%lx.c create image %d %d -image img%lx -tags %lxS\n",
-			   glist_getcanvas(glist),text_xpix(&x->x_obj, glist),
-			   text_ypix(&x->x_obj, glist),x,x);
+          sys_vgui("image create photo img%lx -file {%s}\n",x,fname);
+          sys_vgui(".x%lx.c create image %d %d -image img%lx -tags %lxS\n",
+                           glist_getcanvas(glist),text_xpix(&x->x_obj, glist),
+                           text_ypix(&x->x_obj, glist),x,x);
 
-	  /* TODO callback from gui
-	    sys_vgui("image_size logo");
-	  */
+          /* TODO callback from gui
+            sys_vgui("image_size logo");
+          */
      }
      else {
-		 sys_vgui(".x%lx.c coords %lxS %d %d\n",
-				  glist_getcanvas(glist), x,
-				  text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
+                 sys_vgui(".x%lx.c coords %lxS %d %d\n",
+                                  glist_getcanvas(glist), x,
+                                  text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist));
      }
 
 }
@@ -51,7 +51,7 @@ void image_erase(t_image* x,t_glist* glist)
 {
      int n;
      sys_vgui(".x%lx.c delete %lxS\n",
-	      glist_getcanvas(glist), x);
+              glist_getcanvas(glist), x);
 
 }
 
@@ -100,9 +100,9 @@ static void image_displace(t_gobj *z, t_glist *glist,
     x->x_obj.te_xpix += dx;
     x->x_obj.te_ypix += dy;
     sys_vgui(".x%lx.c coords %lxSEL %d %d %d %d\n",
-		   glist_getcanvas(glist), x,
-		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
-		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
+                   glist_getcanvas(glist), x,
+                   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
+                   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height);
 
     image_drawme(x, glist, 0);
     canvas_fixlinesfor(glist,(t_text*) x);
@@ -112,16 +112,16 @@ static void image_select(t_gobj *z, t_glist *glist, int state)
 {
      t_image *x = (t_image *)z;
      if (state) {
-	  sys_vgui(".x%lx.c create rectangle \
+          sys_vgui(".x%lx.c create rectangle \
 %d %d %d %d -tags %lxSEL -outline blue\n",
-		   glist_getcanvas(glist),
-		   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
-		   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height,
-		   x);
+                   glist_getcanvas(glist),
+                   text_xpix(&x->x_obj, glist), text_ypix(&x->x_obj, glist),
+                   text_xpix(&x->x_obj, glist) + x->x_width, text_ypix(&x->x_obj, glist) + x->x_height,
+                   x);
      }
      else {
-	  sys_vgui(".x%lx.c delete %lxSEL\n",
-		   glist_getcanvas(glist), x);
+          sys_vgui(".x%lx.c delete %lxSEL\n",
+                   glist_getcanvas(glist), x);
      }
 
 
@@ -147,9 +147,9 @@ static void image_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_image* x = (t_image*)z;
     if (vis)
-	 image_drawme(x, glist, 1);
+         image_drawme(x, glist, 1);
     else
-	 image_erase(x,glist);
+         image_erase(x,glist);
 }
 
 /* can we use the normal text save function ?? */
@@ -221,18 +221,18 @@ static void *image_new(t_symbol *s, t_int argc, t_atom *argv)
 void image_setup(void)
 {
     image_class = class_new(gensym("image"), (t_newmethod)image_new, 0,
-				sizeof(t_image),0, A_GIMME,0);
+                                sizeof(t_image),0, A_GIMME,0);
 
     class_addmethod(image_class, (t_method)image_size, gensym("size"),
-    	A_FLOAT, A_FLOAT, 0);
+        A_FLOAT, A_FLOAT, 0);
 
 /*
     class_addmethod(image_class, (t_method)image_color, gensym("color"),
-    	A_SYMBOL, 0);
+        A_SYMBOL, 0);
 */
 
     class_addmethod(image_class, (t_method)image_open, gensym("open"),
-    	A_GIMME, 0);
+        A_GIMME, 0);
 
     image_setwidget();
     class_setwidget(image_class,&image_widgetbehavior);

@@ -23,7 +23,7 @@ static t_int *inv_perform(t_int *w)    /* not static; also used in d_fft.c */
     t_int n = *(t_int *)(w+3);
     while (n--)
     {
-	*out++ = 1/ *in++;
+        *out++ = 1/ *in++;
     }
     return (w + 4);
 }
@@ -36,7 +36,7 @@ static void inv_dsp(t_inv *x, t_signal **sp)
 void inv_tilde_setup(void)
 {
     inv_class = class_new(gensym("inv~"), (t_newmethod)inv_new, 0,
-    	sizeof(t_inv), 0, 0);
+        sizeof(t_inv), 0, 0);
 
     class_addcreator(inv_new,gensym("1/x~"),0);
 
@@ -70,7 +70,7 @@ static void scalarinv_float(t_scalarinv *x,t_float val)
 void inv_setup(void)
 {
     scalarinv_class = class_new(gensym("inv"), (t_newmethod)scalarinv_new, 0,
-    	sizeof(t_scalarinv), 0, 0);
+        sizeof(t_scalarinv), 0, 0);
     class_addcreator(scalarinv_new,gensym("1/x"),0);
 
     class_addfloat(scalarinv_class, (t_method)scalarinv_float);

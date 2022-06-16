@@ -62,7 +62,7 @@ static void *lsend_new(t_symbol *s)
 void sl_setup(void)
 {
     lsend_class = class_new(gensym("sendlocal"), (t_newmethod)lsend_new, 0,
-    	sizeof(t_lsend), 0, A_DEFSYM, 0);
+        sizeof(t_lsend), 0, A_DEFSYM, 0);
     class_addcreator((t_newmethod)lsend_new, gensym("sl"), A_DEFSYM, 0);
     class_addbang(lsend_class, lsend_bang);
     class_addfloat(lsend_class, lsend_float);

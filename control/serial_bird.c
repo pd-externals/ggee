@@ -66,67 +66,67 @@ static void serial_bird_float( t_serial_bird* x,t_floatarg f)
      t_int ac = 0;
 
      if (c&BIRD_DATA_START) {
-	  x->x_count=0;
-	  x->x_c[x->x_count] = c & 0x7f;
+          x->x_count=0;
+          x->x_c[x->x_count] = c & 0x7f;
      }
      else
-	  x->x_c[x->x_count] = c;
+          x->x_c[x->x_count] = c;
 
      DEBUG(post("data %d in = %x, start = %d",x->x_count,c,c&BIRD_DATA_START);)
 
      if (x->x_count == x->x_maxcount-1) {
-	  switch (x->x_dataformat) {
-	  case BIRDCMD_MODE_POS:
-	       ac = 3;
-	       SETFLOAT(&at[0], 0.25*BIRD_GETDATA(x->x_c[0],x->x_c[1]));
-	       SETFLOAT(&at[1], 0.25*BIRD_GETDATA(x->x_c[2],x->x_c[3]));
-	       SETFLOAT(&at[2], 0.25*BIRD_GETDATA(x->x_c[4],x->x_c[5]));
-	       break;
-	  case BIRDCMD_MODE_POSANG:
-	       ac = 6;
-	       SETFLOAT(&at[0], 0.25*BIRD_GETDATA(x->x_c[0],x->x_c[1]));
-	       SETFLOAT(&at[1], 0.25*BIRD_GETDATA(x->x_c[2],x->x_c[3]));
-	       SETFLOAT(&at[2], 0.25*BIRD_GETDATA(x->x_c[4],x->x_c[5]));
-	       SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
-	       SETFLOAT(&at[4], BIRD_GETDATA(x->x_c[8],x->x_c[9]));
-	       SETFLOAT(&at[5], BIRD_GETDATA(x->x_c[10],x->x_c[11]));
-	       break;
-	  case BIRDCMD_MODE_POSMAT:
-	       ac = 12;
-	       SETFLOAT(&at[0], BIRD_GETDATA(x->x_c[0],x->x_c[1]));
-	       SETFLOAT(&at[1], BIRD_GETDATA(x->x_c[2],x->x_c[3]));
-	       SETFLOAT(&at[2], BIRD_GETDATA(x->x_c[4],x->x_c[5]));
-	       SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
-	       SETFLOAT(&at[4], BIRD_GETDATA(x->x_c[8],x->x_c[9]));
-	       SETFLOAT(&at[5], BIRD_GETDATA(x->x_c[10],x->x_c[11]));
-	       SETFLOAT(&at[6], BIRD_GETDATA(x->x_c[12],x->x_c[13]));
-	       SETFLOAT(&at[7], BIRD_GETDATA(x->x_c[14],x->x_c[15]));
-	       SETFLOAT(&at[8], BIRD_GETDATA(x->x_c[16],x->x_c[17]));
-	       SETFLOAT(&at[9], BIRD_GETDATA(x->x_c[18],x->x_c[19]));
-	       SETFLOAT(&at[10], BIRD_GETDATA(x->x_c[20],x->x_c[21]));
-	       SETFLOAT(&at[11], BIRD_GETDATA(x->x_c[22],x->x_c[23]));
-	       break;
-	  case BIRDCMD_MODE_POSQUAT:
-	       ac = 7;
-	       SETFLOAT(&at[0], BIRD_GETDATA(x->x_c[0],x->x_c[1]));
-	       SETFLOAT(&at[1], BIRD_GETDATA(x->x_c[2],x->x_c[3]));
-	       SETFLOAT(&at[2], BIRD_GETDATA(x->x_c[4],x->x_c[5]));
-	       SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
-	       SETFLOAT(&at[4], BIRD_GETDATA(x->x_c[8],x->x_c[9]));
-	       SETFLOAT(&at[5], BIRD_GETDATA(x->x_c[10],x->x_c[11]));
-	       SETFLOAT(&at[6], BIRD_GETDATA(x->x_c[12],x->x_c[13]));
-	       break;
-	  case BIRDCMD_MODE_QUAT:
-	       ac = 4;
-	       SETFLOAT(&at[0], BIRD_GETDATA(x->x_c[0],x->x_c[1]));
-	       SETFLOAT(&at[1], BIRD_GETDATA(x->x_c[2],x->x_c[3]));
-	       SETFLOAT(&at[2], BIRD_GETDATA(x->x_c[4],x->x_c[5]));
-	       SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
-	       break;
-	  }
+          switch (x->x_dataformat) {
+          case BIRDCMD_MODE_POS:
+               ac = 3;
+               SETFLOAT(&at[0], 0.25*BIRD_GETDATA(x->x_c[0],x->x_c[1]));
+               SETFLOAT(&at[1], 0.25*BIRD_GETDATA(x->x_c[2],x->x_c[3]));
+               SETFLOAT(&at[2], 0.25*BIRD_GETDATA(x->x_c[4],x->x_c[5]));
+               break;
+          case BIRDCMD_MODE_POSANG:
+               ac = 6;
+               SETFLOAT(&at[0], 0.25*BIRD_GETDATA(x->x_c[0],x->x_c[1]));
+               SETFLOAT(&at[1], 0.25*BIRD_GETDATA(x->x_c[2],x->x_c[3]));
+               SETFLOAT(&at[2], 0.25*BIRD_GETDATA(x->x_c[4],x->x_c[5]));
+               SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
+               SETFLOAT(&at[4], BIRD_GETDATA(x->x_c[8],x->x_c[9]));
+               SETFLOAT(&at[5], BIRD_GETDATA(x->x_c[10],x->x_c[11]));
+               break;
+          case BIRDCMD_MODE_POSMAT:
+               ac = 12;
+               SETFLOAT(&at[0], BIRD_GETDATA(x->x_c[0],x->x_c[1]));
+               SETFLOAT(&at[1], BIRD_GETDATA(x->x_c[2],x->x_c[3]));
+               SETFLOAT(&at[2], BIRD_GETDATA(x->x_c[4],x->x_c[5]));
+               SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
+               SETFLOAT(&at[4], BIRD_GETDATA(x->x_c[8],x->x_c[9]));
+               SETFLOAT(&at[5], BIRD_GETDATA(x->x_c[10],x->x_c[11]));
+               SETFLOAT(&at[6], BIRD_GETDATA(x->x_c[12],x->x_c[13]));
+               SETFLOAT(&at[7], BIRD_GETDATA(x->x_c[14],x->x_c[15]));
+               SETFLOAT(&at[8], BIRD_GETDATA(x->x_c[16],x->x_c[17]));
+               SETFLOAT(&at[9], BIRD_GETDATA(x->x_c[18],x->x_c[19]));
+               SETFLOAT(&at[10], BIRD_GETDATA(x->x_c[20],x->x_c[21]));
+               SETFLOAT(&at[11], BIRD_GETDATA(x->x_c[22],x->x_c[23]));
+               break;
+          case BIRDCMD_MODE_POSQUAT:
+               ac = 7;
+               SETFLOAT(&at[0], BIRD_GETDATA(x->x_c[0],x->x_c[1]));
+               SETFLOAT(&at[1], BIRD_GETDATA(x->x_c[2],x->x_c[3]));
+               SETFLOAT(&at[2], BIRD_GETDATA(x->x_c[4],x->x_c[5]));
+               SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
+               SETFLOAT(&at[4], BIRD_GETDATA(x->x_c[8],x->x_c[9]));
+               SETFLOAT(&at[5], BIRD_GETDATA(x->x_c[10],x->x_c[11]));
+               SETFLOAT(&at[6], BIRD_GETDATA(x->x_c[12],x->x_c[13]));
+               break;
+          case BIRDCMD_MODE_QUAT:
+               ac = 4;
+               SETFLOAT(&at[0], BIRD_GETDATA(x->x_c[0],x->x_c[1]));
+               SETFLOAT(&at[1], BIRD_GETDATA(x->x_c[2],x->x_c[3]));
+               SETFLOAT(&at[2], BIRD_GETDATA(x->x_c[4],x->x_c[5]));
+               SETFLOAT(&at[3], BIRD_GETDATA(x->x_c[6],x->x_c[7]));
+               break;
+          }
 
-/*	  post("posx %d, posy %d",x->x_posx,x->x_posy);*/
-	  outlet_list(x->x_obj.ob_outlet,&s_list, ac, at);
+/*        post("posx %d, posy %d",x->x_posx,x->x_posy);*/
+          outlet_list(x->x_obj.ob_outlet,&s_list, ac, at);
      }
 
      x->x_count = (++x->x_count)%(x->x_maxcount);
@@ -249,8 +249,8 @@ static void *serial_bird_new(t_symbol *s)
 void serial_bird_setup(void)
 {
     serial_bird_class = class_new(gensym("serial_bird"), (t_newmethod)serial_bird_new,
-			     NULL,
-			     sizeof(t_serial_bird), 0,A_DEFSYM,0);
+                             NULL,
+                             sizeof(t_serial_bird), 0,A_DEFSYM,0);
     class_addfloat(serial_bird_class,serial_bird_float);
     class_addmethod(serial_bird_class,(t_method) serial_bird_reset,gensym("reset"),0);
     class_addmethod(serial_bird_class,(t_method) serial_bird_init,gensym("init"),0);

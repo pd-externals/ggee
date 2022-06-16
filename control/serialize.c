@@ -29,8 +29,8 @@ void serialize_float(t_serialize *x,t_floatarg f)
      x->x_count++;
 
      if (x->x_count == x->x_elements) {
-	  outlet_list(x->x_obj.ob_outlet,0,x->x_count,x->x_abuf);
-	  x->x_count = 0;
+          outlet_list(x->x_obj.ob_outlet,0,x->x_count,x->x_abuf);
+          x->x_count = 0;
      }
 }
 
@@ -51,6 +51,6 @@ static void *serialize_new(t_floatarg f)
 void serialize_setup(void)
 {
     serialize_class = class_new(gensym("serialize"), (t_newmethod)serialize_new, 0,
-				sizeof(t_serialize),0, A_DEFFLOAT,0);
+                                sizeof(t_serialize),0, A_DEFFLOAT,0);
     class_addfloat(serialize_class,serialize_float);
 }

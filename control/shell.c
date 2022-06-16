@@ -72,20 +72,20 @@ void shell_cleanup(t_shell* x)
 
 void shell_check(t_shell* x)
 {
-	int ret;
-	int status;
-	ret = waitpid(x->pid,&status,WNOHANG);
-	if (ret == x->pid) {
-	     shell_cleanup(x);
-	     if (WIFEXITED(status)) {
-		  outlet_float(x->x_done,WEXITSTATUS(status));
-	     }
-	     else outlet_float(x->x_done,0);
-	}
-	else {
-	     if (x->x_del < 100) x->x_del+=2; /* increment poll times */
-	     clock_delay(x->x_clock,x->x_del);
-	}
+        int ret;
+        int status;
+        ret = waitpid(x->pid,&status,WNOHANG);
+        if (ret == x->pid) {
+             shell_cleanup(x);
+             if (WIFEXITED(status)) {
+                  outlet_float(x->x_done,WEXITSTATUS(status));
+             }
+             else outlet_float(x->x_done,0);
+        }
+        else {
+             if (x->x_del < 100) x->x_del+=2; /* increment poll times */
+             clock_delay(x->x_clock,x->x_del);
+        }
 }
 
 
@@ -103,31 +103,31 @@ static void shell_doit(void *z, t_binbuf *b)
 
     for (msg = 0; msg < natom;)
     {
-    	int emsg;
-	for (emsg = msg; emsg < natom && at[emsg].a_type != A_COMMA
-	    && at[emsg].a_type != A_SEMI; emsg++)
-	    	;
-	if (emsg > msg)
-	{
-	    int i;
-	    for (i = msg; i < emsg; i++)
-	    	if (at[i].a_type == A_DOLLAR || at[i].a_type == A_DOLLSYM)
-	    {
-	    	pd_error(x, "netreceive: got dollar sign in message");
-		goto nodice;
-	    }
-	    if (at[msg].a_type == A_FLOAT)
-	    {
-	    	if (emsg > msg + 1)
-		    outlet_list(x->x_obj.ob_outlet,  0, emsg-msg, at + msg);
-		else outlet_float(x->x_obj.ob_outlet,  at[msg].a_w.w_float);
-	    }
-	    else if (at[msg].a_type == A_SYMBOL)
-	    	outlet_anything(x->x_obj.ob_outlet,  at[msg].a_w.w_symbol,
-		    emsg-msg-1, at + msg + 1);
-	}
+        int emsg;
+        for (emsg = msg; emsg < natom && at[emsg].a_type != A_COMMA
+            && at[emsg].a_type != A_SEMI; emsg++)
+                ;
+        if (emsg > msg)
+        {
+            int i;
+            for (i = msg; i < emsg; i++)
+                if (at[i].a_type == A_DOLLAR || at[i].a_type == A_DOLLSYM)
+            {
+                pd_error(x, "netreceive: got dollar sign in message");
+                goto nodice;
+            }
+            if (at[msg].a_type == A_FLOAT)
+            {
+                if (emsg > msg + 1)
+                    outlet_list(x->x_obj.ob_outlet,  0, emsg-msg, at + msg);
+                else outlet_float(x->x_obj.ob_outlet,  at[msg].a_w.w_float);
+            }
+            else if (at[msg].a_type == A_SYMBOL)
+                outlet_anything(x->x_obj.ob_outlet,  at[msg].a_w.w_symbol,
+                    emsg-msg-1, at + msg + 1);
+        }
     nodice:
-    	msg = emsg + 1;
+        msg = emsg + 1;
     }
 }
 
@@ -138,7 +138,7 @@ void shell_read(t_shell *x, int fd)
      t_binbuf* bbuf = binbuf_new();
      int i;
      int readto =
-	  (x->sr_inhead >= x->sr_intail ? INBUFSIZE : x->sr_intail-1);
+          (x->sr_inhead >= x->sr_intail ? INBUFSIZE : x->sr_intail-1);
      int ret;
 
      ret = read(fd, buf,INBUFSIZE-1);
@@ -148,29 +148,29 @@ void shell_read(t_shell *x, int fd)
        if (buf[i] == '\n') buf[i] = ';';
      if (ret < 0)
        {
-	 pd_error(x, "shell: pipe read error");
-	 sys_rmpollfn(fd);
-	 x->fdpipe[0] = -1;
-	 close(fd);
-	 return;
+         pd_error(x, "shell: pipe read error");
+         sys_rmpollfn(fd);
+         x->fdpipe[0] = -1;
+         close(fd);
+         return;
        }
      else if (ret == 0)
        {
-	 post("EOF on socket %d\n", fd);
-	 sys_rmpollfn(fd);
-	 x->fdpipe[0] = -1;
-	 close(fd);
-	 return;
+         post("EOF on socket %d\n", fd);
+         sys_rmpollfn(fd);
+         x->fdpipe[0] = -1;
+         close(fd);
+         return;
        }
      else
        {
-	 int natom;
-	 t_atom *at;
-	 binbuf_text(bbuf, buf, strlen(buf));
+         int natom;
+         t_atom *at;
+         binbuf_text(bbuf, buf, strlen(buf));
 
-	 natom = binbuf_getnatom(bbuf);
-	 at = binbuf_getvec(bbuf);
-	 shell_doit(x,bbuf);
+         natom = binbuf_getnatom(bbuf);
+         at = binbuf_getvec(bbuf);
+         shell_doit(x,bbuf);
        }
      binbuf_free(bbuf);
 }
@@ -185,10 +185,10 @@ static void shell_send(t_shell *x, t_symbol *s,int ac, t_atom *at)
      if (x->fdinpipe[0] == -1) return; /* nothing to send to */
 
      for (i=0;i<ac;i++) {
-	  atom_string(at,tmp+size,MAXPDSTRING - size);
-	  at++;
-	  size=strlen(tmp);
-	  tmp[size++] = ' '; 
+          atom_string(at,tmp+size,MAXPDSTRING - size);
+          at++;
+          size=strlen(tmp);
+          tmp[size++] = ' ';
      }
      tmp[size-1] = '\0';
      post("sending %s",tmp);
@@ -202,28 +202,28 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
      t_symbol* sym;
 
      if (!strcmp(s->s_name,"send")) {
-	  post("send");
-	  shell_send(x,s,ac,at);
-	  return;
+          post("send");
+          shell_send(x,s,ac,at);
+          return;
      }
 
      argv[0] = s->s_name;
 
      if (x->fdpipe[0] != -1) {
-	  post("shell: old process still running");
-	  kill(x->pid,SIGKILL);
-	  shell_cleanup(x);
+          post("shell: old process still running");
+          kill(x->pid,SIGKILL);
+          shell_cleanup(x);
      }
 
 
      if (pipe(x->fdpipe) < 0) {
-	  pd_error(x, "unable to create pipe");
-	  return;
+          pd_error(x, "unable to create pipe");
+          return;
      }
 
      if (pipe(x->fdinpipe) < 0) {
-	  pd_error(x, "unable to create input pipe");
-	  return;
+          pd_error(x, "unable to create input pipe");
+          return;
      }
 
 
@@ -239,32 +239,32 @@ static void shell_anything(t_shell *x, t_symbol *s, int ac, t_atom *at)
          seteuid(getuid());          /* lose setuid priveliges */
 
 #ifdef __APPLE__
-	  for (i=1;i<=ac;i++) {
-	       argv[i] = getbytes(255);
-	       atom_string(at,argv[i],255);
-	       at++;
-	  }
-	  argv[i] = 0;
-	  execvp(s->s_name,argv);
+          for (i=1;i<=ac;i++) {
+               argv[i] = getbytes(255);
+               atom_string(at,argv[i],255);
+               at++;
+          }
+          argv[i] = 0;
+          execvp(s->s_name,argv);
 #else
-	// changed linux part: use execvp() instead system()
-	// see https://github.com/umlaeute/Gem/issues/224
+        // changed linux part: use execvp() instead system()
+        // see https://github.com/umlaeute/Gem/issues/224
 
-	  for (i=1;i<=ac;i++) {
-	       argv[i] = getbytes(255);
-	       atom_string(at,argv[i],255);
-	       at++;
-	  }
-	  argv[i] = 0;
-	  execvp(s->s_name,argv);
+          for (i=1;i<=ac;i++) {
+               argv[i] = getbytes(255);
+               atom_string(at,argv[i],255);
+               at++;
+          }
+          argv[i] = 0;
+          execvp(s->s_name,argv);
 #endif /* __APPLE__ */
-	  exit(0);
+          exit(0);
      }
      x->x_del = 4;
      clock_delay(x->x_clock,x->x_del);
 
      if (x->x_echo)
-	  outlet_anything(x->x_obj.ob_outlet, s, ac, at); 
+          outlet_anything(x->x_obj.ob_outlet, s, ac, at);
 }
 
 
@@ -321,8 +321,8 @@ static void *shell_new(void)
 
 void shell_setup(void)
 {
-    shell_class = class_new(gensym("shell"), (t_newmethod)shell_new, 
-			    (t_method)shell_free,sizeof(t_shell), 0,0);
+    shell_class = class_new(gensym("shell"), (t_newmethod)shell_new,
+                            (t_method)shell_free,sizeof(t_shell), 0,0);
     class_addbang(shell_class,shell_bang);
     class_addanything(shell_class, shell_anything);
 }

@@ -78,7 +78,7 @@ static void *equ_new(t_floatarg f,t_floatarg g,t_floatarg bw)
 void equalizer_setup(void)
 {
     equ_class = class_new(gensym("equalizer"), (t_newmethod)equ_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(equ_class,equ_bang);
     class_addfloat(equ_class,equ_float);
 }

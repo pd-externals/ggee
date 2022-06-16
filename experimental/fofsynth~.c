@@ -34,8 +34,8 @@ static void cos_maketable(void)
      fofcos_table = (t_word *)getbytes(sizeof(t_word) * (COSTABSIZE+1));
 
      for (i = COSTABSIZE + 1, fp = fofcos_table, phase = 0; i--;
-	  fp++, phase += phsinc)
-	  fp->w_float = cos(phase);
+          fp++, phase += phsinc)
+          fp->w_float = cos(phase);
 
 }
 
@@ -48,8 +48,8 @@ static void halfcos_maketable(void)
      halfcos_table = (t_sample *)getbytes(sizeof(t_sample) * (COSTABSIZE+1));
 
      for (i = COSTABSIZE + 1, fp = halfcos_table, phase = PD_PI; i--;
-	  fp++, phase += phsinc)
-	  *fp = 0.5*(cos(phase) + 1.0);
+          fp++, phase += phsinc)
+          *fp = 0.5*(cos(phase) + 1.0);
 }
 
 
@@ -62,8 +62,8 @@ static void exp_maketable(void)
      exp_table = (t_sample *)getbytes(sizeof(t_sample) * (COSTABSIZE+1));
 
      for (i = COSTABSIZE + 1, fp = exp_table, phase = 0; i--;
-	  fp++, phase += phsinc)
-	  *fp = exp(-phase);
+          fp++, phase += phsinc)
+          *fp = exp(-phase);
 }
 
 
@@ -84,7 +84,7 @@ typedef struct _fofsynth
      t_object x_obj;
 
      /* it is possible to use 2 array, prob change this one
-	int the future */
+        int the future */
 
      t_symbol* x_arrayname;
 
@@ -127,11 +127,11 @@ static t_grain* grain_makecyclic(t_grain* base,int num)
 {
      t_grain* cur = base;
      while (--num) {
-	  cur->next = cur+1;
-	  cur++;
+          cur->next = cur+1;
+          cur++;
      }
      cur->next = base;
-	 return base;
+         return base;
 }
 
 
@@ -175,76 +175,76 @@ static t_int *fofsynth_perform(t_int *w)
 
      while (n--)
      {
-	  fundphase+=*++in*israte;
-	  *out = 0.0;
+          fundphase+=*++in*israte;
+          *out = 0.0;
 
-	  if (x->neednewgrain) {  /* new grain, they are deleted separetely */
-	       t_grain* newgrain = x->grainend;
-/*	       DEBUG("new grain created",0); */
-	       if (newgrain->next == x->grainstart) {
-		    post("fof: grain overflow");
-		    x->neednewgrain = 0;
-	       }
-	       else {
-		    x->numgrains++;
-		    x->grainend = newgrain->next;
-		    newgrain->formphinc = formphinc;
-		    newgrain->falling = 0;
-		    newgrain->formph = newgrain->envph = 0.0;
-		    x->neednewgrain = 0;
-	       }
-	  }
+          if (x->neednewgrain) {  /* new grain, they are deleted separetely */
+               t_grain* newgrain = x->grainend;
+/*             DEBUG("new grain created",0); */
+               if (newgrain->next == x->grainstart) {
+                    post("fof: grain overflow");
+                    x->neednewgrain = 0;
+               }
+               else {
+                    x->numgrains++;
+                    x->grainend = newgrain->next;
+                    newgrain->formphinc = formphinc;
+                    newgrain->falling = 0;
+                    newgrain->formph = newgrain->envph = 0.0;
+                    x->neednewgrain = 0;
+               }
+          }
 
-	  cur = x->grainstart;
-	  while (cur != x->grainend) {
-	       t_sample formphase = cur->formph;
-	       t_sample envelope;
+          cur = x->grainstart;
+          while (cur != x->grainend) {
+               t_sample formphase = cur->formph;
+               t_sample envelope;
 
-	       t_sample tph = (formphase - (t_sample)((int) formphase));
-	       t_sample val = x->x_vec[(int) (tph * x->x_npoints)].w_float;
+               t_sample tph = (formphase - (t_sample)((int) formphase));
+               t_sample val = x->x_vec[(int) (tph * x->x_npoints)].w_float;
 
-	       /* Apply the envelope */
+               /* Apply the envelope */
 
-	       if (!cur->falling && (cur->envph <= 1.0)) {
-		    envelope = *(halfcos_table + (int) (cur->envph * COSTABSIZE));
-		    cur->envph+=risinc;
-		    val *= envelope;
-	       }
-	       else if (!cur->falling)
-	       {
-		    cur->falling = 1;
-		    cur->envph = 0;
-	       }
-
-
-	       if (cur->falling) {
-		    envelope = *(exp_table + (int) (cur->envph * COSTABSIZE));
-		    cur->envph+=fallinc;
-		    val *= envelope;
-	       }
-
-	       /* end of envelope code */
+               if (!cur->falling && (cur->envph <= 1.0)) {
+                    envelope = *(halfcos_table + (int) (cur->envph * COSTABSIZE));
+                    cur->envph+=risinc;
+                    val *= envelope;
+               }
+               else if (!cur->falling)
+               {
+                    cur->falling = 1;
+                    cur->envph = 0;
+               }
 
 
-	       formphase+=cur->formphinc;
-	       cur->formph = formphase;
+               if (cur->falling) {
+                    envelope = *(exp_table + (int) (cur->envph * COSTABSIZE));
+                    cur->envph+=fallinc;
+                    val *= envelope;
+               }
 
-	       if (formphase >= numperiods) { /* dead */
-		    DEBUG("grain died",0);
-		    x->grainstart = cur->next;
-		    x->numgrains--;/* not needed */
-	       }
-
-	       cur = cur->next;
-	       *out += val;
-	  }
+               /* end of envelope code */
 
 
-	  if (fundphase > 1.0) {
-	       fundphase -=  1.0;
-	       x->neednewgrain=1;
-	  }
-	  out++;
+               formphase+=cur->formphinc;
+               cur->formph = formphase;
+
+               if (formphase >= numperiods) { /* dead */
+                    DEBUG("grain died",0);
+                    x->grainstart = cur->next;
+                    x->numgrains--;/* not needed */
+               }
+
+               cur = cur->next;
+               *out += val;
+          }
+
+
+          if (fundphase > 1.0) {
+               fundphase -=  1.0;
+               x->neednewgrain=1;
+          }
+          out++;
      }
 
      x->fundph=fundphase;
@@ -258,25 +258,25 @@ void fofsynth_usearray(t_symbol* s,int* points,t_word** vec)
 {
      t_garray *a;
      if (!(a = (t_garray *)pd_findbyclass(s, garray_class)))
-	  pd_error(0, "%s: no such array", s->s_name);
+          pd_error(0, "%s: no such array", s->s_name);
      else if (!garray_getfloatwords(a,points,vec))
-	  pd_error(0, "%s: bad template for fof~", s->s_name);
+          pd_error(0, "%s: bad template for fof~", s->s_name);
      else
-	  garray_usedindsp(a);
+          garray_usedindsp(a);
 }
 
 static void fofsynth_dsp(t_fofsynth *x, t_signal **sp)
 {
 
      if (x->x_arrayname)
-	  fofsynth_usearray(x->x_arrayname,&x->x_npoints, &x->x_vec);
+          fofsynth_usearray(x->x_arrayname,&x->x_npoints, &x->x_vec);
      else {
-	  x->x_npoints=COSTABSIZE;
-	  x->x_vec = fofcos_table;
+          x->x_npoints=COSTABSIZE;
+          x->x_vec = fofcos_table;
      }
 
      dsp_add(fofsynth_perform, 4, x,
-	     sp[0]->s_vec,sp[1]->s_vec, sp[0]->s_n);
+             sp[0]->s_vec,sp[1]->s_vec, sp[0]->s_n);
 }
 
 
@@ -294,7 +294,7 @@ static void fofsynth_debug(t_fofsynth* x)
 
 static void fofsynth_float(t_fofsynth* x,t_float f)
 {
-	x->fundfreq = f > 0.0 ? f : -f;
+        x->fundfreq = f > 0.0 ? f : -f;
 }
 
 
@@ -307,7 +307,7 @@ static void *fofsynth_new(t_symbol* s,t_float a,t_float b,t_float c,t_float d)
      x->x_arrayname = s;
 
      if (s == &s_)
-	  x->x_arrayname = NULL;
+          x->x_arrayname = NULL;
 
      /* setup the grain queue */
 
@@ -344,7 +344,7 @@ void fofsynth_tilde_setup(void)
      fofcos_table = NULL;
      halfcos_table = NULL;
      fofsynth_class = class_new(gensym("fof~"), (t_newmethod) fofsynth_new,(t_method) fofsynth_free,
-				sizeof(t_fofsynth), 0,A_DEFSYM, A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_fofsynth), 0,A_DEFSYM, A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
      class_addcreator((t_newmethod)fofsynth_new,gensym("fofsynth~"),A_DEFSYM, A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
      class_addmethod(fofsynth_class, nullfn, gensym("signal"), 0);
      class_addmethod(fofsynth_class, (t_method) fofsynth_dsp, gensym("dsp"), 0);

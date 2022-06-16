@@ -54,19 +54,19 @@ static void rectangle(void* cv,void* o,int c,int x, int y,int w,int h,char* colo
 }
 
 static void move_object(void* cv,void* o,int c,int x, int y,int w,int h) {
-	  sys_vgui(".x%lx.c coords %lx%d %d %d %d %d\n",
+          sys_vgui(".x%lx.c coords %lx%d %d %d %d %d\n",
                    cv,o,c,x,y,x+w,y+h);
 
 }
 
 static void color_object(void* cv,void* o,int c,char* color) {
      sys_vgui(".x%lx.c itemconfigure %lx%d -fill %s\n", cv,
-	     o, c,color);
+             o, c,color);
 }
 
 static void delete_object(void* cv,void* o,int c) {
      sys_vgui(".x%lx.c delete %lx%d\n",
-	      cv, o,c);
+              cv, o,c);
 }
 
 static void line(void* cv,void* o,int c,int x,int y,int w,int h,char* color) {
@@ -136,43 +136,43 @@ void gcanvas_drawme(t_gcanvas *x, t_glist *glist, int firsttime)
 
      {
        /* outlets */
-	  int n = 3;
-	  int nplus, i;
-	  nplus = (n == 1 ? 1 : n-1);
-	  for (i = 0; i < n; i++)
-	  {
-	       int onset = x->x_obj.te_xpix + (x->x_width - IOWIDTH) * i / nplus;
-	       if (firsttime)
-		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxo%d\n",
-			     glist_getcanvas(glist),
-			     onset, x->x_obj.te_ypix + x->x_height - 1,
-			     onset + IOWIDTH, x->x_obj.te_ypix + x->x_height,
-			     x, i);
-	       else
-		    sys_vgui(".x%lx.c coords %lxo%d %d %d %d %d\n",
-			     glist_getcanvas(glist), x, i,
-			     onset, x->x_obj.te_ypix + x->x_height - 1,
-			     onset + IOWIDTH, x->x_obj.te_ypix + x->x_height);
-	  }
-	  /* inlets */
-	  n = 0;
-	  nplus = (n == 1 ? 1 : n-1);
-	  for (i = 0; i < n; i++)
-	  {
-	       int onset = x->x_obj.te_xpix + (x->x_width - IOWIDTH) * i / nplus;
-	       if (firsttime)
-		    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxi%d\n",
-			     glist_getcanvas(glist),
-			     onset, x->x_obj.te_ypix,
-			     onset + IOWIDTH, x->x_obj.te_ypix + 1,
-			     x, i);
-	       else
-		    sys_vgui(".x%lx.c coords %lxi%d %d %d %d %d\n",
-			     glist_getcanvas(glist), x, i,
-			     onset, x->x_obj.te_ypix,
-			     onset + IOWIDTH, x->x_obj.te_ypix + 1);
+          int n = 3;
+          int nplus, i;
+          nplus = (n == 1 ? 1 : n-1);
+          for (i = 0; i < n; i++)
+          {
+               int onset = x->x_obj.te_xpix + (x->x_width - IOWIDTH) * i / nplus;
+               if (firsttime)
+                    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxo%d\n",
+                             glist_getcanvas(glist),
+                             onset, x->x_obj.te_ypix + x->x_height - 1,
+                             onset + IOWIDTH, x->x_obj.te_ypix + x->x_height,
+                             x, i);
+               else
+                    sys_vgui(".x%lx.c coords %lxo%d %d %d %d %d\n",
+                             glist_getcanvas(glist), x, i,
+                             onset, x->x_obj.te_ypix + x->x_height - 1,
+                             onset + IOWIDTH, x->x_obj.te_ypix + x->x_height);
+          }
+          /* inlets */
+          n = 0;
+          nplus = (n == 1 ? 1 : n-1);
+          for (i = 0; i < n; i++)
+          {
+               int onset = x->x_obj.te_xpix + (x->x_width - IOWIDTH) * i / nplus;
+               if (firsttime)
+                    sys_vgui(".x%lx.c create rectangle %d %d %d %d -tags %lxi%d\n",
+                             glist_getcanvas(glist),
+                             onset, x->x_obj.te_ypix,
+                             onset + IOWIDTH, x->x_obj.te_ypix + 1,
+                             x, i);
+               else
+                    sys_vgui(".x%lx.c coords %lxi%d %d %d %d %d\n",
+                             glist_getcanvas(glist), x, i,
+                             onset, x->x_obj.te_ypix,
+                             onset + IOWIDTH, x->x_obj.te_ypix + 1);
 
-	  }
+          }
      }
 
 }
@@ -189,7 +189,7 @@ void gcanvas_erase(t_gcanvas* x,t_glist* glist)
 
      n = 3;
      while (n--) {
-	  sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
+          sys_vgui(".x%lx.c delete %lxo%d\n",glist_getcanvas(glist),x,n);
      }
 }
 
@@ -248,9 +248,9 @@ static void gcanvas_vis(t_gobj *z, t_glist *glist, int vis)
 {
     t_gcanvas* x = (t_gcanvas*)z;
     if (vis)
-	 gcanvas_drawme(x, glist, 1);
+         gcanvas_drawme(x, glist, 1);
     else
-	 gcanvas_erase(x,glist);
+         gcanvas_erase(x,glist);
 }
 
 /* can we use the normal text save function ?? */
@@ -259,8 +259,8 @@ static void gcanvas_save(t_gobj *z, t_binbuf *b)
 {
     t_gcanvas *x = (t_gcanvas *)z;
     binbuf_addv(b, "ssiisii", gensym("#X"),gensym("obj"),
-		(t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,
-		gensym("gcanvas"),x->x_width,x->x_height);
+                (t_int)x->x_obj.te_xpix, (t_int)x->x_obj.te_ypix,
+                gensym("gcanvas"),x->x_width,x->x_height);
     binbuf_addv(b, ";");
 }
 
@@ -286,7 +286,7 @@ static void gcanvas_click(t_gcanvas *x,
     t_floatarg doit,int up)
 {
     glist_grab(x->x_glist, &x->x_obj.te_g, (t_glistmotionfn) gcanvas_motion,
-		(t_glistkeyfn) NULL, xpos, ypos);
+                (t_glistkeyfn) NULL, xpos, ypos);
 
     x->x = xpos - x->x_obj.te_xpix;
     x->y = ypos - x->x_obj.te_ypix;
@@ -298,9 +298,9 @@ static void gcanvas_click(t_gcanvas *x,
 static int gcanvas_newclick(t_gobj *z, struct _glist *glist,
     int xpix, int ypix, int shift, int alt, int dbl, int doit)
 {
-	if (doit)
-	    gcanvas_click((t_gcanvas *)z, (t_floatarg)xpix, (t_floatarg)ypix,
-		(t_floatarg)shift, 0, (t_floatarg)alt,dbl);
+        if (doit)
+            gcanvas_click((t_gcanvas *)z, (t_floatarg)xpix, (t_floatarg)ypix,
+                (t_floatarg)shift, 0, (t_floatarg)alt,dbl);
 
     if (dbl) outlet_float(((t_gcanvas*)z)->out3,1);
     return (1);
@@ -454,23 +454,23 @@ static void *gcanvas_new(t_symbol* s,t_int ac,t_atom* at)
 void gcanvas_setup(void)
 {
     gcanvas_class = class_new(gensym("gcanvas"), (t_newmethod)gcanvas_new, 0,
-				sizeof(t_gcanvas),0, A_GIMME,0);
+                                sizeof(t_gcanvas),0, A_GIMME,0);
 
     class_addmethod(gcanvas_class, (t_method)gcanvas_click, gensym("click"),
-	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
+        A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT, 0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_size, gensym("size"),
-	A_FLOAT, A_FLOAT, 0);
+        A_FLOAT, A_FLOAT, 0);
 
     class_addmethod(gcanvas_class, (t_method)gcanvas_line, gensym("line"),
-	A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
+        A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_rect, gensym("rect"),
-	A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
+        A_SYMBOL, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_move, gensym("move"),
-	A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
+        A_FLOAT, A_FLOAT, A_FLOAT, A_FLOAT,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_color, gensym("color"),
-	A_SYMBOL,A_FLOAT,0);
+        A_SYMBOL,A_FLOAT,0);
     class_addmethod(gcanvas_class, (t_method)gcanvas_deletenum,gensym("delete"),
-	A_FLOAT,0);
+        A_FLOAT,0);
 
     class_addmethod(gcanvas_class, (t_method)gcanvas_reset,gensym("reset"),0);
     gcanvas_setwidget();

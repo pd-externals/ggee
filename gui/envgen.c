@@ -40,11 +40,11 @@ void envgen_resize(t_envgen* x,int ns)
 {
     DEBUG(post("envgen_resize"););
      if (ns > x->args) {
-	  int newargs = ns*sizeof(t_float);
+          int newargs = ns*sizeof(t_float);
 
-	  x->duration = resizebytes(x->duration,x->args*sizeof(t_float),newargs);
-	  x->finalvalues = resizebytes(x->finalvalues,x->args*sizeof(t_float),newargs);
-	  x->args = ns;
+          x->duration = resizebytes(x->duration,x->args*sizeof(t_float),newargs);
+          x->finalvalues = resizebytes(x->finalvalues,x->args*sizeof(t_float),newargs);
+          x->args = ns;
      }
 }
 
@@ -62,7 +62,7 @@ void envgen_totaldur(t_envgen* x,t_float dur)
      }
 
      for (i=1;i<=x->last_state;i++)
-	  x->duration[i]*=f;
+          x->duration[i]*=f;
 }
 
 
@@ -76,10 +76,10 @@ static void envgen_dump(t_envgen* e)
 
      SETFLOAT(a,e->finalvalues[0]);argc++;
      for (i=1;i <= e->last_state;i++) {
-	  SETFLOAT(argv+argc,e->duration[i] - e->duration[i-1]);
-	  argc++;
-	  SETFLOAT(argv+argc,e->finalvalues[i]);
-	  argc++;
+          SETFLOAT(argv+argc,e->duration[i] - e->duration[i-1]);
+          argc++;
+          SETFLOAT(argv+argc,e->finalvalues[i]);
+          argc++;
      }
      outlet_list(e->out2,&s_list,argc,(t_atom*)&argv);
 
@@ -103,19 +103,19 @@ void envgen_init(t_envgen *x,int argc,t_atom* argv)
      val = x->finalvalues;
 
      if (argc) {
-	  *val = atom_getfloat(argv++);
-	  *dur = 0.0;
+          *val = atom_getfloat(argv++);
+          *dur = 0.0;
      }
      dur++;val++;argc--;
      for (;argc > 0;argc--) {
-	  tdur += atom_getfloat(argv++);
-	  DEBUG(post("dur =%f",tdur););
-	  *dur++ = tdur;
-	  argc--;
-	  if (argc > 0)
-	       *val++ = atom_getfloat(argv++);
-	  else
-	       *val++ = 0;
+          tdur += atom_getfloat(argv++);
+          DEBUG(post("dur =%f",tdur););
+          *dur++ = tdur;
+          argc--;
+          if (argc > 0)
+               *val++ = atom_getfloat(argv++);
+          else
+               *val++ = 0;
       DEBUG(post("val =%f",*(val-1)););
 
      }
@@ -131,7 +131,7 @@ void envgen_list(t_envgen *x,t_symbol* s, int argc,t_atom* argv)
     DEBUG(post("envgen_list"););
      envgen_init(x,argc,argv);
      if (glist_isvisible(x->w.glist)) {
-	  envgen_drawme(x, x->w.glist, 0);
+          envgen_drawme(x, x->w.glist, 0);
      }
 }
 
@@ -152,15 +152,15 @@ void envgen_float(t_envgen *x, t_floatarg f)
 
      if (state == 0 || f >= x->duration[x->last_state]) {
           val = x->finalvalues[state]*(x->max-x->min);
-	  outlet_float(x->x_obj.ob_outlet,f);
-	  if (x->s_sym != &s_) pd_float(x->s_sym->s_thing, f);
-	  return;
+          outlet_float(x->x_obj.ob_outlet,f);
+          if (x->s_sym != &s_) pd_float(x->s_sym->s_thing, f);
+          return;
      }
 
      val = x->finalvalues[state-1] +
-		  (f - x->duration[state-1])*
-		  (x->finalvalues[state] - x->finalvalues[state-1])/
-		  (x->duration[state] - x->duration[state-1]);
+                  (f - x->duration[state-1])*
+                  (x->finalvalues[state] - x->finalvalues[state-1])/
+                  (x->duration[state] - x->duration[state-1]);
 
      val *= (x->max - x->min);
      outlet_float(x->x_obj.ob_outlet,val);
@@ -197,8 +197,8 @@ void envgen_release(t_envgen* x) {
      t_atom a[2];
      float del = x->duration[x->x_state] - x->duration[x->x_state-1];
      if (x->x_state <= x->sustain_state) {
-	x->x_state = x->sustain_state+1; /* skip sustain state */
-     	clock_delay(x->x_clock,del);
+        x->x_state = x->sustain_state+1; /* skip sustain state */
+        clock_delay(x->x_clock,del);
         SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
         SETFLOAT(a+1,del);
         OUT_LIST(x,2,a);
@@ -211,7 +211,7 @@ static void envgen_sustain(t_envgen *x, t_floatarg f)
      if (f > 0 && f < x->last_state)
         x->sustain_state = f;
      else
-		 pd_error(x,"sustain value not betweem 0 and %f, ignoring message", x->last_state);
+                 pd_error(x,"sustain value not betweem 0 and %f, ignoring message", x->last_state);
 }
 
 
@@ -221,14 +221,14 @@ static void envgen_tick(t_envgen* x)
      t_atom a[2];
      x->x_state++;
      if (x->x_state <= x->last_state && x->x_state != x->sustain_state) {
-	  float del = x->duration[x->x_state] - x->duration[x->x_state-1];
-	  clock_delay(x->x_clock,del);
-	  SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
-	  SETFLOAT(a+1,del);
-	  OUT_LIST(x,2,a);
+          float del = x->duration[x->x_state] - x->duration[x->x_state-1];
+          clock_delay(x->x_clock,del);
+          SETFLOAT(a,x->finalvalues[x->x_state]*(x->max-x->min));
+          SETFLOAT(a+1,del);
+          OUT_LIST(x,2,a);
      }
 //     else
-//	  clock_unset(x->x_clock);
+//        clock_unset(x->x_clock);
 }
 
 static void envgen_freeze(t_envgen* x, t_floatarg f)
@@ -294,15 +294,15 @@ static void *envgen_new(t_symbol *s,int argc,t_atom* argv)
      //     post("send %s",x->s_sym->s_name);
 
      if (argc)
-	  envgen_init(x,argc,argv);
+          envgen_init(x,argc,argv);
      else {
-	  t_atom a[5];
-	  SETFLOAT(a,0);
-	  SETFLOAT(a+1,50);
-	  SETFLOAT(a+2,1);
-	  SETFLOAT(a+3,50);
-	  SETFLOAT(a+4,0);
-	  envgen_init(x,5,a);
+          t_atom a[5];
+          SETFLOAT(a,0);
+          SETFLOAT(a+1,50);
+          SETFLOAT(a+2,1);
+          SETFLOAT(a+3,50);
+          SETFLOAT(a+4,0);
+          envgen_init(x,5,a);
      }
 
      x->x_val = 0.0;
@@ -346,9 +346,9 @@ void envgen_setup(void)
     class_addmethod(envgen_class,(t_method)envgen_sustain,gensym("sustain"),A_FLOAT,A_NULL);
 
     class_addmethod(envgen_class, (t_method)envgen_motion, gensym("motion"),
-    	A_FLOAT, A_FLOAT, 0);
+        A_FLOAT, A_FLOAT, 0);
     class_addmethod(envgen_class, (t_method)envgen_key, gensym("key"),
-    	A_FLOAT, 0);
+        A_FLOAT, 0);
 
     class_addmethod(envgen_class,(t_method)envgen_totaldur,gensym("duration"),A_FLOAT,NULL);
     class_addmethod(envgen_class,(t_method)envgen_freeze,gensym("freeze"),A_FLOAT,NULL);

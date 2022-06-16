@@ -77,26 +77,26 @@ int setsocketoptions(int sockfd)
 {
 #ifndef _WIN32
     int sockopt = 1;
-	 if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0)
-	 {
-		 DEBUGMESS(post("setsockopt NODELAY failed\n"));
-	 }
-	 else
-	 {
-		 DEBUGMESS(post("TCP_NODELAY set"));
-	 }
+         if (setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (const char*) &sockopt, sizeof(int)) < 0)
+         {
+                 DEBUGMESS(post("setsockopt NODELAY failed\n"));
+         }
+         else
+         {
+                 DEBUGMESS(post("TCP_NODELAY set"));
+         }
 
 
      /* if we don`t use REUSEADDR we have to wait under unix until the
-	address gets freed after a close ... this can be very annoying
-	when working with netsend/netreceive GG
+        address gets freed after a close ... this can be very annoying
+        when working with netsend/netreceive GG
      */
 
      sockopt = 1;
      if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &sockopt, sizeof(int)) < 0)
-	  post("setsockopt failed\n");
+          post("setsockopt failed\n");
 #endif
-	return 0;
+        return 0;
 }
 
 
@@ -144,8 +144,8 @@ static void streamin_datapoll(t_streamin *x)
 
      n = x->nbytes;
      if (x->nbytes == 0) {      /* get the new tag */
-	  ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),MSG_PEEK);
-	  if (ret != sizeof(t_tag)) {
+          ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),MSG_PEEK);
+          if (ret != sizeof(t_tag)) {
 #ifdef _WIN32
             sys_closesocket(x->x_socket);
             sys_rmpollfn(x->x_socket);
@@ -153,26 +153,26 @@ static void streamin_datapoll(t_streamin *x)
 #endif
             return;
           }
-	  ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),0);
+          ret = recv(x->x_socket, (char*) &x->frames[x->framein].tag,sizeof(t_tag),0);
 
-	  if ((x->frames[x->framein].tag.framesize - sizeof(t_tag)) > MAXFRAMESIZE) {
-	   pd_error(x, "streamin~: got an invalid frame size of %d, maximum is %d\n",
-	           x->frames[x->framein].tag.framesize, MAXFRAMESIZE);
-	   x->frames[x->framein].tag.framesize = MAXFRAMESIZE + sizeof(t_tag);
-	  }
+          if ((x->frames[x->framein].tag.framesize - sizeof(t_tag)) > MAXFRAMESIZE) {
+           pd_error(x, "streamin~: got an invalid frame size of %d, maximum is %d\n",
+                   x->frames[x->framein].tag.framesize, MAXFRAMESIZE);
+           x->frames[x->framein].tag.framesize = MAXFRAMESIZE + sizeof(t_tag);
+          }
 
-	  x->nbytes = n = x->frames[x->framein].tag.framesize;
+          x->nbytes = n = x->frames[x->framein].tag.framesize;
      }
 
      ret = recv(x->x_socket, (char*) x->frames[x->framein].data + x->frames[x->framein].tag.framesize - n, n, 0);
      if (ret > 0)
-	  n-=ret;
+          n-=ret;
 
      x->nbytes = n;
      if (n == 0) {
-	  x->counter++;
-	  x->framein++;
-	  x->framein %= MAXFRAMES;
+          x->counter++;
+          x->framein++;
+          x->framein %= MAXFRAMES;
      }
 }
 
@@ -184,12 +184,12 @@ static void streamin_reset(t_streamin* x,t_floatarg frames)
      x->framein = 0;
      x->frameout = 0;
      for (i=0;i<AVERAGENUM;i++)
-	  x->average[i] = x->maxframes;
+          x->average[i] = x->maxframes;
      x->averagecur=0;
      if (frames == 0.0)
-	  x->maxframes = MAXFRAMES/2;
+          x->maxframes = MAXFRAMES/2;
      else
-	  x->maxframes = frames;
+          x->maxframes = frames;
      x->underflow = 0;
 }
 
@@ -202,14 +202,14 @@ static void streamin_connectpoll(t_streamin *x)
     fcntl(fd,F_SETFL,O_NONBLOCK);
 #endif
     if (fd < 0) {
-	 post("streamin~: accept failed");
-	 return;
+         post("streamin~: accept failed");
+         return;
     }
 
     if (x->x_socket > 0) {
-	 post("streamin~: new connection");
-	 sys_closesocket(x->x_socket);
-	 sys_rmpollfn(x->x_socket);
+         post("streamin~: new connection");
+         sys_closesocket(x->x_socket);
+         sys_rmpollfn(x->x_socket);
     }
 
     streamin_reset(x,0);
@@ -232,8 +232,8 @@ static int streamin_createsocket(t_streamin* x, int portno,t_symbol* prot)
 
     if (sockfd < 0)
     {
-	sys_sockerror("socket");
-	return (0);
+        sys_sockerror("socket");
+        return (0);
     }
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
@@ -250,26 +250,26 @@ static int streamin_createsocket(t_streamin* x, int portno,t_symbol* prot)
     /* name the socket */
 
     if (bind(sockfd, (struct sockaddr *)&server, sizeof(server)) < 0) {
-	 sys_sockerror("bind");
-	 sys_closesocket(sockfd);
-	 return (0);
+         sys_sockerror("bind");
+         sys_closesocket(sockfd);
+         return (0);
     }
 
 
     if (!tcp) {
-	 x->x_socket = sockfd;
-	 x->nbytes = 0;
-	 sys_addpollfn(sockfd, streamin_datapoll, x);
+         x->x_socket = sockfd;
+         x->nbytes = 0;
+         sys_addpollfn(sockfd, streamin_datapoll, x);
     }
     else {
-	 if (listen(sockfd, 5) < 0) {
-	      sys_sockerror("listen");
-	      sys_closesocket(sockfd);
-	 }
-	 else {
-	      x->x_connectsocket = sockfd;
-	      sys_addpollfn(sockfd, streamin_connectpoll, x);
-	 }
+         if (listen(sockfd, 5) < 0) {
+              sys_sockerror("listen");
+              sys_closesocket(sockfd);
+         }
+         else {
+              x->x_connectsocket = sockfd;
+              sys_addpollfn(sockfd, streamin_connectpoll, x);
+         }
     }
     return 1;
 }
@@ -279,8 +279,8 @@ static int streamin_createsocket(t_streamin* x, int portno,t_symbol* prot)
 static void streamin_free(t_streamin *x)
 {
      if (x->x_connectsocket > 0) {
-	  sys_closesocket(x->x_connectsocket);
-	  sys_rmpollfn(x->x_connectsocket);
+          sys_closesocket(x->x_connectsocket);
+          sys_rmpollfn(x->x_connectsocket);
      }
      sys_rmpollfn(x->x_socket);
      sys_closesocket(x->x_socket);
@@ -298,12 +298,12 @@ static t_int *streamin_perform(t_int *w)
      int i = 0;
 
      if (x->counter < x->maxframes) {
-	  return (w+4);
+          return (w+4);
      }
 
      if (x->framein == x->frameout) {
-	  x->underflow++;
-	  return w+4;
+          x->underflow++;
+          return w+4;
      }
 
 
@@ -315,37 +315,37 @@ static t_int *streamin_perform(t_int *w)
 
      switch (x->frames[x->frameout].tag.format) {
      case SF_FLOAT: {
-	  t_float* buf = (t_float*)(x->frames[x->frameout].data);
-	  while (n--)
-	       *out++ = *buf++;
-	  x->frameout++;
-	  x->frameout %= MAXFRAMES;
-	  break;
+          t_float* buf = (t_float*)(x->frames[x->frameout].data);
+          while (n--)
+               *out++ = *buf++;
+          x->frameout++;
+          x->frameout %= MAXFRAMES;
+          break;
      }
      case SF_16BIT:
      {
-	  short* buf = (short*)(x->frames[x->frameout].data);
+          short* buf = (short*)(x->frames[x->frameout].data);
 
-	  while (n--)
-	       *out++ = (float) *buf++*3.051850e-05;
-	  x->frameout++;
-	  x->frameout %= MAXFRAMES;
+          while (n--)
+               *out++ = (float) *buf++*3.051850e-05;
+          x->frameout++;
+          x->frameout %= MAXFRAMES;
 
-	  break;
+          break;
      }
      case SF_8BIT:
      {
-	  unsigned char* buf = (char*)(x->frames[x->frameout].data);
+          unsigned char* buf = (char*)(x->frames[x->frameout].data);
 
-	  while (n--)
-	       *out++ = (float) (0.0078125 * (*buf++)) - 1.0;
-	  x->frameout++;
-	  x->frameout %= MAXFRAMES;
-	  break;
+          while (n--)
+               *out++ = (float) (0.0078125 * (*buf++)) - 1.0;
+          x->frameout++;
+          x->frameout %= MAXFRAMES;
+          break;
      }
      default:
-	  post("unknown format %d",x->frames[x->frameout].tag.format);
-	  break;
+          post("unknown format %d",x->frames[x->frameout].tag.format);
+          break;
      }
 
      return (w+4);
@@ -364,9 +364,9 @@ static void streamin_print(t_streamin* x)
      int i;
      int avg = 0;
      for (i=0;i<AVERAGENUM;i++)
-	  avg += x->average[i];
+          avg += x->average[i];
      post("last size = %d, avg size = %d, %d underflows",
-	  QUEUESIZE,avg/AVERAGENUM,x->underflow);
+          QUEUESIZE,avg/AVERAGENUM,x->underflow);
 }
 
 
@@ -390,14 +390,14 @@ static void *streamin_new(t_floatarg fportno, t_floatarg prot)
     x->x_ndrops = 0;
 
     for (i=0;i<MAXFRAMES;i++) {
-	 x->frames[i].data = getbytes(MAXFRAMESIZE);
+         x->frames[i].data = getbytes(MAXFRAMESIZE);
     }
     x->framein = 0;
     x->frameout = 0;
     x->maxframes = MAXFRAMES/2;
 
     if (prot)
-	 x->x_tcp = 0;
+         x->x_tcp = 0;
 
     streamin_createsocket(x, fportno, gensym("tcp"));
 
@@ -411,13 +411,13 @@ static void *streamin_new(t_floatarg fportno, t_floatarg prot)
 void streamin_tilde_setup(void)
 {
     streamin_class = class_new(gensym("streamin~"),
-	(t_newmethod) streamin_new, (t_method) streamin_free,
-	sizeof(t_streamin),  0, A_DEFFLOAT,A_DEFFLOAT, A_NULL);
+        (t_newmethod) streamin_new, (t_method) streamin_free,
+        sizeof(t_streamin),  0, A_DEFFLOAT,A_DEFFLOAT, A_NULL);
 
     class_addmethod(streamin_class, nullfn, gensym("signal"), 0);
     class_addmethod(streamin_class, (t_method) streamin_dsp, gensym("dsp"), 0);
     class_addmethod(streamin_class, (t_method) streamin_print,
-		    gensym("print"), 0);
+                    gensym("print"), 0);
     class_addmethod(streamin_class, (t_method) streamin_reset,
-		    gensym("reset"),A_DEFFLOAT, 0);
+                    gensym("reset"),A_DEFFLOAT, 0);
 }

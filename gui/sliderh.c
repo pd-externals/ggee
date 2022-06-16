@@ -41,7 +41,7 @@ t_widgetbehavior   sliderh_widgetbehavior;
 
 void sliderh_setup() {
     sliderh_class = class_new(gensym("sliderh"), (t_newmethod)sliderh_new, 0,
-				sizeof(t_fatom),0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_fatom),0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
 
     fatom_setup_common(sliderh_class);
 
@@ -57,7 +57,7 @@ void sliderh_setup() {
 #endif
     sliderh_widgetbehavior.w_clickfn=    NULL;
 
-	class_setwidget(sliderh_class,&sliderh_widgetbehavior);
+        class_setwidget(sliderh_class,&sliderh_widgetbehavior);
 #if PD_MINOR_VERSION >= 37
     class_setsavefn(sliderh_class,&sliderh_save);
 #endif

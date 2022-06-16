@@ -78,7 +78,7 @@ static void *notch_new(t_floatarg f,t_floatarg bw)
 void notch_setup(void)
 {
     notch_class = class_new(gensym("notch"), (t_newmethod)notch_new, 0,
-				sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
+                                sizeof(t_rbjfilter), 0,A_DEFFLOAT,A_DEFFLOAT,0);
     class_addbang(notch_class,notch_bang);
     class_addfloat(notch_class,notch_float);
 }

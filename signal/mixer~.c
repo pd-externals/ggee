@@ -98,7 +98,7 @@ static void mixer_dsp(t_mixer *x, t_signal **sp)
 void mixer_tilde_setup(void)
 {
   mixer_class = class_new(gensym("mixer~"), (t_newmethod)mixer_new, 0,
-			  sizeof(t_mixer), 0, A_DEFFLOAT, A_DEFSYM,A_NULL);
+                          sizeof(t_mixer), 0, A_DEFFLOAT, A_DEFSYM,A_NULL);
   class_addmethod(mixer_class, nullfn, gensym("signal"), 0);
   class_addmethod(mixer_class, (t_method)mixer_dsp, gensym("dsp"), 0);
 

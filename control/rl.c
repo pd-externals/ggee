@@ -69,7 +69,7 @@ static void lreceive_free(t_lreceive *x)
 void rl_setup(void)
 {
     lreceive_class = class_new(gensym("receivelocal"), (t_newmethod)lreceive_new,
-    	(t_method)lreceive_free, sizeof(t_lreceive), CLASS_NOINLET, A_SYMBOL, 0);
+        (t_method)lreceive_free, sizeof(t_lreceive), CLASS_NOINLET, A_SYMBOL, 0);
     class_addcreator((t_newmethod)lreceive_new, gensym("rl"), A_DEFSYM, 0);
     class_addbang(lreceive_class, lreceive_bang);
     class_addfloat(lreceive_class, (t_method)lreceive_float);
