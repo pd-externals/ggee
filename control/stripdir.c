@@ -21,7 +21,7 @@ typedef struct _stripdir
 
 void stripdir_symbol(t_stripdir *x,t_symbol* s)
 {
-     int len = strlen(s->s_name);
+     int len = (int)strlen(s->s_name);
 
      while (len--)
           if (*(s->s_name + len) == '/') {
