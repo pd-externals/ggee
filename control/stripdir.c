@@ -31,7 +31,7 @@ void stripdir_symbol(t_stripdir *x,t_symbol* s)
 
 }
 
-static void *stripdir_new()
+static void *stripdir_new(void)
 {
     t_stripdir *x = (t_stripdir *)pd_new(stripdir_class);
     outlet_new(&x->x_obj, &s_float);

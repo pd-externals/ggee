@@ -42,7 +42,7 @@ static void *ticker_new(t_symbol* t)
 t_widgetbehavior   ticker_widgetbehavior;
 
 
-void ticker_setup() {
+void ticker_setup(void) {
     ticker_class = class_new(gensym("ticker"), (t_newmethod)ticker_new, 0,
                                 sizeof(t_fatom),0,A_DEFSYMBOL,0);
 
