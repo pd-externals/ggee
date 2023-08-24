@@ -28,7 +28,7 @@ static void *slider_new(t_floatarg max, t_floatarg min, t_floatarg h)
 t_widgetbehavior   slider_widgetbehavior;
 
 
-void slider_setup() {
+void slider_setup(void) {
     slider_class = class_new(gensym("slider"), (t_newmethod)slider_new, 0,
                                 sizeof(t_fatom),0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
 

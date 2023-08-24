@@ -4,7 +4,7 @@
 
 static t_class *fatom_class;
 
-void fatom_setup() {
+void fatom_setup(void) {
   post("fatom setup");
     fatom_class = class_new(gensym("fatom"), (t_newmethod)fatom_new, 0,
                                 sizeof(t_fatom),0,A_DEFSYM,0);

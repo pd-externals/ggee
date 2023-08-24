@@ -23,7 +23,7 @@ void messages_bang(t_messages *x)
      post("bang");
 }
 
-static void *messages_new()
+static void *messages_new(void)
 {
     t_messages *x = (t_messages *)pd_new(messages_class);
     outlet_new(&x->x_obj, &s_float);

@@ -35,7 +35,7 @@ void sinh_float(t_sinh *x,t_floatarg f)
 }
 
 
-static void *sinh_new()
+static void *sinh_new(void)
 {
     t_sinh *x = (t_sinh *)pd_new(sinh_class);
 
