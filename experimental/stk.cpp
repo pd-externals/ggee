@@ -76,7 +76,7 @@ static void stk_set_instrument(t_stk* x,t_symbol* s)
   DI(Whistle);
 
   if (!x->instrument)
-       error("No such instrument %s",s->s_name);
+       pd_error(x, "No such instrument %s",s->s_name);
 
   stk_instruments[i] = "LastInst";
 }
