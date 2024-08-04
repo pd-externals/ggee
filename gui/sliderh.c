@@ -39,7 +39,7 @@ t_widgetbehavior   sliderh_widgetbehavior;
 
 
 
-void sliderh_setup() {
+void sliderh_setup(void) {
     sliderh_class = class_new(gensym("sliderh"), (t_newmethod)sliderh_new, 0,
                                 sizeof(t_fatom),0,A_DEFFLOAT,A_DEFFLOAT,A_DEFFLOAT,0);
 

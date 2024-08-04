@@ -89,7 +89,7 @@ static void shuffle_dsp(t_shuffle *x, t_signal **sp)
 
 }
 
-static void *shuffle_new()
+static void *shuffle_new(void)
 {
     t_shuffle *x = (t_shuffle *)pd_new(shuffle_class);
 
