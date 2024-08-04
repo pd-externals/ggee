@@ -361,7 +361,7 @@ void envgen_setup(void)
     envgen_widgetbehavior.w_activatefn =   envgen_activate;
     envgen_widgetbehavior.w_deletefn =   envgen_delete;
     envgen_widgetbehavior.w_visfn =   envgen_vis;
-    envgen_widgetbehavior.w_clickfn = envgen_newclick;
+    envgen_widgetbehavior.w_clickfn = (t_clickfn)envgen_newclick;
 #if PD_MINOR_VERSION < 37
     envgen_widgetbehavior.w_propertiesfn = NULL;
     envgen_widgetbehavior.w_savefn =   envgen_save;
