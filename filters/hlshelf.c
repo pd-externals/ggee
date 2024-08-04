@@ -25,14 +25,14 @@ static t_class *hlshelf_class;
 typedef struct _hlshelf
 {
      t_object x_obj;
-     float s_rate;
-     float s_gain0;
-     float s_gain1;
-     float s_gain2;
-     float s_ltransfq;
-     float s_htransfq;
-     float s_lradians;
-     float s_hradians;
+     t_float s_rate;
+     t_float s_gain0;
+     t_float s_gain1;
+     t_float s_gain2;
+     t_float s_ltransfq;
+     t_float s_htransfq;
+     t_float s_lradians;
+     t_float s_hradians;
 } t_hlshelf;
 
 

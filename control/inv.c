@@ -19,7 +19,7 @@ static void *inv_new(void)
 
 static t_int *inv_perform(t_int *w)    /* not static; also used in d_fft.c */
 {
-    float *in = *(t_float **)(w+1), *out = *(t_float **)(w+2);
+    t_sample *in = *(t_sample **)(w+1), *out = *(t_sample **)(w+2);
     t_int n = *(t_int *)(w+3);
     while (n--)
     {
